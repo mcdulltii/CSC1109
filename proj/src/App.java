@@ -10,7 +10,7 @@ public class App {
     }
 
     public static Account authenticateUser() {
-        Account account = new Account(null, null, null, null, null, 0, 0, 0, 0, false, false);
+        Account account = new Account(null, null, null, null, false);
         return account;
     }
 

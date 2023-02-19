@@ -1,24 +1,34 @@
 public class User {
-    // potentially temp method for userId
+    // potential temp method for userId
     static int userCounter = 0;
 
     private int userId;
     protected String firstName;
     protected String lastName;
+    protected String userName;
     protected String pinNumber;
-    private Settings settings;
+    protected boolean isAdmin;
+    protected static Settings settings;
 
-    User(String firstName, String lastName, String pinNumber) {
+    User(String firstName, String lastName, String userName, String pinNumber,
+         boolean isAdmin) {
         this.userId = userCounter;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.settings = new Settings(this);
+        this.userName = userName;
+        this.pinNumber = pinNumber;
+        this.isAdmin = isAdmin;
+        settings = new Settings(this);
 
         ++userCounter;
     }
 
     public int getUserId() {
         return userId;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 
     public String getFirstName() {
