@@ -1,22 +1,28 @@
 public class Settings {
-    private String username;
-    private String password;
-    private String firstName;
-    private String lastName;
+	private User user;
+	// private User account;
+
+	Settings(User user) {
+		this.user = user;
+	}
+
+	// Settings(Account account) {
+	// 	this.account = account;
+	// }
     
-    public Settings(String username) {
-        this.username = username;
+    public void setFirstName(String firstName) {
+        user.firstName = firstName;
     }
 
-	public String getUsername() {
-		return username;
-	}
+	public void setLastName(String lastName) {
+		user.lastName = lastName;
+    }
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public void setPinNumber(String pinNumber) {
+		user.pinNumber = pinNumber;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+	// public void setTransferLimit(double limit) {
+		// account.transferLimit = limit;
+	// }
 }
