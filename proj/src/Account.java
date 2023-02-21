@@ -19,12 +19,17 @@ public class Account {
     }
 
 	public String getAccountNumber() {
-		return accountNumber;
+		return this.accountNumber;
 	}
 
 	public double getTransferLimit() {
-		return transferLimit;
+		return this.transferLimit;
 	}
 
+    public double getAvailableBalance(){
+        return this.availableBalance;
+    }
+
+    //above getters to be shifted to balance class
 	//missing getters, oh well :/
 }
