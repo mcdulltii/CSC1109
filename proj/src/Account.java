@@ -30,6 +30,11 @@ public class Account {
         return this.availableBalance;
     }
 
-    //above getters to be shifted to balance class
-	//missing getters, oh well :/
+    public double getTotalBalance(){
+        return this.totalBalance;
+    }
+
+    public void setTotalBalance(double balance){
+        this.totalBalance=balance;
+    }
 }
