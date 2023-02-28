@@ -6,43 +6,43 @@ import java.util.Scanner;
 public class App {
     public static void main(String[] args) throws Exception {
         Account user = authenticateUser(); //figure out which user is logged in
-        selectionMenu(user); //main 
+        selectionMenu(user); //main
     }
 
     public static Account authenticateUser() {
-        Account account = new Account(null, null, null, null, false);
+        Account account = new Account(0, 0, 0, false);
         return account;
     }
 
     public static void selectionMenu(Account user) {
         Scanner sc = new Scanner(System.in);
-		while (true) {
-			//TODO: Add whatever options yall want
-			System.out.println("Welcome to ATM!\nEnter 1 for x\nEnter 2 for y\n");
-			if (true /*insert check for if user is admin here*/) {
-				System.out.println("\n---Admin Options---\nEnter 8 for View All Accounts\n");
-			}
-			System.out.println("\nEnter 0 to exit");
-			try {
-				int userinput = Integer.parseInt(sc.next());
-				switch (userinput) {
-				case 0:
-					return;
-				case 1:
-					// some function
-					break;
-				case 2:
-					// some other function
-					break;
-				case 8:
-					printAllAccounts();
-				}
-			} catch (NumberFormatException e) {
-				System.out.println("Invalid choice! Please choose again!");
+        while (true) {
+            //TODO: Add whatever options yall want
+            System.out.println("Welcome to ATM!\nEnter 1 for x\nEnter 2 for y\n");
+            if (true /*insert check for if user is admin here*/) {
+                System.out.println("\n---Admin Options---\nEnter 8 for View All Accounts\n");
+            }
+            System.out.println("\nEnter 0 to exit");
+            try {
+                int userinput = Integer.parseInt(sc.next());
+                switch (userinput) {
+                case 0:
+                    return;
+                case 1:
+                    // some function
+                    break;
+                case 2:
+                    // some other function
+                    break;
+                case 8:
+                    printAllAccounts();
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid choice! Please choose again!");
                 e.printStackTrace();
-			}
-			System.out.println("");
-		}
+            }
+            System.out.println("");
+        }
     }
 
     public static void printAllAccounts() {
@@ -124,7 +124,7 @@ public class App {
 // public static void generateAccounts() {
 
 //     // Create accounts.csv from transactions.csv
-//     // NOTE: GENERATES HEADERS OF transactions AT THE BOTTOM. 
+//     // NOTE: GENERATES HEADERS OF transactions AT THE BOTTOM.
 //     //IF THIS CODE IS RUN, DELETE LAST ROW OR EDIT CODE
 //     ArrayList<String> accounts = new ArrayList<String>();
 //     String[] words = { "Hu", "Tao", "Jun", "Kai", "Yue", "Hao", "Ti", "Xuan" };

@@ -24,7 +24,4 @@ public class Transaction {
         }
         return false;
     }
-    
-    
-
 }
