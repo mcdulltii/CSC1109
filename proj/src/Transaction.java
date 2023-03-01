@@ -37,13 +37,13 @@ public class Transaction {
     }
 
     //deposit
-    public String deposit(Account a1, double amount){
-        double newBalance=a1.getTotalBalance()+amount;
+    public String deposit(Account a1){
+        double newBalance=a1.getTotalBalance()+this.amount;
         a1.setTotalBalance(newBalance);
         SQLQueries q = new SQLQueries();
         java.sql.Date sqlDate=new java.sql.Date(transactionDate.getTime());
         //testing
-        q.executeQueryTransactions("111111", "123", sqlDate, "", "", sqlDate, 0.0, amount, a1.getTotalBalance());
+        q.executeQueryTransactions("111111", "123", sqlDate, "", "", sqlDate, 0.0, this.amount, a1.getTotalBalance());
         return "Deposit Successful";
     }
 
