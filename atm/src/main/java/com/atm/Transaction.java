@@ -2,7 +2,7 @@ package com.atm;
 import java.util.Date;
 
 public class Transaction {
-
+    private int transactionCount = 0;
     private Account a1;
     private double amount;
     private Date transactionDate;
@@ -43,8 +43,7 @@ public class Transaction {
         a1.setTotalBalance(newBalance);
         SQLQueries q = new SQLQueries();
         java.sql.Date sqlDate=new java.sql.Date(transactionDate.getTime());
-        //testing
-        q.executeQueryTransactions("111111", "123", sqlDate, "", "", sqlDate, 0.0, this.amount, a1.getTotalBalance());
+        q.executeQueryTransactions(Integer.toString(this.transactionCount++), a1.getAccountNumber(), sqlDate, "", "", sqlDate, 0.0, this.amount, a1.getTotalBalance());
         return "Deposit Successful";
     }
 

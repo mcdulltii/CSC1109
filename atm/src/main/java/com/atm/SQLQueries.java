@@ -8,11 +8,15 @@ public class SQLQueries {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn=DriverManager.getConnection(db_url, "testAdmin", "password1");
-            //Statement statement=conn.createStatement();
+            // Statement statement=conn.createStatement();
             // ResultSet rs=statement.executeQuery(query);
             // while (rs.next()){
             //     System.out.println(rs.getString(1));
             // }
+            String clearTable = "delete from transactions";
+            PreparedStatement clearStmt = conn.prepareStatement(clearTable);
+            clearStmt.execute();
+
             String sql = " insert into transactions (transactionId, accountNumber, transactionDate, transactionDetails, chqNumber, valueDate, withdrawal, deposit, balance) values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStmt = conn.prepareStatement(sql);
             preparedStmt.setString(1, transactionId);
