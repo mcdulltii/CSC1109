@@ -45,6 +45,14 @@ public class Account {
         return this.availableBalance;
     }
 
+    public double getTotalBalance(){
+        return this.totalBalance;
+    }
+
+    public void setTotalBalance(double balance){
+        this.totalBalance=balance;
+    }
+
     private String getNewAccountNumber(){
         Random rng = new Random();
         boolean nonUnique;
@@ -67,7 +75,4 @@ public class Account {
         } while (nonUnique);
         return uuid;
     }
-
-    //above getters to be shifted to balance class
-    //missing getters, oh well :/
 }

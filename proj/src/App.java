@@ -5,14 +5,19 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        Account user = authenticateUser(); //figure out which user is logged in
-        selectionMenu(user); //main
+        // Account user = authenticateUser(); //figure out which user is logged in
+        // selectionMenu(user); //main 
+
+        //mysql testing
+        Account testAccount = new Account("111111", 0, 20, 100, false);
+        Transaction testDeposit = new Transaction(testAccount, 50);
+        testDeposit.deposit(testAccount);
     }
 
-    public static Account authenticateUser() {
-        Account account = new Account(0, 0, 0, false);
-        return account;
-    }
+    // public static Account authenticateUser() {
+    //     Account account = new Account(null, null, null, null, false);
+    //     return account;
+    // }
 
     public static void selectionMenu(Account user) {
         Scanner sc = new Scanner(System.in);
