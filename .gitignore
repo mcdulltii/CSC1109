@@ -1,3 +1,2 @@
-proj/bin/Account.class
-proj/bin/App.class
+*.class
 proj/.vscode/launch.json
