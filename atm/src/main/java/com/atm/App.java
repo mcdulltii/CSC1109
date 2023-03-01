@@ -8,8 +8,9 @@ public class App {
     public static void main(String[] args) throws Exception {
         // Account user = authenticateUser(); //figure out which user is logged in
         // selectionMenu(user); //main 
-
         //mysql testing
+        SQLQueries q = new SQLQueries();
+        q.importAccounts();
         Account testAccount = new Account("111111", 0, 20, 100, false);
         Transaction testDeposit = new Transaction(testAccount, 50);
         testDeposit.deposit(testAccount);
@@ -54,7 +55,7 @@ public class App {
     public static void printAllAccounts() {
         System.out.println(String.format("%20s %20s %20s %20s %20s", "Account Number", "First Name", "Last Name", "Total Balance", "Available Balance"));
         try {
-            BufferedReader br = new BufferedReader(new FileReader("res/accounts.csv"));
+            BufferedReader br = new BufferedReader(new FileReader("atm/res/accounts.csv"));
             br.readLine(); //skip headers
             while (true) {
                 String row = br.readLine();
