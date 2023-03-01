@@ -6,6 +6,35 @@
 4. Money Transfer(e.g. inter-account transfer, third-party transfer, etc)
 5. Settings (e.g. transfer limit, overseas withdraw limit, etc)
 
+## Dependencies
+
+- Maven
+- MySQL
+
+## Setup
+
+1. Install dependencies
+2. Connect to MySQL server
+  - Create database by `CREATE DATABASE oopasgdb;`
+  - Grant user:password to access MySQL database by `GRANT ALL PRIVILEGES ON oopasgdb.* TO 'testAdmin'@'localhost' IDENTIFIED BY 'password1';`
+  - Create transactions table by `use oopasgdb;` and
+    ```sql
+    CREATE TABLE `transactions` (
+      `transactionId` varchar(8) NOT NULL,
+      `accountNumber` varchar(50) NOT NULL,
+      `transactionDate` date NOT NULL,
+      `transactionDetails` varchar(100) DEFAULT NULL,
+      `chqNumber` varchar(50) DEFAULT NULL,
+      `valueDate` date NOT NULL,
+      `withdrawal` decimal(15,2) DEFAULT NULL,
+      `deposit` decimal(15,2) DEFAULT NULL,
+      `balance` decimal(15,2) NOT NULL,
+      PRIMARY KEY (`transactionId`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ```
+
+## Class Diagram
+
 ```mermaid
 classDiagram
     class CSVHandler {
