@@ -4,25 +4,23 @@ import java.util.Date;
 public class Transaction {
     private int transactionCount = 0;
     private Account a1;
-    private double amount;
     private Date transactionDate;
 
-    public Transaction(Account a1, double amount){
+    public Transaction(Account a1){
         //to add more fields
-        this.a1=a1;
-        this.amount=amount;   
+        this.a1=a1; 
         this.transactionDate=new Date();
     }
 
-    public boolean hasAvailableBalance(){
-        if (this.amount < a1.getAvailableBalance()){
+    public boolean hasAvailableBalance(double amount){
+        if (amount < a1.getAvailableBalance()){
             return true;
         }
         return false;
     }
 
-    public boolean belowTransferLimit(){
-        if (this.amount < a1.getTransferLimit()){
+    public boolean belowTransferLimit(double amount){
+        if (amount < a1.getTransferLimit()){
             return true;
         }
         return false;
@@ -38,12 +36,12 @@ public class Transaction {
     }
 
     //deposit
-    public String deposit(Account a1){
-        double newBalance=a1.getTotalBalance()+this.amount;
+    public String deposit(Account a1, double amount){
+        double newBalance=a1.getTotalBalance()+amount;
         a1.setTotalBalance(newBalance);
         SQLQueries q = new SQLQueries();
         java.sql.Date sqlDate=new java.sql.Date(transactionDate.getTime());
-        q.executeQueryTransactions(Integer.toString(this.transactionCount++), a1.getAccountNumber(), sqlDate, "", "", sqlDate, 0.0, this.amount, a1.getTotalBalance());
+        q.executeQueryTransactions(Integer.toString(this.transactionCount++), a1.getAccountNumber(), sqlDate, "", "", sqlDate, 0.0, amount, a1.getTotalBalance());
         return "Deposit Successful";
     }
 

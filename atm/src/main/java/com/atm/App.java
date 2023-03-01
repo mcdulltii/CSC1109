@@ -6,48 +6,84 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        // Account user = authenticateUser(); //figure out which user is logged in
-        // selectionMenu(user); //main 
+        Account user = authenticateUser(); //figure out which user is logged in
+        selectionMenu(user); //main 
 
         //mysql testing
-        Account testAccount = new Account("111111", 0, 20, 100, false);
-        Transaction testDeposit = new Transaction(testAccount, 50);
-        testDeposit.deposit(testAccount);
+        // Account testAccount = new Account("111111", 0, 20, 100, false);
+        // Transaction testDeposit = new Transaction(testAccount, 50);
+        // testDeposit.deposit(testAccount);
     }
 
-    // public static Account authenticateUser() {
-    //     Account account = new Account(null, null, null, null, false);
-    //     return account;
-    // }
+    public static Account authenticateUser() {
+        Account account = new Account(0.0,0.0,0.0,true);
+        return account;
+    }
 
     public static void selectionMenu(Account user) {
         Scanner sc = new Scanner(System.in);
         while (true) {
-            //TODO: Add whatever options yall want
-            System.out.println("Welcome to ATM!\nEnter 1 for x\nEnter 2 for y\n");
-            if (true /*insert check for if user is admin here*/) {
-                System.out.println("\n---Admin Options---\nEnter 8 for View All Accounts\n");
+            // Welcome Message
+            System.out.println("Welcome to ATM!");
+
+            // Prompt user for account details
+            System.out.print("Enter username: ");
+            String username = sc.next();
+            System.out.print("Enter password: ");
+            String password = sc.next();
+
+            //authentication required
+
+            // User options
+            System.out.print("\nAvailable Services:");
+            System.out.println("\n(1) Deposit\n(2) Withdraw\n(3) Transfer\n(4) View Account Balance\n(5) Help");
+
+            // For Admins Only
+            /* insert check for if user is admin here */ 
+            if (true) {
+                System.out.println("\n\n---Admin Options---\n(6) View All Accounts\n(7) View all Transaction History");
             }
-            System.out.println("\nEnter 0 to exit");
+
+            System.out.println("\n(0) Exit\n");
+            System.out.print("Please enter an option: ");
+
             try {
+                Transaction transaction = new Transaction(user);
                 int userinput = Integer.parseInt(sc.next());
                 switch (userinput) {
                 case 0:
                     return;
                 case 1:
-                    // some function
+                    System.out.println("Please enter an amount to deposit: ");
+                    double depositAmount = sc.nextDouble();
+                    transaction.deposit(user, depositAmount);
                     break;
                 case 2:
-                    // some other function
+                    System.out.println("Please enter an amount to withdraw: ");
+                    double withdrawalAmount = sc.nextDouble();
+                    transaction.deposit(user, withdrawalAmount);
                     break;
-                case 8:
+                case 3:
+                    // transfer
+                case 4:
+                    System.out.println("Your Available Balance is "+user.getAvailableBalance());
+                    System.out.println("Your Total Balance is "+user.getTotalBalance());
+                    break;
+                case 5:
+                    System.out.println("Please contact the customer service hotline for any assistance.");
+                case 6: 
                     printAllAccounts();
+                    break;
+                case 7:
+                    // print all transactions history
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid choice! Please choose again!");
                 e.printStackTrace();
             }
-            System.out.println("");
+
+            // Thank You Message
+            System.out.println("Thank You and Have a Nice Day!");
         }
     }
 
