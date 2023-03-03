@@ -8,7 +8,7 @@ public class App {
     public static void main(String[] args) throws Exception {
         // Account user = authenticateUser(); //figure out which user is logged in
         // selectionMenu(user); //main 
-        //mysql testing
+        
         SQLQueries q = new SQLQueries();
         q.importAccounts();
         Account testAccount = new Account("111111", 0, 20, 100, false);

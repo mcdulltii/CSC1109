@@ -10,7 +10,6 @@ public class SQLQueries {
     public String transactionId;
 
     public void executeQueryTransactions(String accountNumber, Date transactionDate, String transactionDetails, String chqNumber, Date valueDate, Double withdrawal, Double deposit, Double balance){
-        /*
         Connection conn = getConnection();
         String getTransactionCount = "SELECT transactionId FROM transactions ORDER BY transactionId desc limit 1";
         String sql = "INSERT INTO transactions (transactionId, accountNumber, transactionDate, transactionDetails, chqNumber, valueDate, withdrawal, deposit, balance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -43,9 +42,6 @@ public class SQLQueries {
         } catch (Exception e) {
             System.out.println(e);
         }
-
-        closeConnection(conn);
-        */
     }
 
     public void importAccounts() throws FileNotFoundException{
@@ -55,6 +51,7 @@ public class SQLQueries {
             if (!rs.next()) {
                 // Import CSV
                 BufferedReader br = new BufferedReader(new FileReader("atm/res/accounts.csv"));
+                Authenticate au = new Authenticate();
                 try {
                     br.readLine();
                 } catch (IOException e) {
@@ -76,7 +73,6 @@ public class SQLQueries {
                     for (int i=0; i<data.length; i++) {
                         switch(i) {
                             case 0:
-                            case 5:
                                 preparedStmt.setLong(i+1, Long.parseLong(data[i]));
                                 break;
                             case 1:
@@ -84,6 +80,10 @@ public class SQLQueries {
                             case 3:
                             case 4:
                                 preparedStmt.setString(i+1, data[i]);
+                                break;
+                            case 5:
+                                preparedStmt.setLong(i+1, Long.parseLong(data[i]));
+                                preparedStmt.setString(3, au.hashString(data[i]));
                                 break;
                             case 6:
                             case 7:
@@ -98,7 +98,6 @@ public class SQLQueries {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("uwu");
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
