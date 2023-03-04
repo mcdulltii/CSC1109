@@ -16,7 +16,11 @@
 1. Install dependencies
 2. Connect to MySQL server
   - Create database by `CREATE DATABASE oopasgdb;`
-  - Grant user:password to access MySQL database by `GRANT ALL PRIVILEGES ON oopasgdb.* TO 'testAdmin'@'localhost' IDENTIFIED BY 'password1';`
+  - Grant user:password to access MySQL database by 
+    ```sql
+    CREATE USER testAdmin@localhost IDENTIFIED BY 'password1';
+    GRANT ALL PRIVILEGES ON oopasgdb.* TO testAdmin@localhost;
+    ```
   - Create transactions table by `use oopasgdb;` and
     ```sql
     CREATE TABLE `transactions` (
