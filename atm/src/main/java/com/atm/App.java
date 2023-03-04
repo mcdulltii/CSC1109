@@ -11,9 +11,6 @@ public class App {
         
         SQLQueries q = new SQLQueries();
         q.importAccounts();
-        Account testAccount = new Account("111111", 0, 20, 100, false);
-        Transaction testDeposit = new Transaction(testAccount, 50);
-        testDeposit.deposit(testAccount);
     }
 
     public static Account authenticateUser() {
