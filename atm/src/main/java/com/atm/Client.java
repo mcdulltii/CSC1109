@@ -59,7 +59,8 @@ public class Client {
         Scanner sc = new Scanner(System.in);
         Client c = new Client("127.0.0.1", 7777);
         c.startConnection();
-        System.out.println("Type anything to start..."); //NOTE: does not actually do anything but idk why it needs sth to be typed before the server prompts sooooo...?
+        c.sendMessage(""); //Grabs server prompt
+        //System.out.println("Type anything to start..."); //NOTE: does not actually do anything but idk why it needs sth to be typed before the server prompts sooooo...?
         while (true) {
             String input = sc.nextLine();
             if (input != null && input.length() > 0)

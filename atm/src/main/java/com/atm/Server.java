@@ -85,35 +85,48 @@ class ThreadClientHandler extends Thread {
         //NOTE: ALL out.println MUST END WITH \n TO LET BUFFEREDREADER KNOW END-OF-INPUT
         //VV IMPT I SPEND 5HRS ON THIS AND IM VERY SAD
         
-        /* 
+        
         // Get client username and password
+        /* 
         while (!authenticated) {
             try {
-                out.println("Enter username: \n");
-                out.flush();
-                String username = in.readLine();
-                out.println("Enter password: \n");
-                out.flush();
-                String password = in.readLine();
+                out.println("Enter username\n");
+                String username, password;
+                while (true) {
+                    inputLine = in.readLine();
+                    if (inputLine.length() > 0)
+                        username = inputLine;
+                        break;
+                }
+
+                out.println("Enter password\n");
+                while (true) {
+                    inputLine = in.readLine();
+                    if (inputLine.length() > 0)
+                        password = inputLine;
+                        break;
+                }
+
                 //TODO: Authenticate user
                 authenticated = true;
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
-        //Print Menu
-        out.print("Long list of stuff\n1.\n2.\n3.\nEnter input: ");
-        out.flush();
         */
-        
         //idk why the code above doesnt work sighs
+        //Print Menu
+        out.println("Long list of stuff\n1.\n2.\n3.\nEnter input\n");
+        out.flush();
+        
         
         //Some sample codes, entering ono closes the server, typing anything else echoes itback
         try {
             inputLine = in.readLine();
             while (true) {
                 if (inputLine.length() > 0) {
+                    
                     if ("ono".equals(inputLine)) {
                         out.println("Connection Terminated.\n");
                         out.flush();
@@ -121,7 +134,7 @@ class ThreadClientHandler extends Thread {
                     }
 
                     out.println("From Server: " + inputLine);
-                    out.println("");
+                    out.println(""); //alternatively to \n you can do this but pls dont
                     out.flush();
                 }
                 inputLine = in.readLine();
