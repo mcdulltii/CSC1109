@@ -42,24 +42,25 @@ public class Server extends Thread {
     }
 
     public static void main(String[] args) {
-        /* 
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter admin password: ");
-        String password = sc.next();
-        if (password == "admin") { // TODO: Authenticate
-            // TODO: List of Admin Actions (copy from App.java im lazy rn)
-            System.out.println("Welcome Admin!");
-        }
-        // switch case all that for admin actions
-        // one of actions is open server????
-        System.out.println("i open server uwu");
-        */
         Server s = new Server();
         try {
             s.start(7777);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter admin password: ");
+        String password = sc.next();
+        if (password.equals("admin")) { // TODO: Authenticate
+            System.out.println("Welcome Admin!");
+            // TODO: List of Admin Actions
+            System.out.println("Enter option: ");
+            int choice = sc.nextInt();
+        }
+        // switch case all that for admin actions
+        // one of actions is open server????
+        System.out.println("i open server uwu");
     }
 }
 
@@ -74,6 +75,20 @@ class ThreadClientHandler extends Thread {
         this.clientSocket = socket;
     }
 
+    private String getUserInput() {
+        String s = "";
+        try {
+            while (true) {
+                s = in.readLine();
+                if (s != null && s.length() > 0)
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
     public void run() {
         try {
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -82,53 +97,39 @@ class ThreadClientHandler extends Thread {
             e.printStackTrace();
             return;
         }
-        //NOTE: ALL out.println MUST END WITH \n TO LET BUFFEREDREADER KNOW END-OF-INPUT
-        
+        // NOTE: ALL out.println MUST END WITH \n (no spaces) TO LET BUFFEREDREADER KNOW END-OF-INPUT
+        // VV IMPT
+
         // Get client username and password
         while (!authenticated) {
-            try {
-                out.println("Enter username\n");
-                String username, password;
-                while (true) {
-                    username = in.readLine();
-                    if (username != null && username.length() > 0)
-                        break;
-                }
+            out.println("Enter username\n");
+            String username = getUserInput();
 
-                out.println("Enter password\n");
-                while (true) {
-                    password = in.readLine();
-                    if (password != null && password.length() > 0)
-                        break;
-                }
+            out.println("Enter password\n");
+            String password = getUserInput();
 
-                //TODO: Authenticate user
-                authenticated = true;
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            // TODO: Authenticate user
+            authenticated = true;
         }
 
-        //Print Menu
+        // Print Menu
         out.println("Long list of stuff\n1.\n2.\n3.\nEnter input\n");
-        out.flush();
-        
-        //Some sample codes, entering ono closes the server, typing anything else echoes itback
+
+        // Some sample codes, entering ono closes the server, typing anything else
+        // echoes itback
         try {
             inputLine = in.readLine();
             while (true) {
                 if (inputLine != null && inputLine.length() > 0) {
-                    
-                    if ("ono".equals(inputLine)) {
+
+                    if (inputLine.equalsIgnoreCase("terminate")) {
                         out.println("Connection Terminated.\n");
                         out.flush();
                         break;
                     }
 
                     out.println("From Server: " + inputLine);
-                    out.println(""); //alternatively to \n you can do this but pls dont
-                    out.flush();
+                    out.println(""); // alternatively to \n you can do this but pls dont
                 }
                 inputLine = in.readLine();
             }
@@ -136,7 +137,7 @@ class ThreadClientHandler extends Thread {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
+
         try {
             in.close();
             out.close();

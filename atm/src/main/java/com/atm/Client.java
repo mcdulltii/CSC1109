@@ -56,15 +56,16 @@ public class Client {
     }
 
     public static void main(String args[]) {
-        Scanner sc = new Scanner(System.in);
-        Client c = new Client("127.0.0.1", 7777);
-        c.startConnection();
-        c.sendMessage(""); //Grabs server prompt
-        //System.out.println("Type anything to start..."); //NOTE: does not actually do anything but idk why it needs sth to be typed before the server prompts sooooo...?
+        Scanner scanner = new Scanner(System.in);
+        Client client = new Client("127.0.0.1", 7777);
+        client.startConnection();
+        client.sendMessage(""); //Grabs server prompt
         while (true) {
-            String input = sc.nextLine();
+            String input = scanner.nextLine();
             if (input != null && input.length() > 0)
-                c.sendMessage(input);
+                client.sendMessage(input);
+            if (input.equalsIgnoreCase("terminate")) 
+                client.close();
         }
     } 
 }
