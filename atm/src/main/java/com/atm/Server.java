@@ -83,27 +83,22 @@ class ThreadClientHandler extends Thread {
             return;
         }
         //NOTE: ALL out.println MUST END WITH \n TO LET BUFFEREDREADER KNOW END-OF-INPUT
-        //VV IMPT I SPEND 5HRS ON THIS AND IM VERY SAD
-        
         
         // Get client username and password
-        /* 
         while (!authenticated) {
             try {
                 out.println("Enter username\n");
                 String username, password;
                 while (true) {
-                    inputLine = in.readLine();
-                    if (inputLine.length() > 0)
-                        username = inputLine;
+                    username = in.readLine();
+                    if (username != null && username.length() > 0)
                         break;
                 }
 
                 out.println("Enter password\n");
                 while (true) {
-                    inputLine = in.readLine();
-                    if (inputLine.length() > 0)
-                        password = inputLine;
+                    password = in.readLine();
+                    if (password != null && password.length() > 0)
                         break;
                 }
 
@@ -114,18 +109,16 @@ class ThreadClientHandler extends Thread {
                 e.printStackTrace();
             }
         }
-        */
-        //idk why the code above doesnt work sighs
+
         //Print Menu
         out.println("Long list of stuff\n1.\n2.\n3.\nEnter input\n");
         out.flush();
-        
         
         //Some sample codes, entering ono closes the server, typing anything else echoes itback
         try {
             inputLine = in.readLine();
             while (true) {
-                if (inputLine.length() > 0) {
+                if (inputLine != null && inputLine.length() > 0) {
                     
                     if ("ono".equals(inputLine)) {
                         out.println("Connection Terminated.\n");
