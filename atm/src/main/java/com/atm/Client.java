@@ -9,8 +9,8 @@ import java.util.Scanner;
 
 public class Client {
     private Socket socket;
-    private PrintStream out;
-    private BufferedReader in;
+    private PrintStream outputStream;
+    private BufferedReader inputReader;
 
     public Client(String ip, int port) {
         try {
@@ -23,32 +23,32 @@ public class Client {
 
     public void startConnection() {
         try {
-            out = new PrintStream(socket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            outputStream = new PrintStream(socket.getOutputStream(), true);
+            inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void sendMessage(String msg) {
-        out.println(msg + "\n");
+        outputStream.println(msg + "\n");
         try {
-            String line = in.readLine();
-            while(line != null && line.length() > 0)
+            String responseLine = inputReader.readLine();
+            while(responseLine != null && responseLine.length() > 0)
             {
-                System.out.println(line);
-                line = in.readLine();
+                System.out.println(responseLine);
+                responseLine = inputReader.readLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        out.flush();
+        outputStream.flush();
     }
 
     public void close() {
         try {
-            in.close();
-            out.close();
+            inputReader.close();
+            outputStream.close();
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -65,7 +65,10 @@ public class Client {
             if (input != null && input.length() > 0)
                 client.sendMessage(input);
             if (input.equalsIgnoreCase("terminate")) 
+            {
                 client.close();
+                break;
+            }
         }
     } 
 }
