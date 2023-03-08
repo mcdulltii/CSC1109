@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: db-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: oopasgdb
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: testAdmin
+      MYSQL_PASSWORD: password1
+    ports:
+      - '4444:3306'
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d

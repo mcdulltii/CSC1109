@@ -20,6 +20,7 @@ public class Account {
         this.transferLimit = transferLimit;
         this.isAuthenticated = isAuthenticated;
         settings = new Settings(this);
+        storeAccountNumber();
     }
 
     public Account(String accountNumber, double availableBalance,
@@ -32,6 +33,7 @@ public class Account {
         this.transferLimit = transferLimit;
         this.isAuthenticated = isAuthenticated;
         settings = new Settings(this);
+        storeAccountNumber();
     }
 
     public String getAccountNumber() {
@@ -52,6 +54,10 @@ public class Account {
 
     public void setTotalBalance(double balance){
         this.totalBalance=balance;
+    }
+
+    public void setAvailableBalance(double availableBalance) {
+        this.availableBalance = availableBalance;
     }
 
     private String getNewAccountNumber(){
@@ -75,5 +81,9 @@ public class Account {
 //             }
         } while (nonUnique);
         return uuid;
+    }
+
+    private void storeAccountNumber(){
+        // TODO Store new account in accounts sql table
     }
 }
