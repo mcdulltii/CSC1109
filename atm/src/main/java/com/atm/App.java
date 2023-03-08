@@ -17,10 +17,17 @@ public class App {
         return account;
     }
 
-    public static Account updateUser(String username){
+    // Create Account object based on username input
+    public static Account getCurrentUser(String username){
         SQLQueries q = new SQLQueries();
-        Account currentUser = q.getAccount(username);
+        Account currentUser = q.getAccountfromUsername(username);
         return currentUser;
+    }
+    // Create Account object based on accountNumber (For transfer)
+    public static Account getTransferAccount(Long accountNumber){
+        SQLQueries q = new SQLQueries();
+        Account transferAccount = q.getAccountfromAccountNumber(accountNumber);
+        return transferAccount;
     }
 
     public static void selectionMenu(Account user) {
@@ -32,7 +39,9 @@ public class App {
             // Prompt user for account details
             System.out.print("Enter username: ");
             String username = sc.next();
-            user = updateUser(username);            
+            // Set user based on username input
+            user = getCurrentUser(username);    
+
             System.out.print("Enter password: ");
             String password = sc.next();
             
@@ -59,17 +68,26 @@ public class App {
                 case 0:
                     return;
                 case 1:
+                // Deposit
                     System.out.println("Please enter an amount to deposit: ");
                     double depositAmount = sc.nextDouble();
                     transaction.deposit(user, depositAmount);
                     break;
                 case 2:
+                // Withdraw
                     System.out.println("Please enter an amount to withdraw: ");
                     double withdrawalAmount = sc.nextDouble();
-                    transaction.deposit(user, withdrawalAmount);
+                    transaction.withdraw(user, withdrawalAmount);
                     break;
                 case 3:
-                    // transfer
+                // Transfer
+                    System.out.println("Please enter account number to transfer to: ");
+                    long transferAccountNumber = sc.nextLong();
+                    System.out.println("Please enter amount to be transferred: ");
+                    double amount = sc.nextDouble();
+                    Account a2 = getTransferAccount(transferAccountNumber);
+                    transaction.transferToAccount(user, a2, amount);
+                    
                 case 4:
                     System.out.println("Your Available Balance is "+user.getAvailableBalance());
                     System.out.println("Your Total Balance is "+user.getTotalBalance());

@@ -56,6 +56,10 @@ public class Account {
         this.totalBalance=balance;
     }
 
+    public void setAvailableBalance(double availableBalance) {
+        this.availableBalance = availableBalance;
+    }
+
     private String getNewAccountNumber(){
         Random rng = new Random();
         boolean nonUnique;

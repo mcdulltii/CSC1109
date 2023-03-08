@@ -44,25 +44,32 @@ public class SQLQueries {
         }
     }
 
-    public void executeQueryAccounts(int AccountNumber, String action, double amount){
-        double oldTotalBalance=0, newTotalBalance=0;
+    // Update accounts table based on selected action (Deposit/Withdraw)
+    public void executeQueryAccounts(Long AccountNumber, String action, double amount){
+        double oldTotalBalance=0, newTotalBalance=0, oldAvailableBalance=0, newAvailableBalance=0;
         Connection conn = getConnection();
 
         String selectQuery = "SELECT * FROM accounts WHERE accountNumber = "+AccountNumber;
-        String updateQuery = "UPDATE accounts SET TotalBalance = ? WHERE AccountNumber = ?";
+        String updateQuery = "UPDATE accounts SET TotalBalance = ?, AvailableBalance = ? WHERE AccountNumber = ?";
         ResultSet rs = executeQuery(selectQuery);
         try {
             while (rs.next()){
+                oldAvailableBalance = rs.getDouble("AvailableBalance");
                 oldTotalBalance = rs.getDouble("TotalBalance");
             }
             PreparedStatement preparedStmt = conn.prepareStatement(updateQuery);
-            if (action == "deposit")
+            if (action == "deposit"){
                 newTotalBalance = oldTotalBalance + amount;
-            else if (action == "withdraw")
+                preparedStmt.setDouble(2, oldAvailableBalance);
+            }else if (action == "withdraw"){
+                newAvailableBalance = oldAvailableBalance - amount;
                 newTotalBalance = oldTotalBalance - amount;
-
+                preparedStmt.setDouble(2, newAvailableBalance);
+            }
+                
+            
             preparedStmt.setDouble(1, newTotalBalance);
-            preparedStmt.setInt(2, AccountNumber);
+            preparedStmt.setLong(3, AccountNumber);
             preparedStmt.executeUpdate();
             
         } catch (SQLException e) {
@@ -71,14 +78,16 @@ public class SQLQueries {
         }
     }
 
-    public Account getAccount(String username){
+    // Create and return Account object from accounts table based on username input
+    public Account getAccountfromUsername(String username){
         double availableBalance=0, totalBalance = 0, transferLimit = 0;
-        int accountNumber = 0;
+        long accountNumber = 0;
+        
         String selectQuery = "SELECT * FROM accounts WHERE UserName = "+username;
         ResultSet rs = executeQuery(selectQuery);
         try {
             while(rs.next()){
-                accountNumber = rs.getInt("AccountNumber");
+                accountNumber = rs.getLong("AccountNumber");
                 availableBalance = rs.getDouble("AvailableBalance");
                 totalBalance = rs.getDouble("TotalBalance");
                 transferLimit = rs.getDouble("TransferLimit");
@@ -87,7 +96,27 @@ public class SQLQueries {
             // TODO: handle exception
             e.printStackTrace();
         }
+        
+        Account newAccount = new Account(String.valueOf(accountNumber), availableBalance, totalBalance, transferLimit, true);
+        return newAccount;
+    }
 
+    public Account getAccountfromAccountNumber(Long accountNumber){
+        double availableBalance=0, totalBalance = 0, transferLimit = 0;
+        
+        String selectQuery = "SELECT * FROM accounts WHERE AccountNumber = "+accountNumber;
+        ResultSet rs = executeQuery(selectQuery);
+        try {
+            while(rs.next()){
+                availableBalance = rs.getDouble("AvailableBalance");
+                totalBalance = rs.getDouble("TotalBalance");
+                transferLimit = rs.getDouble("TransferLimit");
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        
         Account newAccount = new Account(String.valueOf(accountNumber), availableBalance, totalBalance, transferLimit, true);
         return newAccount;
     }
