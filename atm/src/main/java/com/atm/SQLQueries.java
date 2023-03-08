@@ -83,7 +83,7 @@ public class SQLQueries {
         double availableBalance=0, totalBalance = 0, transferLimit = 0;
         long accountNumber = 0;
         
-        String selectQuery = "SELECT * FROM accounts WHERE UserName = "+username;
+        String selectQuery = "SELECT * FROM accounts WHERE UserName = \""+username+"\"";
         ResultSet rs = executeQuery(selectQuery);
         try {
             while(rs.next()){
