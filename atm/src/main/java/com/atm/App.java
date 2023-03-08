@@ -6,16 +6,21 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        Account user = authenticateUser(); //figure out which user is logged in
-        selectionMenu(user); //main
-        
         SQLQueries q = new SQLQueries();
         q.importAccounts();
+        Account user = authenticateUser(); //figure out which user is logged in
+        selectionMenu(user); //main
     }
 
     public static Account authenticateUser() {
         Account account = new Account(0.0,0.0,0.0,true);
         return account;
+    }
+
+    public static Account updateUser(String username){
+        SQLQueries q = new SQLQueries();
+        Account currentUser = q.getAccount(username);
+        return currentUser;
     }
 
     public static void selectionMenu(Account user) {
@@ -27,8 +32,10 @@ public class App {
             // Prompt user for account details
             System.out.print("Enter username: ");
             String username = sc.next();
+            user = updateUser(username);            
             System.out.print("Enter password: ");
             String password = sc.next();
+            
 
             //authentication required
 

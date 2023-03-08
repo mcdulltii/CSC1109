@@ -41,6 +41,10 @@ public class Transaction {
         SQLQueries q = new SQLQueries();
         java.sql.Date sqlDate=new java.sql.Date(transactionDate.getTime());
         q.executeQueryTransactions(a1.getAccountNumber(), sqlDate, "", "", sqlDate, 0.0, amount, a1.getTotalBalance());
+
+        // Phileo's part
+        q.executeQueryAccounts(Integer.parseInt(a1.getAccountNumber()), "deposit", amount);
+        
         return "Deposit Successful";
     }
 

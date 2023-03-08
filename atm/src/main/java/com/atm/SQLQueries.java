@@ -44,6 +44,54 @@ public class SQLQueries {
         }
     }
 
+    public void executeQueryAccounts(int AccountNumber, String action, double amount){
+        double oldTotalBalance=0, newTotalBalance=0;
+        Connection conn = getConnection();
+
+        String selectQuery = "SELECT * FROM accounts WHERE accountNumber = "+AccountNumber;
+        String updateQuery = "UPDATE accounts SET TotalBalance = ? WHERE AccountNumber = ?";
+        ResultSet rs = executeQuery(selectQuery);
+        try {
+            while (rs.next()){
+                oldTotalBalance = rs.getDouble("TotalBalance");
+            }
+            PreparedStatement preparedStmt = conn.prepareStatement(updateQuery);
+            if (action == "deposit")
+                newTotalBalance = oldTotalBalance + amount;
+            else if (action == "withdraw")
+                newTotalBalance = oldTotalBalance - amount;
+
+            preparedStmt.setDouble(1, newTotalBalance);
+            preparedStmt.setInt(2, AccountNumber);
+            preparedStmt.executeUpdate();
+            
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public Account getAccount(String username){
+        double availableBalance=0, totalBalance = 0, transferLimit = 0;
+        int accountNumber = 0;
+        String selectQuery = "SELECT * FROM accounts WHERE UserName = "+username;
+        ResultSet rs = executeQuery(selectQuery);
+        try {
+            while(rs.next()){
+                accountNumber = rs.getInt("AccountNumber");
+                availableBalance = rs.getDouble("AvailableBalance");
+                totalBalance = rs.getDouble("TotalBalance");
+                transferLimit = rs.getDouble("TransferLimit");
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+
+        Account newAccount = new Account(String.valueOf(accountNumber), availableBalance, totalBalance, transferLimit, true);
+        return newAccount;
+    }
+
     public void importAccounts() throws FileNotFoundException{
         String sql = "SELECT * FROM accounts";
         ResultSet rs = executeQuery(sql);
