@@ -144,30 +144,32 @@ public class SQLQueries {
                         break;
                     }
                     if (row == null) break;
-                    sql = "INSERT INTO accounts(AccountNumber, UserName, Password, FirstName, LastName, PinNumber, AvailableBalance, TotalBalance, TransferLimit, IsAdmin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    sql = "INSERT INTO accounts(CardNumber, AccountNumber, UserName, Password, FirstName, LastName, PinNumber, AvailableBalance, TotalBalance, TransferLimit, IsAdmin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     PreparedStatement preparedStmt = conn.prepareStatement(sql);
                     String[] data = row.split(",");
                     for (int i=0; i<data.length; i++) {
                         switch(i) {
                             case 0:
+                            case 1:
+                                preparedStmt.setLong(i+1, Long.parseLong(data[i]));
                                 preparedStmt.setLong(i+1, Long.parseLong(data[i]));
                                 break;
-                            case 1:
                             case 2:
                             case 3:
                             case 4:
+                            case 5:
                                 preparedStmt.setString(i+1, data[i]);
                                 break;
-                            case 5:
-                                preparedStmt.setLong(i+1, Long.parseLong(data[i]));
-                                preparedStmt.setString(3, au.hashString(data[i]));
-                                break;
                             case 6:
+                                preparedStmt.setLong(i+1, Long.parseLong(data[i]));
+                                preparedStmt.setString(4, au.hashString(data[i]));
+                                break;
                             case 7:
                             case 8:
+                            case 9:
                                 preparedStmt.setFloat(i+1, Float.parseFloat(data[i]));
                                 break;
-                            case 9:
+                            case 10:
                                 preparedStmt.setBoolean(i+1, Boolean.parseBoolean(data[i]));
                         }
                     }

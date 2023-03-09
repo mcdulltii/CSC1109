@@ -39,6 +39,7 @@
   - Create accounts table
     ```sql
     CREATE TABLE `accounts` (
+      `CardNumber` BIGINT(20) NOT NULL,
       `AccountNumber` BIGINT(20) NOT NULL,
       `UserName` VARCHAR(45) NOT NULL,
       `Password` VARCHAR(128) NOT NULL,
