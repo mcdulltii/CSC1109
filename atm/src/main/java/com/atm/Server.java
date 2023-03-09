@@ -50,14 +50,14 @@ public class Server extends Thread {
 
         Scanner sc = new Scanner(System.in);
         login: while (true) {
-            System.out.println("Enter admin password: ");
+            System.out.println("Enter admin password:");
             String password = sc.next();
             if (password.equals("admin")) // TODO: Authenticate
             {
                 System.out.println("Welcome Admin!");
                 while (true) {
                     System.out.println("Available Options:\n(1) Display all accounts\n(0) Logout admin");
-                    System.out.println("Enter option: ");
+                    System.out.println("Enter option:");
                     int choice = sc.nextInt();
                     switch (choice) {
                         case 1:
@@ -102,24 +102,25 @@ class ThreadClientHandler extends Thread {
     private PrintWriter outputStream;
     private BufferedReader inputReader;
     private Boolean authenticated = false;
-    private String inputLine = "";
 
     public ThreadClientHandler(Socket socket) {
         this.clientSocket = socket;
     }
 
     private String getUserInput() {
+        this.endLine();
         String s = "";
         try {
-            while (true) {
-                s = inputReader.readLine();
-                if (s != null && s.length() > 0)
-                    break;
-            }
+            s = inputReader.readLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return s;
+        return s.trim();
+    }
+
+    private void endLine() {
+        outputStream.println("END");
+        outputStream.flush();
     }
 
     public void run() {
@@ -130,8 +131,6 @@ class ThreadClientHandler extends Thread {
             e.printStackTrace();
             return;
         }
-        // NOTE: ALL out.println MUST END WITH \n (no spaces) TO LET BUFFEREDREADER KNOW
-        // END-OF-INPUT
 
         // Fill account database
         SQLQueries q = new SQLQueries();
@@ -141,71 +140,85 @@ class ThreadClientHandler extends Thread {
             e.printStackTrace();
         }
 
+        // Send server prompt
+        outputStream.println("Welcome to ATM!");
+
         // Get client username and password
         Account user = null;
+        Authenticate au = new Authenticate();
         while (!authenticated) {
-            outputStream.println("Enter username\n");
+            outputStream.println("Enter username:");
             String username = getUserInput();
 
-            outputStream.println("Enter password\n");
+            outputStream.println("Enter password:");
             String password = getUserInput();
 
-            // TODO: Authenticate user
-            user = authenticateUser();
-            authenticated = true;
-        }
-
-        SelectionMenu: while (true) {
-            // User options
-            outputStream.println("Available Services:\n");
-            outputStream
-                    .println("(1) Deposit\n(2) Withdraw\n(3) Transfer\n(4) View Account Balance\n(5) Help\n(0) Exit\n");
-            outputStream.println("Please enter an option:\n");
-            try {
-                Transaction transaction = new Transaction(user);
-                int userinput = Integer.parseInt(getUserInput());
-                switch (userinput) {
-                    case 0:
-                        break SelectionMenu;
-                    case 1:
-                        // Deposit
-                        outputStream.println("Please enter an amount to deposit:\n");
-                        double depositAmount = Double.parseDouble(getUserInput());
-                        transaction.deposit(user, depositAmount);
-                        break;
-                    case 2:
-                        // Withdraw
-                        outputStream.println("Please enter an amount to withdraw:\n");
-                        double withdrawalAmount = Double.parseDouble(getUserInput());
-                        transaction.withdraw(user, withdrawalAmount);
-                        break;
-                    case 3:
-                        // Transfer
-                        outputStream.println("Please enter account number to transfer to:\n");
-                        long transferAccountNumber = Long.parseLong(getUserInput());
-                        outputStream.println("Please enter amount to be transferred:\n");
-                        double amount = Double.parseDouble(getUserInput());
-                        Account a2 = getTransferAccount(transferAccountNumber);
-                        transaction.transferToAccount(user, a2, amount);
-
-                    case 4:
-                        outputStream.println("Your Available Balance is " + user.getAvailableBalance() + "\n");
-                        outputStream.println("Your Total Balance is " + user.getTotalBalance() + "\n");
-                        break;
-                    case 5:
-                        outputStream.println("Please contact the customer service hotline for any assistance.\n");
-                    default:
-                        outputStream.println("Invalid choice! Please choose again!\n");
-                        break;
+            if (username.length() != 0 && password.length() != 0) {
+                if (au.checkPassword(username, password) == true) {
+                    // TODO: add OTP
+                    user = authenticateUser();
+                    authenticated = true;
+                    break;
                 }
-            } catch (NumberFormatException e) {
-                outputStream.println("Invalid choice! Please choose again!\n");
             }
+
+            // TODO: add 3 times timeout
+            outputStream.println("Password incorrect, try again.");
         }
 
-        // if here, user has prompted to terminate connection
-        // Thank You Message
-        outputStream.println("Thank You and Have a Nice Day!\n");
+        if (authenticated) {
+            SelectionMenu: while (true) {
+                // User options
+                outputStream.println("Available Services:");
+                outputStream
+                        .println("(1) Deposit\n(2) Withdraw\n(3) Transfer\n(4) View Account Balance\n(5) Help\n(0) Exit");
+                outputStream.println("Please enter an option:");
+                try {
+                    Transaction transaction = new Transaction(user);
+                    int userinput = Integer.parseInt(getUserInput());
+                    switch (userinput) {
+                        case 0:
+                            break SelectionMenu;
+                        case 1:
+                            // Deposit
+                            outputStream.println("Please enter an amount to deposit:");
+                            double depositAmount = Double.parseDouble(getUserInput());
+                            transaction.deposit(user, depositAmount);
+                            break;
+                        case 2:
+                            // Withdraw
+                            outputStream.println("Please enter an amount to withdraw:");
+                            double withdrawalAmount = Double.parseDouble(getUserInput());
+                            transaction.withdraw(user, withdrawalAmount);
+                            break;
+                        case 3:
+                            // Transfer
+                            outputStream.println("Please enter account number to transfer to:");
+                            long transferAccountNumber = Long.parseLong(getUserInput());
+                            outputStream.println("Please enter amount to be transferred:");
+                            double amount = Double.parseDouble(getUserInput());
+                            Account a2 = getTransferAccount(transferAccountNumber);
+                            transaction.transferToAccount(user, a2, amount);
+
+                        case 4:
+                            outputStream.println("Your Available Balance is " + user.getAvailableBalance());
+                            outputStream.println("Your Total Balance is " + user.getTotalBalance());
+                            break;
+                        case 5:
+                            outputStream.println("Please contact the customer service hotline for any assistance.");
+                        default:
+                            outputStream.println("Invalid choice! Please choose again!");
+                            break;
+                    }
+                } catch (NumberFormatException e) {
+                    outputStream.println("Invalid choice! Please choose again!");
+                }
+            }
+
+            // if here, user has prompted to terminate connection
+            // Thank You Message
+            outputStream.println("Thank You and Have a Nice Day!\n");
+        }
 
         // Close connection
         try {

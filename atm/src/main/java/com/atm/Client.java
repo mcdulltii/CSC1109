@@ -30,18 +30,24 @@ public class Client {
         }
     }
 
-    public void sendMessage(String msg) {
-        outputStream.println(msg + "\n");
+    public void receiveMessage() {
+        String responseLine = "";
         try {
-            String responseLine = inputReader.readLine();
-            while(responseLine != null && responseLine.length() > 0)
-            {
+            responseLine = inputReader.readLine();
+            while (true) {
+                if (responseLine.equalsIgnoreCase("END"))
+                    break;
                 System.out.println(responseLine);
                 responseLine = inputReader.readLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void sendMessage(String msg) {
+        this.receiveMessage();
+        outputStream.println(msg);
         outputStream.flush();
     }
 
@@ -59,7 +65,7 @@ public class Client {
         Scanner scanner = new Scanner(System.in);
         Client client = new Client("127.0.0.1", 7777);
         client.startConnection();
-        client.sendMessage(""); //Grabs server prompt
+        client.sendMessage(""); // Receive server prompt
         while (true) {
             String input = scanner.nextLine();
             if (input != null && input.length() > 0)
@@ -70,5 +76,6 @@ public class Client {
                 break;
             }
         }
+        scanner.close();
     } 
 }
