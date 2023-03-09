@@ -48,6 +48,14 @@ public class Server extends Thread {
         Server s = new Server();
         s.start(7777);
 
+        // Fill account database
+        SQLQueries q = new SQLQueries();
+        try {
+            q.importAccounts();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
         Scanner sc = new Scanner(System.in);
         login: while (true) {
             System.out.println("Enter admin password:");
@@ -115,7 +123,7 @@ class ThreadClientHandler extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return s.trim();
+        return s.strip();
     }
 
     private void endLine() {
@@ -125,22 +133,14 @@ class ThreadClientHandler extends Thread {
 
     public void run() {
         try {
-            inputReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             outputStream = new PrintWriter(clientSocket.getOutputStream(), true);
+            inputReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         } catch (IOException e) {
             e.printStackTrace();
             return;
         }
 
-        // Fill account database
-        SQLQueries q = new SQLQueries();
-        try {
-            q.importAccounts();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        // Send server prompt
+        //System Welcome Message
         outputStream.println("Welcome to ATM!");
 
         // Get client username and password
@@ -149,12 +149,11 @@ class ThreadClientHandler extends Thread {
         while (!authenticated) {
             outputStream.println("Enter username:");
             String username = getUserInput();
-
             outputStream.println("Enter password:");
             String password = getUserInput();
 
             if (username.length() != 0 && password.length() != 0) {
-                if (au.checkPassword(username, password) == true) {
+                if (au.checkPassword(username, password)) {
                     // TODO: add OTP
                     user = authenticateUser();
                     authenticated = true;

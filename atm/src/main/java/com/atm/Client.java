@@ -65,7 +65,7 @@ public class Client {
         Scanner scanner = new Scanner(System.in);
         Client client = new Client("127.0.0.1", 7777);
         client.startConnection();
-        client.sendMessage(""); // Receive server prompt
+        client.sendMessage("\n"); // Receive server prompt
         while (true) {
             String input = scanner.nextLine();
             if (input != null && input.length() > 0)
