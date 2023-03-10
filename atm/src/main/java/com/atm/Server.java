@@ -140,17 +140,22 @@ class ThreadClientHandler extends Thread {
             return;
         }
 
-        //System Welcome Message
+        // Send server prompt
+        getUserInput();
         outputStream.println("Welcome to ATM!");
-
+        //endLine();
+        
         // Get client username and password
         Account user = null;
         Authenticate au = new Authenticate();
         while (!authenticated) {
             outputStream.println("Enter username:");
             String username = getUserInput();
+            System.out.println("Username:" + username);
+            
             outputStream.println("Enter password:");
             String password = getUserInput();
+            System.out.println("Password:" + password);
 
             if (username.length() != 0 && password.length() != 0) {
                 if (au.checkPassword(username, password)) {

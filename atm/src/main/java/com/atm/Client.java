@@ -33,21 +33,23 @@ public class Client {
     public void receiveMessage() {
         String responseLine = "";
         try {
-            responseLine = inputReader.readLine();
+            if (inputReader.ready()) responseLine = inputReader.readLine().trim();
             while (true) {
-                if (responseLine.equalsIgnoreCase("END"))
-                    break;
-                System.out.println(responseLine);
-                responseLine = inputReader.readLine();
+                if (responseLine.equalsIgnoreCase("END")) {
+                    return;
+                }
+                if (responseLine != "") System.out.println(responseLine);
+                Thread.sleep(50);
+                if (inputReader.ready()) responseLine = inputReader.readLine();
             }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
 
     public void sendMessage(String msg) {
-        this.receiveMessage();
         outputStream.println(msg);
+        this.receiveMessage();
         outputStream.flush();
     }
 
@@ -65,7 +67,8 @@ public class Client {
         Scanner scanner = new Scanner(System.in);
         Client client = new Client("127.0.0.1", 7777);
         client.startConnection();
-        client.sendMessage("\n"); // Receive server prompt
+        client.sendMessage(null); // Receive server prompt
+        client.receiveMessage();
         while (true) {
             String input = scanner.nextLine();
             if (input != null && input.length() > 0)
