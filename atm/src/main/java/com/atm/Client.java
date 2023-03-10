@@ -30,19 +30,31 @@ public class Client {
         }
     }
 
-    public void sendMessage(String msg) {
-        outputStream.println(msg + "\n");
+    public Boolean receiveMessage() {
+        String responseLine = "";
         try {
-            String responseLine = inputReader.readLine();
-            while(responseLine != null && responseLine.length() > 0)
-            {
-                System.out.println(responseLine);
-                responseLine = inputReader.readLine();
+            if (inputReader.ready()) responseLine = inputReader.readLine().trim();
+            while (true) {
+                if (responseLine.equalsIgnoreCase("END")) {
+                    return true;
+                } else if (responseLine.equalsIgnoreCase("FIN")) {
+                    return false;
+                }
+                if (responseLine != "") System.out.println(responseLine);
+                Thread.sleep(50);
+                if (inputReader.ready()) responseLine = inputReader.readLine();
             }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+        return true;
+    }
+
+    public Boolean sendMessage(String msg) {
+        outputStream.println(msg);
+        Boolean isOpen = this.receiveMessage();
         outputStream.flush();
+        return isOpen;
     }
 
     public void close() {
@@ -59,16 +71,15 @@ public class Client {
         Scanner scanner = new Scanner(System.in);
         Client client = new Client("127.0.0.1", 7777);
         client.startConnection();
-        client.sendMessage(""); //Grabs server prompt
-        while (true) {
+        client.sendMessage(null); // Receive server prompt
+        client.receiveMessage();
+        Boolean isOpen = true;
+        while (isOpen) {
             String input = scanner.nextLine();
             if (input != null && input.length() > 0)
-                client.sendMessage(input);
-            if (input.equalsIgnoreCase("terminate")) 
-            {
-                client.close();
-                break;
-            }
+                isOpen = client.sendMessage(input);
         }
+        client.close();
+        scanner.close();
     } 
 }
