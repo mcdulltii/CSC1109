@@ -30,13 +30,15 @@ public class Client {
         }
     }
 
-    public void receiveMessage() {
+    public Boolean receiveMessage() {
         String responseLine = "";
         try {
             if (inputReader.ready()) responseLine = inputReader.readLine().trim();
             while (true) {
                 if (responseLine.equalsIgnoreCase("END")) {
-                    return;
+                    return true;
+                } else if (responseLine.equalsIgnoreCase("FIN")) {
+                    return false;
                 }
                 if (responseLine != "") System.out.println(responseLine);
                 Thread.sleep(50);
@@ -45,12 +47,14 @@ public class Client {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+        return true;
     }
 
-    public void sendMessage(String msg) {
+    public Boolean sendMessage(String msg) {
         outputStream.println(msg);
-        this.receiveMessage();
+        Boolean isOpen = this.receiveMessage();
         outputStream.flush();
+        return isOpen;
     }
 
     public void close() {
@@ -69,16 +73,13 @@ public class Client {
         client.startConnection();
         client.sendMessage(null); // Receive server prompt
         client.receiveMessage();
-        while (true) {
+        Boolean isOpen = true;
+        while (isOpen) {
             String input = scanner.nextLine();
             if (input != null && input.length() > 0)
-                client.sendMessage(input);
-            if (input.equalsIgnoreCase("terminate")) 
-            {
-                client.close();
-                break;
-            }
+                isOpen = client.sendMessage(input);
         }
+        client.close();
         scanner.close();
     } 
 }

@@ -143,7 +143,6 @@ class ThreadClientHandler extends Thread {
         // Send server prompt
         getUserInput();
         outputStream.println("Welcome to ATM!");
-        //endLine();
         
         // Get client username and password
         Account user = null;
@@ -151,11 +150,9 @@ class ThreadClientHandler extends Thread {
         while (!authenticated) {
             outputStream.println("Enter username:");
             String username = getUserInput();
-            System.out.println("Username:" + username);
             
             outputStream.println("Enter password:");
             String password = getUserInput();
-            System.out.println("Password:" + password);
 
             if (username.length() != 0 && password.length() != 0) {
                 if (au.checkPassword(username, password)) {
@@ -203,13 +200,14 @@ class ThreadClientHandler extends Thread {
                             double amount = Double.parseDouble(getUserInput());
                             Account a2 = getTransferAccount(transferAccountNumber);
                             transaction.transferToAccount(user, a2, amount);
-
+                            break;
                         case 4:
                             outputStream.println("Your Available Balance is " + user.getAvailableBalance());
                             outputStream.println("Your Total Balance is " + user.getTotalBalance());
                             break;
                         case 5:
                             outputStream.println("Please contact the customer service hotline for any assistance.");
+                            break;
                         default:
                             outputStream.println("Invalid choice! Please choose again!");
                             break;
@@ -221,7 +219,8 @@ class ThreadClientHandler extends Thread {
 
             // if here, user has prompted to terminate connection
             // Thank You Message
-            outputStream.println("Thank You and Have a Nice Day!\n");
+            outputStream.println("Thank You and Have a Nice Day!");
+            outputStream.println("FIN");
         }
 
         // Close connection
