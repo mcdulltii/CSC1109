@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.sql.*;
 
 public class SQLQueries {
-    final String db_url = "jdbc:mysql://localhost:4444/oopasgdb";
+    final String db_url = "jdbc:mysql://localhost:3306/oopasgdb";
     public String transactionId;
 
     public void executeQueryTransactions(String accountNumber,
