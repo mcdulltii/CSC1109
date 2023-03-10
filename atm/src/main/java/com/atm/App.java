@@ -8,8 +8,40 @@ public class App {
     public static void main(String[] args) throws Exception {
         SQLQueries q = new SQLQueries();
         q.importAccounts();
-        Account user = authenticateUser(); //figure out which user is logged in
+
+        // Welcome Message
+        System.out.println("Welcome to ATM!");
+
+        Scanner sc = new Scanner(System.in);
+        // Get client username and password
+        Account user = null;
+        Authenticate au = new Authenticate();
+        Boolean authenticated = false;
+        while (!authenticated) {
+            // Prompt user for account details
+            System.out.print("Enter username: ");
+            String username = sc.next();
+            // Set user based on username input
+            user = getCurrentUser(username);    
+
+            System.out.print("Enter password: ");
+            String password = sc.next();
+
+            if (username.length() != 0 && password.length() != 0) {
+                if (au.checkPassword(username, password)) {
+                    // TODO: add OTP
+                    user = authenticateUser();
+                    authenticated = true;
+                    break;
+                }
+            }
+
+            // TODO: add 3 times timeout
+            System.out.println("Password incorrect, try again.");
+        }
+        
         selectionMenu(user); //main
+        sc.close();
     }
 
     public static Account authenticateUser() {
@@ -33,21 +65,6 @@ public class App {
     public static void selectionMenu(Account user) {
         Scanner sc = new Scanner(System.in);
         while (true) {
-            // Welcome Message
-            System.out.println("Welcome to ATM!");
-
-            // Prompt user for account details
-            System.out.print("Enter username: ");
-            String username = sc.next();
-            // Set user based on username input
-            user = getCurrentUser(username);    
-
-            System.out.print("Enter password: ");
-            String password = sc.next();
-            
-
-            //authentication required
-
             // User options
             System.out.print("\nAvailable Services:");
             System.out.println("\n(1) Deposit\n(2) Withdraw\n(3) Transfer\n(4) View Account Balance\n(5) Help");
@@ -66,34 +83,39 @@ public class App {
                 int userinput = Integer.parseInt(sc.next());
                 switch (userinput) {
                 case 0:
+                    // Thank You Message
+                    System.out.println("Thank You and Have a Nice Day!");
+                    // Close and return
+                    sc.close();
                     return;
                 case 1:
-                // Deposit
+                    // Deposit
                     System.out.println("Please enter an amount to deposit: ");
                     double depositAmount = sc.nextDouble();
                     transaction.deposit(user, depositAmount);
                     break;
                 case 2:
-                // Withdraw
+                    // Withdraw
                     System.out.println("Please enter an amount to withdraw: ");
                     double withdrawalAmount = sc.nextDouble();
                     transaction.withdraw(user, withdrawalAmount);
                     break;
                 case 3:
-                // Transfer
+                    // Transfer
                     System.out.println("Please enter account number to transfer to: ");
                     long transferAccountNumber = sc.nextLong();
                     System.out.println("Please enter amount to be transferred: ");
                     double amount = sc.nextDouble();
                     Account a2 = getTransferAccount(transferAccountNumber);
                     transaction.transferToAccount(user, a2, amount);
-                    
+                    break;
                 case 4:
                     System.out.println("Your Available Balance is "+user.getAvailableBalance());
                     System.out.println("Your Total Balance is "+user.getTotalBalance());
                     break;
                 case 5:
                     System.out.println("Please contact the customer service hotline for any assistance.");
+                    break;
                 case 6: 
                     printAllAccounts();
                     break;
@@ -104,9 +126,6 @@ public class App {
                 System.out.println("Invalid choice! Please choose again!");
                 e.printStackTrace();
             }
-
-            // Thank You Message
-            System.out.println("Thank You and Have a Nice Day!");
         }
     }
 

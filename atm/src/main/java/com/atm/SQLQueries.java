@@ -121,6 +121,23 @@ public class SQLQueries {
         return newAccount;
     }
 
+    public String getPasswordfromUsername(String username){
+        String password = "";
+        
+        String selectQuery = "SELECT * FROM accounts WHERE UserName = \""+username+"\"";
+        ResultSet rs = executeQuery(selectQuery);
+        try {
+            while(rs.next()){
+                password = rs.getString("Password");
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        
+        return password;
+    }
+
     public void importAccounts() throws FileNotFoundException{
         String sql = "SELECT * FROM accounts";
         ResultSet rs = executeQuery(sql);
