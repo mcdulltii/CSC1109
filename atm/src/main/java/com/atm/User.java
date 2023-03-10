@@ -1,4 +1,5 @@
 package com.atm;
+
 import java.util.Random;
 
 public class User {
@@ -12,7 +13,7 @@ public class User {
     protected static Settings settings;
 
     User(String firstName, String lastName, String userName, String pinNumber,
-         boolean isAdmin) {
+            boolean isAdmin) {
         this.userId = this.getNewUserId();
         this.firstName = firstName;
         this.lastName = lastName;
@@ -42,7 +43,7 @@ public class User {
         return pinNumber;
     }
 
-    private int getNewUserId(){
+    private int getNewUserId() {
         Random rng = new Random();
         boolean nonUnique;
         String uuid;
@@ -50,18 +51,18 @@ public class User {
 
         do {
             uuid = "";
-            for (int c = 0 ; c<len; c++) {
-                uuid += ((Integer)rng.nextInt(10)).toString();
+            for (int c = 0; c < len; c++) {
+                uuid += ((Integer) rng.nextInt(10)).toString();
 
             }
             nonUnique = false;
             // Check database for userId collision
-//             for (User u : this.users) {
-//                 if (uuid.compareTo(u.getUserId()) == 0) {
-//                     nonUnique = true;
-//                     break;
-//                 }
-//             }
+            // for (User u : this.users) {
+            // if (uuid.compareTo(u.getUserId()) == 0) {
+            // nonUnique = true;
+            // break;
+            // }
+            // }
 
         } while (nonUnique);
         return Integer.parseInt(uuid);

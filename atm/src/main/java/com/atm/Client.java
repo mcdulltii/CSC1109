@@ -33,16 +33,19 @@ public class Client {
     public Boolean receiveMessage() {
         String responseLine = "";
         try {
-            if (inputReader.ready()) responseLine = inputReader.readLine().trim();
+            if (inputReader.ready())
+                responseLine = inputReader.readLine().trim();
             while (true) {
                 if (responseLine.equalsIgnoreCase("END")) {
                     return true;
                 } else if (responseLine.equalsIgnoreCase("FIN")) {
                     return false;
                 }
-                if (responseLine != "") System.out.println(responseLine);
+                if (responseLine != "")
+                    System.out.println(responseLine);
                 Thread.sleep(50);
-                if (inputReader.ready()) responseLine = inputReader.readLine();
+                if (inputReader.ready())
+                    responseLine = inputReader.readLine();
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -81,5 +84,5 @@ public class Client {
         }
         client.close();
         scanner.close();
-    } 
+    }
 }
