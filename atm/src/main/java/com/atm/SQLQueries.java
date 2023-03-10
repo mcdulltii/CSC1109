@@ -1,4 +1,5 @@
 package com.atm;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -6,15 +7,19 @@ import java.io.IOException;
 import java.sql.*;
 
 public class SQLQueries {
-    final String db_url="jdbc:mysql://localhost:3306/oopasgdb";
+    final String db_url = "jdbc:mysql://localhost:4444/oopasgdb";
     public String transactionId;
 
-    public void executeQueryTransactions(String accountNumber, Date transactionDate, String transactionDetails, String chqNumber, Date valueDate, Double withdrawal, Double deposit, Double balance){
+    public void executeQueryTransactions(String accountNumber,
+            Date transactionDate, String transactionDetails,
+            String chqNumber, Date valueDate, Double withdrawal, Double deposit,
+            Double balance) {
         Connection conn = getConnection();
+
         String getTransactionCount = "SELECT transactionId FROM transactions ORDER BY transactionId desc limit 1";
         String sql = "INSERT INTO transactions (transactionId, accountNumber, transactionDate, transactionDetails, chqNumber, valueDate, withdrawal, deposit, balance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
         ResultSet transactionCountResult = executeQuery(getTransactionCount);
+
         try {
             if (transactionCountResult != null)
                 while (transactionCountResult.next())
@@ -45,33 +50,33 @@ public class SQLQueries {
     }
 
     // Update accounts table based on selected action (Deposit/Withdraw)
-    public void executeQueryAccounts(Long AccountNumber, String action, double amount){
-        double oldTotalBalance=0, newTotalBalance=0, oldAvailableBalance=0, newAvailableBalance=0;
+    public void executeQueryAccounts(Long AccountNumber, String action, double amount) {
+        double oldTotalBalance = 0, newTotalBalance = 0, oldAvailableBalance = 0, newAvailableBalance = 0;
         Connection conn = getConnection();
 
-        String selectQuery = "SELECT * FROM accounts WHERE accountNumber = "+AccountNumber;
+        String selectQuery = "SELECT * FROM accounts WHERE accountNumber = " + AccountNumber;
         String updateQuery = "UPDATE accounts SET TotalBalance = ?, AvailableBalance = ? WHERE AccountNumber = ?";
         ResultSet rs = executeQuery(selectQuery);
+
         try {
-            while (rs.next()){
+            while (rs.next()) {
                 oldAvailableBalance = rs.getDouble("AvailableBalance");
                 oldTotalBalance = rs.getDouble("TotalBalance");
             }
             PreparedStatement preparedStmt = conn.prepareStatement(updateQuery);
-            if (action == "deposit"){
+            if (action == "deposit") {
                 newTotalBalance = oldTotalBalance + amount;
                 preparedStmt.setDouble(2, oldAvailableBalance);
-            }else if (action == "withdraw"){
+            } else if (action == "withdraw") {
                 newAvailableBalance = oldAvailableBalance - amount;
                 newTotalBalance = oldTotalBalance - amount;
                 preparedStmt.setDouble(2, newAvailableBalance);
             }
-                
-            
+
             preparedStmt.setDouble(1, newTotalBalance);
             preparedStmt.setLong(3, AccountNumber);
             preparedStmt.executeUpdate();
-            
+
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -79,14 +84,15 @@ public class SQLQueries {
     }
 
     // Create and return Account object from accounts table based on username input
-    public Account getAccountfromUsername(String username){
-        double availableBalance=0, totalBalance = 0, transferLimit = 0;
+    public Account getAccountfromUsername(String username) {
+        double availableBalance = 0, totalBalance = 0, transferLimit = 0;
         long accountNumber = 0;
-        
-        String selectQuery = "SELECT * FROM accounts WHERE UserName = \""+username+"\"";
+
+        String selectQuery = "SELECT * FROM accounts WHERE UserName = \"" + username + "\"";
         ResultSet rs = executeQuery(selectQuery);
+
         try {
-            while(rs.next()){
+            while (rs.next()) {
                 accountNumber = rs.getLong("AccountNumber");
                 availableBalance = rs.getDouble("AvailableBalance");
                 totalBalance = rs.getDouble("TotalBalance");
@@ -96,18 +102,20 @@ public class SQLQueries {
             // TODO: handle exception
             e.printStackTrace();
         }
-        
-        Account newAccount = new Account(String.valueOf(accountNumber), availableBalance, totalBalance, transferLimit, true);
+
+        Account newAccount = new Account(String.valueOf(accountNumber), availableBalance,
+                totalBalance, transferLimit, true);
         return newAccount;
     }
 
-    public Account getAccountfromAccountNumber(Long accountNumber){
-        double availableBalance=0, totalBalance = 0, transferLimit = 0;
-        
-        String selectQuery = "SELECT * FROM accounts WHERE AccountNumber = "+accountNumber;
+    public Account getAccountfromAccountNumber(Long accountNumber) {
+        double availableBalance = 0, totalBalance = 0, transferLimit = 0;
+
+        String selectQuery = "SELECT * FROM accounts WHERE AccountNumber = " + accountNumber;
         ResultSet rs = executeQuery(selectQuery);
+
         try {
-            while(rs.next()){
+            while (rs.next()) {
                 availableBalance = rs.getDouble("AvailableBalance");
                 totalBalance = rs.getDouble("TotalBalance");
                 transferLimit = rs.getDouble("TransferLimit");
@@ -116,41 +124,46 @@ public class SQLQueries {
             // TODO: handle exception
             e.printStackTrace();
         }
-        
-        Account newAccount = new Account(String.valueOf(accountNumber), availableBalance, totalBalance, transferLimit, true);
+
+        Account newAccount = new Account(String.valueOf(accountNumber), availableBalance,
+                totalBalance, transferLimit, true);
         return newAccount;
     }
 
-    public String getPasswordfromUsername(String username){
+    public String getPasswordfromUsername(String username) {
         String password = "";
-        
-        String selectQuery = "SELECT * FROM accounts WHERE UserName = \""+username+"\"";
+
+        String selectQuery = "SELECT * FROM accounts WHERE UserName = \"" + username + "\"";
         ResultSet rs = executeQuery(selectQuery);
+
         try {
-            while(rs.next()){
+            while (rs.next()) {
                 password = rs.getString("Password");
             }
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
         }
-        
+
         return password;
     }
 
-    public void importAccounts() throws FileNotFoundException{
+    public void importAccounts() throws FileNotFoundException {
         String sql = "SELECT * FROM accounts";
         ResultSet rs = executeQuery(sql);
+
         try {
             if (!rs.next()) {
                 // Import CSV
                 BufferedReader br = new BufferedReader(new FileReader("atm/res/accounts.csv"));
                 Authenticate au = new Authenticate();
+
                 try {
                     br.readLine();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
                 Connection conn = getConnection();
                 while (true) {
                     String row = null;
@@ -160,34 +173,37 @@ public class SQLQueries {
                         e.printStackTrace();
                         break;
                     }
-                    if (row == null) break;
+                    if (row == null)
+                        break;
+
                     sql = "INSERT INTO accounts(CardNumber, AccountNumber, UserName, Password, FirstName, LastName, PinNumber, AvailableBalance, TotalBalance, TransferLimit, IsAdmin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     PreparedStatement preparedStmt = conn.prepareStatement(sql);
                     String[] data = row.split(",");
-                    for (int i=0; i<data.length; i++) {
-                        switch(i) {
+
+                    for (int i = 0; i < data.length; i++) {
+                        switch (i) {
                             case 0:
                             case 1:
-                                preparedStmt.setLong(i+1, Long.parseLong(data[i]));
-                                preparedStmt.setLong(i+1, Long.parseLong(data[i]));
+                                preparedStmt.setLong(i + 1, Long.parseLong(data[i]));
+                                preparedStmt.setLong(i + 1, Long.parseLong(data[i]));
                                 break;
                             case 2:
                             case 3:
                             case 4:
                             case 5:
-                                preparedStmt.setString(i+1, data[i]);
+                                preparedStmt.setString(i + 1, data[i]);
                                 break;
                             case 6:
-                                preparedStmt.setLong(i+1, Long.parseLong(data[i]));
+                                preparedStmt.setLong(i + 1, Long.parseLong(data[i]));
                                 preparedStmt.setString(4, au.hashString(data[i]));
                                 break;
                             case 7:
                             case 8:
                             case 9:
-                                preparedStmt.setFloat(i+1, Float.parseFloat(data[i]));
+                                preparedStmt.setFloat(i + 1, Float.parseFloat(data[i]));
                                 break;
                             case 10:
-                                preparedStmt.setBoolean(i+1, Boolean.parseBoolean(data[i]));
+                                preparedStmt.setBoolean(i + 1, Boolean.parseBoolean(data[i]));
                         }
                     }
                     preparedStmt.execute();
@@ -202,24 +218,27 @@ public class SQLQueries {
     private ResultSet executeQuery(String query) {
         ResultSet statementResult = null;
         Connection conn = getConnection();
+
         try {
             Statement sqlStatement = conn.createStatement();
             statementResult = sqlStatement.executeQuery(query);
         } catch (Exception e) {
             System.out.println(e);
         }
-        //closeConnection(conn);
+        // closeConnection(conn);
         return statementResult;
     }
 
     private Connection getConnection() {
         Connection conn = null;
+
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(db_url, "testAdmin", "password1");
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
+
         return conn;
     }
 

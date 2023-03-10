@@ -1,4 +1,5 @@
 package com.atm;
+
 public class Settings implements UserSettings, AccountSettings {
     private User user;
     private Account account;

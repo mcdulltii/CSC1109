@@ -22,6 +22,7 @@ public class Authenticate {
 
     private String encryptSHA256(String password) {
         String sha256 = "";
+
         try {
             MessageDigest crypt = MessageDigest.getInstance("SHA-256");
             crypt.reset();
@@ -32,14 +33,17 @@ public class Authenticate {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
         return sha256;
     }
 
     private String byteToHex(final byte[] hash) {
         Formatter formatter = new Formatter();
+
         for (byte b : hash) {
             formatter.format("%02x", b);
         }
+        
         String result = formatter.toString();
         formatter.close();
         return result;
