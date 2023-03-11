@@ -8,31 +8,26 @@ public class Account {
     private double availableBalance;
     private double totalBalance;
     protected double transferLimit;
-    private boolean isAuthenticated;
     protected static Settings settings;
 
     public Account(double availableBalance,
-            double totalBalance, double transferLimit,
-            boolean isAuthenticated) {
+            double totalBalance, double transferLimit) {
         super();
         this.accountNumber = this.getNewAccountNumber();
         this.availableBalance = availableBalance;
         this.totalBalance = totalBalance;
         this.transferLimit = transferLimit;
-        this.isAuthenticated = isAuthenticated;
         settings = new Settings(this);
         storeAccountNumber();
     }
 
     public Account(String accountNumber, double availableBalance,
-            double totalBalance, double transferLimit,
-            boolean isAuthenticated) {
+            double totalBalance, double transferLimit) {
         super();
         this.accountNumber = accountNumber;
         this.availableBalance = availableBalance;
         this.totalBalance = totalBalance;
         this.transferLimit = transferLimit;
-        this.isAuthenticated = isAuthenticated;
         settings = new Settings(this);
         storeAccountNumber();
     }

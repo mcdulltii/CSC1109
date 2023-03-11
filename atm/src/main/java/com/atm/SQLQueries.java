@@ -104,7 +104,7 @@ public class SQLQueries {
         }
 
         Account newAccount = new Account(String.valueOf(accountNumber), availableBalance,
-                totalBalance, transferLimit, true);
+                totalBalance, transferLimit);
         return newAccount;
     }
 
@@ -126,7 +126,7 @@ public class SQLQueries {
         }
 
         Account newAccount = new Account(String.valueOf(accountNumber), availableBalance,
-                totalBalance, transferLimit, true);
+                totalBalance, transferLimit);
         return newAccount;
     }
 
