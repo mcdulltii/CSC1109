@@ -144,10 +144,10 @@ class ThreadClientHandler extends Thread {
         getUserInput();
 
         // Welcome Message
-        outputStream.println("");
-        outputStream.printf("%s%n", "-".repeat(32));
-        outputStream.printf("|        Welcome to ATM!       |%n");
-        outputStream.printf("%s%n%n", "-".repeat(32));
+        // outputStream.println("");
+        // outputStream.printf("%s%n", "-".repeat(32));
+        // outputStream.printf("|        Welcome to ATM!       |%n");
+        // outputStream.printf("%s%n%n", "-".repeat(32));
 
         // Get client username and password
         Account user = null;
