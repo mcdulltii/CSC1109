@@ -26,16 +26,14 @@ public class App {
             // Prompt user for account details
             System.out.print("Enter username: ");
             String username = sc.next();
-            // Set user based on username input
-            user = getCurrentUser(username);
 
             System.out.print("Enter password: ");
             String password = sc.next();
 
             if (username.length() != 0 && password.length() != 0) {
                 if (au.checkPassword(username, password)) {
-                    // TODO: add OTP
-                    user = authenticateUser();
+                    // Set user based on username input
+                    user = getCurrentUser(username);
                     authenticated = true;
                     break;
                 }
@@ -47,11 +45,6 @@ public class App {
 
         selectionMenu(user); // main
         sc.close();
-    }
-
-    public static Account authenticateUser() {
-        Account account = new Account(0.0, 0.0, 0.0, true);
-        return account;
     }
 
     // Create Account object based on username input

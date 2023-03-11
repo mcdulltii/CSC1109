@@ -41,8 +41,14 @@ public class Client {
                 } else if (responseLine.equalsIgnoreCase("FIN")) {
                     return false;
                 }
-                if (responseLine != "")
-                    System.out.println(responseLine);
+                if (responseLine != "") {
+                    if (responseLine.length() > 3  &&
+                        responseLine.substring(responseLine.length() - 3).equalsIgnoreCase("END")) {
+                        System.out.print(responseLine.substring(0, responseLine.length() - 3));
+                        return true;
+                    } else
+                        System.out.println(responseLine);
+                }
                 Thread.sleep(50);
                 if (inputReader.ready())
                     responseLine = inputReader.readLine();
