@@ -6,10 +6,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
 
 public class Authenticate {
-    SQLQueries q;
+    private SQLQueries q;
+    private int numTries;
 
     public Authenticate() {
         this.q = new SQLQueries();
+        this.numTries = 0;
     }
 
     public String hashString(String str) {
@@ -17,7 +19,12 @@ public class Authenticate {
     }
 
     public Boolean checkPassword(String username, String password) {
+        this.numTries++;
         return this.hashString(password).equals(q.getPasswordfromUsername(username));
+    }
+
+    public int getNumTries() {
+        return this.numTries;
     }
 
     private String encryptSHA256(String password) {

@@ -84,7 +84,7 @@ public class Server extends Thread {
 
     }
 
-    public static void printAllAccounts() {
+    private static void printAllAccounts() {
         System.out.println(String.format("%20s %20s %20s %20s %20s", "Account Number", "First Name", "Last Name",
                 "Total Balance", "Available Balance"));
         try {
@@ -168,8 +168,15 @@ class ThreadClientHandler extends Thread {
                 }
             }
 
-            // TODO: add 3 times timeout
-            outputStream.println("Password incorrect, try again.\n");
+            // 3 times timeout
+            int numTries = au.getNumTries();
+            outputStream.println("Password incorrect, try again.");
+            outputStream.printf("You have %d tries left. ", 3 - numTries);
+            if (numTries >= 3) {
+                outputStream.println("Terminating session.");
+                endSession(outputStream);
+            } else
+                outputStream.println("\n");
         }
 
         if (authenticated) {
@@ -187,20 +194,20 @@ class ThreadClientHandler extends Thread {
     }
 
     // Create Account object based on username input
-    public static Account getCurrentUser(String username) {
+    private static Account getCurrentUser(String username) {
         SQLQueries q = new SQLQueries();
         Account currentUser = q.getAccountfromUsername(username);
         return currentUser;
     }
 
     // Create Account object based on accountNumber (For transfer)
-    public static Account getTransferAccount(Long accountNumber) {
+    private static Account getTransferAccount(Long accountNumber) {
         SQLQueries q = new SQLQueries();
         Account transferAccount = q.getAccountfromAccountNumber(accountNumber);
         return transferAccount;
     }
 
-    public void selectionMenu(Account user, PrintWriter outputStream) {
+    private void selectionMenu(Account user, PrintWriter outputStream) {
         SelectionMenu: while (true) {
             outputStream.printf("%n---------- %s ----------%n", "Available Services");
             outputStream.printf("| %-36s |%n", "(0) Exit");
@@ -270,6 +277,10 @@ class ThreadClientHandler extends Thread {
         // if here, user has prompted to terminate connection
         // Thank You Message
         outputStream.println("Thank You and Have a Nice Day!");
+        endSession(outputStream);
+    }
+
+    private void endSession(PrintWriter outputStream) {
         outputStream.println("FIN");
     }
 }
