@@ -153,10 +153,10 @@ class ThreadClientHandler extends Thread {
         Account user = null;
         Authenticate au = new Authenticate();
         while (!authenticated) {
-            outputStream.println("Enter username:");
+            outputStream.print("Enter username: ");
             String username = getUserInput();
 
-            outputStream.println("Enter password:");
+            outputStream.print("Enter password: ");
             String password = getUserInput();
 
             if (username.length() != 0 && password.length() != 0) {

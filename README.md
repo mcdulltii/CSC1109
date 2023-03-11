@@ -16,12 +16,14 @@
 1. Install dependencies
 2. Connect to MySQL server
   - Create database by `CREATE DATABASE oopasgdb;`
-  - Grant user:password to access MySQL database by 
+  - Grant user:password to access MySQL database by
+
     ```sql
     CREATE USER testAdmin@localhost IDENTIFIED BY 'password1';
     GRANT ALL PRIVILEGES ON oopasgdb.* TO testAdmin@localhost;
     ```
   - Create transactions table by `use oopasgdb;` and
+
     ```sql
     CREATE TABLE `transactions` (
       `transactionId` varchar(8) NOT NULL,
@@ -37,6 +39,7 @@
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     ```
   - Create accounts table
+
     ```sql
     CREATE TABLE `accounts` (
       `CardNumber` BIGINT(20) NOT NULL,
@@ -56,11 +59,24 @@
 
 ## Setup (Docker)
 
-1. Start sql docker container
+1. Start sql and server docker containers
+
   ```shell
-  > docker-compose up -d
+  > ./start.sh
   ```
-2. Connect to sql docker container using `mysql://localhost:4444/oopasgdb`
+
+2. Run client script
+
+  ```shell
+  > make build
+  > make run
+  ```
+
+3. Stop docker containers once done
+
+  ```shell
+  > ./stop.sh
+  ```
 
 ## Class Diagram
 
