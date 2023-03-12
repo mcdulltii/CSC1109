@@ -56,6 +56,10 @@ public class Account {
         this.availableBalance = availableBalance;
     }
 
+    public void setTransferLimit(double transferLimit) {
+        this.transferLimit = transferLimit;
+    }
+
     private String getNewAccountNumber() {
         Random rng = new Random();
         boolean nonUnique;

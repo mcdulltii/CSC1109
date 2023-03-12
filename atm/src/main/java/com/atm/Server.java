@@ -234,14 +234,15 @@ class ThreadClientHandler extends Thread {
                         outputStream.print("Please enter an amount to deposit: $");
                         double depositAmount = Double.parseDouble(getUserInput());
                         transaction.deposit(user, depositAmount);
-                        outputStream.println("Your Total Balance is after deposit is: $" + user.getTotalBalance());
+                        outputStream.println("Your Total Balance after deposit is: $" + user.getTotalBalance());
                         break;
                     case 2:
                         // Withdraw
                         outputStream.print("Please enter an amount to withdraw: $");
                         double withdrawalAmount = Double.parseDouble(getUserInput());
                         transaction.withdraw(user, withdrawalAmount);
-                        outputStream.println("Your Total Balance is after withdrawal is: $" + user.getTotalBalance());
+                        outputStream.println("Your Total Balance after withdrawal is: $" + user.getTotalBalance());
+                        outputStream.println("Your Available Balance after withdrawal is: $" + user.getAvailableBalance());
                         break;
                     case 3:
                         // Transfer
@@ -251,6 +252,7 @@ class ThreadClientHandler extends Thread {
                         double amount = Double.parseDouble(getUserInput());
                         Account a2 = getTransferAccount(transferAccountNumber);
                         transaction.transferToAccount(user, a2, amount);
+                        outputStream.println("Your Transfer Limit after transfer is: $" + user.getTransferLimit());
                         break;
                     case 4:
                         // Account balance

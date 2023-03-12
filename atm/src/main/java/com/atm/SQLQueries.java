@@ -50,32 +50,24 @@ public class SQLQueries {
     }
 
     // Update accounts table based on selected action (Deposit/Withdraw)
-    public void executeQueryAccounts(Long AccountNumber, String action, double amount) {
-        double oldTotalBalance = 0, newTotalBalance = 0, oldAvailableBalance = 0, newAvailableBalance = 0;
+    public void executeQueryAccounts(Account a1, String action, double amount, Account a2) {
         Connection conn = getConnection();
 
-        String selectQuery = "SELECT * FROM accounts WHERE accountNumber = " + AccountNumber;
-        String updateQuery = "UPDATE accounts SET TotalBalance = ?, AvailableBalance = ? WHERE AccountNumber = ?";
-        ResultSet rs = executeQuery(selectQuery);
-
+        String updateQuery = "UPDATE accounts SET TotalBalance = ?, AvailableBalance = ?, TransferLimit = ? WHERE AccountNumber = ?";
         try {
-            while (rs.next()) {
-                oldAvailableBalance = rs.getDouble("AvailableBalance");
-                oldTotalBalance = rs.getDouble("TotalBalance");
-            }
             PreparedStatement preparedStmt = conn.prepareStatement(updateQuery);
-            if (action == "deposit") {
-                newTotalBalance = oldTotalBalance + amount;
-                preparedStmt.setDouble(2, oldAvailableBalance);
-            } else if (action == "withdraw") {
-                newAvailableBalance = oldAvailableBalance - amount;
-                newTotalBalance = oldTotalBalance - amount;
-                preparedStmt.setDouble(2, newAvailableBalance);
-            }
-
-            preparedStmt.setDouble(1, newTotalBalance);
-            preparedStmt.setLong(3, AccountNumber);
+            preparedStmt.setDouble(1, a1.getTotalBalance());
+            preparedStmt.setDouble(2, a1.getAvailableBalance());
+            preparedStmt.setDouble(3, a1.getTransferLimit());
+            preparedStmt.setLong(4, Long.parseLong(a1.getAccountNumber()));
             preparedStmt.executeUpdate();
+            if (a2 != null) {
+                preparedStmt.setDouble(1, a2.getTotalBalance());
+                preparedStmt.setDouble(2, a2.getAvailableBalance());
+                preparedStmt.setDouble(3, a2.getTransferLimit());
+                preparedStmt.setLong(4, Long.parseLong(a2.getAccountNumber()));
+                preparedStmt.executeUpdate();
+            }
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block

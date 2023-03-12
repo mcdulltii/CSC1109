@@ -28,31 +28,32 @@ public class Transaction {
 
     // transfer between accounts
     public String transferToAccount(Account a1, Account a2, double amount) {
-        double newBalance = a1.getTotalBalance() - amount;
-        double newAvailableBalance = a1.getAvailableBalance() - amount;
-        a1.setTotalBalance(newBalance);
-        a1.setAvailableBalance(newAvailableBalance);
+        double newTotalBalance = a1.getTotalBalance() - amount;
+        double newTransferLimit = a1.getTransferLimit() - amount;
+        a1.setTotalBalance(newTotalBalance);
+        a1.setTransferLimit(newTransferLimit);
 
-        newBalance = a2.getTotalBalance() + amount;
-        a2.setTotalBalance(newBalance);
+        newTotalBalance = a2.getTotalBalance() + amount;
+        a2.setTotalBalance(newTotalBalance);
 
         SQLQueries q = new SQLQueries();
-        q.executeQueryAccounts(Long.parseLong(a2.getAccountNumber()), "deposit", amount);
-        q.executeQueryAccounts(Long.parseLong(a1.getAccountNumber()), "withdraw", amount);
+        q.executeQueryAccounts(a1, "transfer", amount, a2);
 
         return "Tranfer is Successful";
     }
 
     // deposit
     public String deposit(Account a1, double amount) {
-        double newBalance = a1.getTotalBalance() + amount;
-        a1.setTotalBalance(newBalance);
+        double newTotalBalance = a1.getTotalBalance() + amount;
+        a1.setTotalBalance(newTotalBalance);
+
+        // Update transactions
         SQLQueries q = new SQLQueries();
         java.sql.Date sqlDate = new java.sql.Date(transactionDate.getTime());
         q.executeQueryTransactions(a1.getAccountNumber(), sqlDate, "", "", sqlDate, 0.0, amount, a1.getTotalBalance());
 
         // Update account balance -> deposit
-        q.executeQueryAccounts(Long.parseLong(a1.getAccountNumber()), "deposit", amount);
+        q.executeQueryAccounts(a1, "deposit", amount, null);
 
         return "Deposit Successful";
     }
@@ -60,12 +61,14 @@ public class Transaction {
     // withdraw
     public String withdraw(Account a1, double amount) {
         if (a1.getAvailableBalance() > amount) {
-            double newBalance = a1.getTotalBalance() - amount;
-            a1.setTotalBalance(newBalance);
+            double newTotalBalance = a1.getTotalBalance() - amount;
+            double newAvailableBalance = a1.getAvailableBalance() - amount;
+            a1.setTotalBalance(newTotalBalance);
+            a1.setAvailableBalance(newAvailableBalance);
 
             // Update account balance -> withdraw
             SQLQueries q = new SQLQueries();
-            q.executeQueryAccounts(Long.parseLong(a1.getAccountNumber()), "withdraw", amount);
+            q.executeQueryAccounts(a1, "withdraw", amount, null);
 
             return "Withdraw Successful";
         }
