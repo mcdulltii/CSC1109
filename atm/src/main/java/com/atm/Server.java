@@ -150,7 +150,9 @@ class ThreadClientHandler extends Thread {
         outputStream.printf("%s%n%n", "-".repeat(32));
 
         // Get client username and password
-        Account user = null;
+        AccUserObj obj = null;
+        Account acc = null;
+        User user = null;
         Authenticate au = new Authenticate();
         while (!authenticated) {
             outputStream.print("Enter username: ");
@@ -162,7 +164,9 @@ class ThreadClientHandler extends Thread {
             if (username.length() != 0 && password.length() != 0) {
                 if (au.checkPassword(username, password)) {
                     // Set user based on username input
-                    user = getCurrentUser(username);
+                    obj = getCurrentUserAcc(username);
+                    acc = obj.account;
+                    user = obj.user;
                     authenticated = true;
                     break;
                 }
@@ -180,7 +184,24 @@ class ThreadClientHandler extends Thread {
         }
 
         if (authenticated) {
-            selectionMenu(user, outputStream);
+            // selectionMenu(user, outputStream);
+            AtmService svc = new AtmService(acc, user, outputStream, inputReader);
+            int userinput = 0;
+
+            do {
+                svc.selectionMenu();
+                try {
+                    userinput = Integer.parseInt(svc.getUserInput());
+                    svc.selection(userinput);
+                } catch (NumberFormatException e) {
+                    outputStream.println("Invalid choice! Please choose again!");
+                }
+            } while (userinput != 0);
+
+            // if here, user has prompted to terminate connection
+            // Thank You Message
+            outputStream.println("Thank You and Have a Nice Day!");
+            endSession(outputStream);
         }
 
         // Close connection
@@ -194,92 +215,10 @@ class ThreadClientHandler extends Thread {
     }
 
     // Create Account object based on username input
-    private static Account getCurrentUser(String username) {
+    private static AccUserObj getCurrentUserAcc(String username) {
         SQLQueries q = new SQLQueries();
-        Account currentUser = q.getAccountfromUsername(username);
-        return currentUser;
-    }
-
-    // Create Account object based on accountNumber (For transfer)
-    private static Account getTransferAccount(Long accountNumber) {
-        SQLQueries q = new SQLQueries();
-        Account transferAccount = q.getAccountfromAccountNumber(accountNumber);
-        return transferAccount;
-    }
-
-    private void selectionMenu(Account user, PrintWriter outputStream) {
-        SelectionMenu: while (true) {
-            outputStream.printf("%n---------- %s ----------%n", "Available Services");
-            outputStream.printf("| %-36s |%n", "(0) Exit");
-            // User options
-            outputStream.printf("| %-36s |%n", "(1) Deposit");
-            outputStream.printf("| %-36s |%n", "(2) Withdraw");
-            outputStream.printf("| %-36s |%n", "(3) Transfer");
-            outputStream.printf("| %-36s |%n", "(4) View Account Balance");
-            outputStream.printf("| %-36s |%n", "(5) Settings");
-            outputStream.printf("| %-36s |%n", "(6) Help");
-            outputStream.printf("%s%n%n", "-".repeat(40));
-
-            outputStream.println("Please enter an option: ");
-
-            try {
-                Transaction transaction = new Transaction(user);
-                int userinput = Integer.parseInt(getUserInput());
-                
-                switch (userinput) {
-                    case 0:
-                        break SelectionMenu;
-                    case 1:
-                        // Deposit
-                        outputStream.print("Please enter an amount to deposit: $");
-                        double depositAmount = Double.parseDouble(getUserInput());
-                        transaction.deposit(user, depositAmount);
-                        outputStream.println("Your Total Balance after deposit is: $" + user.getTotalBalance());
-                        break;
-                    case 2:
-                        // Withdraw
-                        outputStream.print("Please enter an amount to withdraw: $");
-                        double withdrawalAmount = Double.parseDouble(getUserInput());
-                        transaction.withdraw(user, withdrawalAmount);
-                        outputStream.println("Your Total Balance after withdrawal is: $" + user.getTotalBalance());
-                        outputStream.println("Your Available Balance after withdrawal is: $" + user.getAvailableBalance());
-                        break;
-                    case 3:
-                        // Transfer
-                        outputStream.println("Please enter account number to transfer to: ");
-                        long transferAccountNumber = Long.parseLong(getUserInput());
-                        outputStream.println("Please enter amount to be transferred: ");
-                        double amount = Double.parseDouble(getUserInput());
-                        Account a2 = getTransferAccount(transferAccountNumber);
-                        transaction.transferToAccount(user, a2, amount);
-                        outputStream.println("Your Transfer Limit after transfer is: $" + user.getTransferLimit());
-                        break;
-                    case 4:
-                        // Account balance
-                        outputStream.println("Your Available Balance is " + user.getAvailableBalance());
-                        outputStream.println("Your Total Balance is " + user.getTotalBalance());
-                        break;
-                    case 5:
-                        // Settings
-                        // TODO: Add settings functions
-                        break;
-                    case 6:
-                        // Help
-                        outputStream.println("Please contact the customer service hotline for any assistance.");
-                        break;
-                    default:
-                        outputStream.println("Invalid choice! Please choose again!");
-                        break;
-                }
-            } catch (NumberFormatException e) {
-                outputStream.println("Invalid choice! Please choose again!");
-            }
-        }
-
-        // if here, user has prompted to terminate connection
-        // Thank You Message
-        outputStream.println("Thank You and Have a Nice Day!");
-        endSession(outputStream);
+        AccUserObj currentUserAcc = q.getAccountfromUsername(username);
+        return currentUserAcc;
     }
 
     private void endSession(PrintWriter outputStream) {
