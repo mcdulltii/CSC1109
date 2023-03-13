@@ -75,29 +75,78 @@ public class SQLQueries {
         }
     }
 
+    public void executeQuerySettings(Account ac, String field) {
+        Connection conn = getConnection();
+        String updateQuery = "";
+        PreparedStatement preparedStmt;
+        long accNo = Long.parseLong(ac.getAccountNumber());
+
+        try {
+            switch (field) {
+                case "transferlimit":
+                    updateQuery = "UPDATE accounts SET TransferLimit = ? WHERE AccountNumber = ?";
+                    preparedStmt = conn.prepareStatement(updateQuery);
+                    preparedStmt.setDouble(1, ac.getTransferLimit());
+                    preparedStmt.setLong(2, accNo);
+                    preparedStmt.executeUpdate();
+                    break;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void executeQuerySettings(User user, String field) {
+        Connection conn = getConnection();
+        String updateQuery = "";
+        PreparedStatement preparedStmt;
+        long accNo = Long.parseLong(user.getAccNo());
+
+        try {
+            switch (field) {
+                case "pin":
+                    updateQuery = "UPDATE accounts SET Password = ? WHERE AccountNumber = ?";
+                    preparedStmt = conn.prepareStatement(updateQuery);
+                    preparedStmt.setString(1, user.getPin());
+                    preparedStmt.setLong(2, accNo);
+                    preparedStmt.executeUpdate();
+                    break;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     // Create and return Account object from accounts table based on username input
-    public Account getAccountfromUsername(String username) {
+    public AccUserObj getAccountfromUsername(String username) {
+        String accountNumber = "", firstname = "", lastname = "";
+        int isAdmin = 0;
         double availableBalance = 0, totalBalance = 0, transferLimit = 0;
-        long accountNumber = 0;
 
         String selectQuery = "SELECT * FROM accounts WHERE UserName = \"" + username + "\"";
         ResultSet rs = executeQuery(selectQuery);
 
         try {
             while (rs.next()) {
-                accountNumber = rs.getLong("AccountNumber");
+                accountNumber = String.valueOf(rs.getLong("AccountNumber"));
+                firstname = rs.getString("FirstName");
+                lastname = rs.getString("LastName");
                 availableBalance = rs.getDouble("AvailableBalance");
                 totalBalance = rs.getDouble("TotalBalance");
                 transferLimit = rs.getDouble("TransferLimit");
+                isAdmin = rs.getInt("IsAdmin");
             }
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
         }
 
-        Account newAccount = new Account(String.valueOf(accountNumber), availableBalance,
+        Account newUserAcc = new Account(accountNumber, availableBalance,
                 totalBalance, transferLimit);
-        return newAccount;
+        User newUser = new User(accountNumber, firstname, lastname, isAdmin);
+        AccUserObj obj = new AccUserObj(newUserAcc, newUser);
+
+        return obj;
     }
 
     public Account getAccountfromAccountNumber(Long accountNumber) {
@@ -240,5 +289,15 @@ public class SQLQueries {
         } catch (Exception e) {
             return;
         }
+    }
+}
+
+class AccUserObj {
+    Account account;
+    User user;
+
+    AccUserObj (Account acc, User user) {
+        this.account = acc;
+        this.user = user;
     }
 }
