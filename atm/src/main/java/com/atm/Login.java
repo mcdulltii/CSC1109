@@ -122,7 +122,7 @@ public class Login extends JFrame {
 			"[]"));
 
 		//---- promptLabel ----
-		promptLabel.setText("Enter card number and pin:");
+		promptLabel.setText("Enter card and pin number:");
 		contentPane.add(promptLabel, "cell 1 3 15 2");
 		contentPane.add(usernameField, "cell 2 7 18 5");
 
