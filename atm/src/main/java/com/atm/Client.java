@@ -7,12 +7,32 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
 
+class ReceivedMessage {
+    public Boolean isOpen = false;
+    public String msg = "";
+}
+
 public class Client {
     private Socket socket;
     private PrintStream outputStream;
     private BufferedReader inputReader;
+    private Boolean isCLI;
+    private int numTries;
 
     public Client(String ip, int port) {
+        this.numTries = 0;
+        this.isCLI = true;
+        try {
+            this.socket = new Socket(ip, port);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public Client(String ip, int port, Boolean isCLI) {
+        this.numTries = 0;
+        this.isCLI = isCLI;
         try {
             this.socket = new Socket(ip, port);
         } catch (IOException e) {
@@ -30,24 +50,34 @@ public class Client {
         }
     }
 
-    public Boolean receiveMessage() {
+    public ReceivedMessage receiveMessage() {
         String responseLine = "";
+        ReceivedMessage recvMsg = new ReceivedMessage();
         try {
             if (inputReader.ready())
                 responseLine = inputReader.readLine().trim();
             while (true) {
                 if (responseLine.equalsIgnoreCase("END")) {
-                    return true;
+                    recvMsg.isOpen = true;
+                    return recvMsg;
                 } else if (responseLine.equalsIgnoreCase("FIN")) {
-                    return false;
+                    recvMsg.isOpen = false;
+                    return recvMsg;
                 }
                 if (responseLine != "") {
                     if (responseLine.length() > 3  &&
                         responseLine.substring(responseLine.length() - 3).equalsIgnoreCase("END")) {
-                        System.out.print(responseLine.substring(0, responseLine.length() - 3));
-                        return true;
-                    } else
-                        System.out.println(responseLine);
+                        String responseString = responseLine.substring(0, responseLine.length() - 3);
+                        if (this.isCLI)
+                            System.out.print(responseString);
+                        recvMsg.isOpen = true;
+                        recvMsg.msg += responseString;
+                        return recvMsg;
+                    } else {
+                        if (this.isCLI)
+                            System.out.println(responseLine);
+                        recvMsg.msg += responseLine;
+                    }
                 }
                 Thread.sleep(50);
                 if (inputReader.ready())
@@ -56,14 +86,27 @@ public class Client {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        return true;
+        recvMsg.isOpen = true;
+        return recvMsg;
     }
 
     public Boolean sendMessage(String msg) {
         outputStream.println(msg);
-        Boolean isOpen = this.receiveMessage();
+        ReceivedMessage recvMsg = this.receiveMessage();
         outputStream.flush();
-        return isOpen;
+        return recvMsg.isOpen;
+    }
+
+    public String sendUsernamePassword(String username, String password) {
+        this.sendMessage(username);
+        this.sendMessage(password);
+        this.numTries++;
+        ReceivedMessage recvMsg = this.receiveMessage();
+        return recvMsg.msg;
+    }
+
+    public int getNumTries() {
+        return this.numTries;
     }
 
     public void close() {
@@ -82,6 +125,8 @@ public class Client {
         client.startConnection();
         client.sendMessage(null); // Receive server prompt
         client.receiveMessage();
+
+        // Main server-client communication loop
         Boolean isOpen = true;
         while (isOpen) {
             String input = scanner.nextLine();

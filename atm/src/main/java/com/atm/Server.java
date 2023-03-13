@@ -116,7 +116,7 @@ class ThreadClientHandler extends Thread {
     }
 
     private String getUserInput() {
-        this.endLine();
+        endLine();
         String s = "";
         try {
             s = inputReader.readLine();
@@ -184,7 +184,7 @@ class ThreadClientHandler extends Thread {
         }
 
         if (authenticated) {
-            // selectionMenu(user, outputStream);
+            outputStream.println("User authenticated");
             AtmService svc = new AtmService(acc, user, outputStream, inputReader);
             int userinput = 0;
 
