@@ -14,6 +14,7 @@ public class Login extends JFrame {
         client = new Client("127.0.0.1", 7777, false);
         client.startConnection();
         client.sendMessage(null); // Receive server prompt
+		client.receiveMessage();
 
 		// Basic Constructor Setup
 		setResizable(false);
@@ -23,10 +24,10 @@ public class Login extends JFrame {
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	}
 
-	private void sendUsernamePassword(MouseEvent e) {
+	private void sendUsernamePassword(AWTEvent e) {
 		String authReply = null;
 		int numTries = client.getNumTries();
-		if (numTries < 3) {
+		if (numTries < 2) {
 			// Only allow 3 tries for user authentication
 			String username = usernameField.getText();
 			String password = new String(passwordField.getPassword());
@@ -35,13 +36,21 @@ public class Login extends JFrame {
 				authReply = client.sendUsernamePassword(username, password);
 			} else {
 				// Popup invalid input window
+				JOptionPane.showMessageDialog(null, "Failed to read input!");
+				return;
 			}
 		} else {
 			// Exit when user hits 3 tries
+			JOptionPane.showMessageDialog(null, "No attempts remaining!\n Terminating program.");
 			this.exitWindow(null);
 		}
-		if (authReply.contains("User authenticated")) {
+
+		// Check server authentication
+		if (authReply != null && authReply.contains("User authenticated")) {
 			// Go to ATM app
+			dispose();
+		} else {
+			JOptionPane.showMessageDialog(null, "Username password combination is incorrect!\n" + (2 - numTries) + " attempts remaining!");
 		}
 	}
 
@@ -125,6 +134,13 @@ public class Login extends JFrame {
 		//---- pinLabel ----
 		pinLabel.setText("Pin number:");
 		contentPane.add(pinLabel, "cell 1 13");
+
+		//---- passwordField ----
+		passwordField.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				sendUsernamePassword(e);
+			}
+		});
 
 		//---- okButton ----
 		okButton.setText("Ok");
