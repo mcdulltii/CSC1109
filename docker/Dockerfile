@@ -7,7 +7,7 @@ RUN sed -i "s/atm\/res/res/g" SQLQueries.java
 
 WORKDIR /home/app/atm
 
-COPY ./docker/wait-for-it.sh /wait-for-it.sh
+ADD https://github.com/vishnubob/wait-for-it/raw/master/wait-for-it.sh /wait-for-it.sh
 RUN chmod +x /wait-for-it.sh
 
 ENTRYPOINT ["/wait-for-it.sh", "mysql:3306", "-t", "30", "--", "mvn", "compile", "exec:java"]

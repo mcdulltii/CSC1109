@@ -1,34 +1,25 @@
 package com.atm;
 
 public class Settings implements UserSettings, AccountSettings {
-    private User user;
     private Account account;
-
-    Settings(User user) {
-        this.user = user;
-    }
+    private User user;
+    SQLQueries q = new SQLQueries();
 
     Settings(Account account) {
         this.account = account;
     }
 
-    public void setFirstName(String firstName) {
-        user.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        user.lastName = lastName;
-    }
-
-    public void setUserName(String userName) {
-        user.userName = userName;
+    Settings(User user) {
+        this.user = user;
     }
 
     public void setPinNumber(String pinNumber) {
-        user.pinNumber = pinNumber;
+        user.setPin(pinNumber);
+        q.executeQuerySettings(user, "pin");
     }
 
     public void setTransferLimit(double limit) {
-        account.transferLimit = limit;
+        account.setTransferLimit(limit);
+        q.executeQuerySettings(account, "transferlimit");
     }
 }
