@@ -90,18 +90,17 @@ public class Client {
         return recvMsg;
     }
 
-    public Boolean sendMessage(String msg) {
+    public ReceivedMessage sendMessage(String msg) {
         outputStream.println(msg);
         ReceivedMessage recvMsg = this.receiveMessage();
         outputStream.flush();
-        return recvMsg.isOpen;
+        return recvMsg;
     }
 
     public String sendUsernamePassword(String username, String password) {
         this.sendMessage(username);
-        this.sendMessage(password);
+        ReceivedMessage recvMsg = this.sendMessage(password);
         this.numTries++;
-        ReceivedMessage recvMsg = this.receiveMessage();
         return recvMsg.msg;
     }
 
@@ -131,7 +130,7 @@ public class Client {
         while (isOpen) {
             String input = scanner.nextLine();
             if (input != null && input.length() > 0)
-                isOpen = client.sendMessage(input);
+                isOpen = client.sendMessage(input).isOpen;
         }
         client.close();
         scanner.close();
