@@ -4,13 +4,61 @@ import java.util.Date;
 
 public class Transaction {
     private Account a1;
+    private String accountNumber;
     private Date transactionDate;
+    private String transactionDetails;
+    private String chqNumber;
+    private java.sql.Date valueDate;
+    private Double withdrawal;
+    private Double deposit;
+    private Double balance;
 
-    public Transaction(Account a1) {
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+    public Date getTransactionDate() {
+        return transactionDate;
+    }
+    public String getTransactionDetails() {
+        return transactionDetails;
+    }
+    public String getChqNumber() {
+        return chqNumber;
+    }
+    public java.sql.Date getValueDate() {
+        return valueDate;
+    }
+    public Double getWithdrawal() {
+        return withdrawal;
+    }
+    public Double getDeposit() {
+        return deposit;
+    }
+    public Double getBalance() {
+        return balance;
+    }
+
+    public Transaction(Account a1){
         // to add more fields
         this.a1 = a1;
         this.transactionDate = new Date();
     }
+
+    public Transaction(Account a1, String accountNumber, String transactionDetails, 
+    String chqNumber, java.sql.Date valueDate, Double withdrawal, Double deposit, Double balance) {
+        // to add more fields
+        this.a1 = a1;
+        this.accountNumber = accountNumber;
+        this.transactionDate = new Date();
+        this.transactionDetails = transactionDetails;
+        this.chqNumber = chqNumber;
+        this.valueDate = valueDate;
+        this.withdrawal = withdrawal;
+        this.deposit = deposit;
+        this.balance = balance;
+    }
+    
+    
 
     public boolean hasAvailableBalance(double amount) {
         if (amount < a1.getAvailableBalance()) {
@@ -37,7 +85,7 @@ public class Transaction {
         a2.setTotalBalance(newTotalBalance);
 
         SQLQueries q = new SQLQueries();
-        q.executeQueryAccounts(a1, "transfer", amount, a2);
+        q.executeQueryAccounts(a1, a2);
 
         return "Tranfer is Successful";
     }
@@ -50,10 +98,15 @@ public class Transaction {
         // Update transactions
         SQLQueries q = new SQLQueries();
         java.sql.Date sqlDate = new java.sql.Date(transactionDate.getTime());
-        q.executeQueryTransactions(a1.getAccountNumber(), sqlDate, "", "", sqlDate, 0.0, amount, a1.getTotalBalance());
+        //public Transaction(Account a1, String accountNumber, String transactionDetails, 
+        //String chqNumber, Date valueDate, Double withdrawal, Double balance) {
+        Transaction transaction = new Transaction(a1, a1.getAccountNumber(), "MoneyForYou", "123987", sqlDate, amount, 0.0, a1.getTotalBalance());
+        q.executeQueryTransactions(transaction);
 
+        //a1.getAccountNumber(), sqlDate, "", "",sqlDate, 0.0, amount, a1.getTotalBalance()
+        
         // Update account balance -> deposit
-        q.executeQueryAccounts(a1, "deposit", amount, null);
+        q.executeQueryAccounts(a1, null);
 
         return "Deposit Successful";
     }
@@ -68,7 +121,7 @@ public class Transaction {
 
             // Update account balance -> withdraw
             SQLQueries q = new SQLQueries();
-            q.executeQueryAccounts(a1, "withdraw", amount, null);
+            q.executeQueryAccounts(a1, null);
 
             return "Withdraw Successful";
         }

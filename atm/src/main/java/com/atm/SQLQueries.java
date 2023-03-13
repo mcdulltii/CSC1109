@@ -10,10 +10,7 @@ public class SQLQueries {
     final String db_url = "jdbc:mysql://localhost:3306/oopasgdb";
     public String transactionId;
 
-    public void executeQueryTransactions(String accountNumber,
-            Date transactionDate, String transactionDetails,
-            String chqNumber, Date valueDate, Double withdrawal, Double deposit,
-            Double balance) {
+    public void executeQueryTransactions(Transaction tr) {
         Connection conn = getConnection();
 
         String getTransactionCount = "SELECT transactionId FROM transactions ORDER BY transactionId desc limit 1";
@@ -35,14 +32,14 @@ public class SQLQueries {
         try {
             PreparedStatement preparedStmt = conn.prepareStatement(sql);
             preparedStmt.setString(1, transactionId);
-            preparedStmt.setString(2, accountNumber);
-            preparedStmt.setDate(3, transactionDate);
-            preparedStmt.setString(4, transactionDetails);
-            preparedStmt.setString(5, chqNumber);
-            preparedStmt.setDate(6, valueDate);
-            preparedStmt.setDouble(7, withdrawal);
-            preparedStmt.setDouble(8, deposit);
-            preparedStmt.setDouble(9, balance);
+            preparedStmt.setString(2, tr.getAccountNumber());
+            preparedStmt.setDate(3, tr.getValueDate());
+            preparedStmt.setString(4, tr.getTransactionDetails());
+            preparedStmt.setString(5, tr.getChqNumber());
+            preparedStmt.setDate(6, tr.getValueDate());
+            preparedStmt.setDouble(7, tr.getWithdrawal());
+            preparedStmt.setDouble(8, tr.getDeposit());
+            preparedStmt.setDouble(9, tr.getBalance());
             preparedStmt.execute();
         } catch (Exception e) {
             System.out.println(e);
@@ -50,7 +47,7 @@ public class SQLQueries {
     }
 
     // Update accounts table based on selected action (Deposit/Withdraw)
-    public void executeQueryAccounts(Account a1, String action, double amount, Account a2) {
+    public void executeQueryAccounts(Account a1, Account a2) {
         Connection conn = getConnection();
 
         String updateQuery = "UPDATE accounts SET TotalBalance = ?, AvailableBalance = ?, TransferLimit = ? WHERE AccountNumber = ?";
