@@ -6,9 +6,16 @@ import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
 
 public class Login extends JFrame {
+	private Client client;
+
 	public Login() {
-		//Basic Constructor Setup
 		super("Login Screen");
+		// Connect to ATM server
+        client = new Client("127.0.0.1", 7777, false);
+        client.startConnection();
+        client.sendMessage(null); // Receive server prompt
+
+		// Basic Constructor Setup
 		setResizable(false);
 		setLocationRelativeTo(null);
 		initComponents();
@@ -17,11 +24,30 @@ public class Login extends JFrame {
 	}
 
 	private void sendUsernamePassword(MouseEvent e) {
-		// TODO add your code here
+		String authReply = null;
+		int numTries = client.getNumTries();
+		if (numTries < 3) {
+			// Only allow 3 tries for user authentication
+			String username = usernameField.getText();
+			String password = new String(passwordField.getPassword());
+			if (username != null && username.length() > 0 &&
+				password != null && password.length() > 0) {
+				authReply = client.sendUsernamePassword(username, password);
+			} else {
+				// Popup invalid input window
+			}
+		} else {
+			// Exit when user hits 3 tries
+			this.exitWindow(null);
+		}
+		if (authReply.contains("User authenticated")) {
+			// Go to ATM app
+		}
 	}
 
 	private void exitWindow(MouseEvent e) {
-		// TODO add your code here
+        client.close();
+		this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 	}
 
 	private void initComponents() {
@@ -133,4 +159,8 @@ public class Login extends JFrame {
 	private JButton okButton;
 	private JButton exitButton;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
+
+    public static void main(String args[]) {
+		new Login();
+    }
 }
