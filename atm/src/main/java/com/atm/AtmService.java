@@ -19,17 +19,17 @@ class AtmService {
         this.inputReader = inputReader;
     }
 
-    private void deposit(double amount) {
-        transaction.deposit(acc, amount);
+    private String deposit(double amount) {
+        return transaction.deposit(acc, amount);
     }
 
-    private void withdraw(double amount) {
-        transaction.withdraw(acc, amount);
+    private String withdraw(double amount) throws InsufficientFundsException {
+        return transaction.withdraw(acc, amount);
     }
 
-    private void transfer(long transferAccNo, double amount) {
+    private String transfer(long transferAccNo, double amount) throws InsufficientFundsException {
         Account a2 = getTransferAccount(transferAccNo);
-        transaction.transferToAccount(acc, a2, amount);
+        return transaction.transferToAccount(acc, a2, amount);
     }
 
     private double[] getBalance() {
@@ -191,15 +191,25 @@ class AtmService {
                 // Deposit
                 outputStream.print("Please enter an amount to deposit: $");
                 double depositAmount = Double.parseDouble(getUserInput());
-                deposit(depositAmount);
-                outputStream.println("Your Total Balance is after deposit is: $" + acc.getTotalBalance());
+                try {
+                    outputStream.println(deposit(depositAmount));
+                    outputStream.println("Your Total Balance is after deposit is: $" + acc.getTotalBalance());
+                } catch (IllegalArgumentException e) {
+                    outputStream.println(e.getMessage());
+                }
                 break;
             case 2:
                 // Withdraw
                 outputStream.print("Please enter an amount to withdraw: $");
                 double withdrawalAmount = Double.parseDouble(getUserInput());
-                withdraw(withdrawalAmount);
-                outputStream.println("Your Total Balance is after withdrawal is: $" + acc.getTotalBalance());
+                try {
+                    outputStream.println(withdraw(withdrawalAmount));
+                    outputStream.println("Your Total Balance is after withdrawal is: $" + acc.getTotalBalance());
+                } catch (IllegalArgumentException e) {
+                    outputStream.println(e.getMessage());
+                } catch (InsufficientFundsException e) {
+                    outputStream.println("\nSorry, but your account is short by: $"+ e.getAmount());
+                }
                 break;
             case 3:
                 // Transfer
@@ -207,7 +217,13 @@ class AtmService {
                 long transferAccountNumber = Long.parseLong(getUserInput());
                 outputStream.println("Please enter amount to be transferred: ");
                 double amount = Double.parseDouble(getUserInput());
-                transfer(transferAccountNumber, amount);
+                try {
+                    transfer(transferAccountNumber, amount);
+                } catch (IllegalArgumentException e) {
+                    outputStream.println(e.getMessage());
+                } catch (InsufficientFundsException e) {
+                    outputStream.println("\nSorry, but your account is short by: $"+ e.getAmount());
+                }
                 break;
             case 4:
                 // Account balance

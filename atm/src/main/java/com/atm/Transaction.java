@@ -12,30 +12,14 @@ public class Transaction {
         this.transactionDate = new Date();
     }
 
-    public boolean hasAvailableBalance(double amount) {
-        if (amount < a1.getAvailableBalance()) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean belowTransferLimit(double amount) {
-        if (amount < a1.getTransferLimit()) {
-            return true;
-        }
-        return false;
-    }
-
     // transfer between accounts
-    public String transferToAccount(Account a1, Account a2, double amount) {
-        double newTotalBalance = a1.getTotalBalance() - amount;
-        double newTransferLimit = a1.getTransferLimit() - amount;
-        a1.setTotalBalance(newTotalBalance);
-        a1.setTransferLimit(newTransferLimit);
-
-        newTotalBalance = a2.getTotalBalance() + amount;
-        a2.setTotalBalance(newTotalBalance);
-
+    public String transferToAccount(Account a1, Account a2, double amount) throws InsufficientFundsException {
+        if (amount>a1.getAvailableBalance()) {
+            throw new InsufficientFundsException(-(a1.getAvailableBalance()-amount));
+        }
+        if (amount <0){
+            throw new IllegalArgumentException("Amount has to be positive.");
+        }
         SQLQueries q = new SQLQueries();
         q.executeQueryAccounts(a1, "transfer", amount, a2);
 
@@ -44,8 +28,9 @@ public class Transaction {
 
     // deposit
     public String deposit(Account a1, double amount) {
-        double newTotalBalance = a1.getTotalBalance() + amount;
-        a1.setTotalBalance(newTotalBalance);
+        if (amount <0){
+            throw new IllegalArgumentException("Amount has to be positive.");
+        }
 
         // Update transactions
         SQLQueries q = new SQLQueries();
@@ -59,19 +44,24 @@ public class Transaction {
     }
 
     // withdraw
-    public String withdraw(Account a1, double amount) {
-        if (a1.getAvailableBalance() > amount) {
-            double newTotalBalance = a1.getTotalBalance() - amount;
-            double newAvailableBalance = a1.getAvailableBalance() - amount;
-            a1.setTotalBalance(newTotalBalance);
-            a1.setAvailableBalance(newAvailableBalance);
-
-            // Update account balance -> withdraw
-            SQLQueries q = new SQLQueries();
-            q.executeQueryAccounts(a1, "withdraw", amount, null);
-
-            return "Withdraw Successful";
+    public String withdraw(Account a1, double amount) throws InsufficientFundsException {
+        if (amount>a1.getAvailableBalance()) {
+            throw new InsufficientFundsException(-(a1.getAvailableBalance()-amount));
         }
-        return "Withdraw Unsuccessful";
+        if (amount <0){
+            throw new IllegalArgumentException("Amount has to be positive.");
+        }
+
+        // Update account balance -> withdraw
+        SQLQueries q = new SQLQueries();
+        q.executeQueryAccounts(a1, "withdraw", amount, null);
+
+        return "Withdraw Successful";
     }
+}
+
+class InsufficientFundsException extends Exception {
+    private double amount;
+    public InsufficientFundsException(double amount) { this.amount = amount; }
+    public double getAmount() { return amount; }
 }
