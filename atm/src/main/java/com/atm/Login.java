@@ -50,6 +50,7 @@ public class Login extends JFrame {
 		if (authReply != null && authReply.contains("User authenticated")) {
 			// Go to ATM app
 			dispose();
+			new ATMGUI();
 		} else {
 			JOptionPane.showMessageDialog(null, "Username password combination is incorrect!\n" + (2 - numTries) + " attempts remaining!");
 		}
@@ -77,12 +78,12 @@ public class Login extends JFrame {
 			// columns
 			"[fill]" +
 			"[fill]" +
+			"[70,fill]" +
 			"[fill]" +
 			"[fill]" +
 			"[fill]" +
 			"[fill]" +
-			"[fill]" +
-			"[fill]" +
+			"[70,fill]" +
 			"[fill]" +
 			"[fill]" +
 			"[fill]" +
@@ -130,7 +131,7 @@ public class Login extends JFrame {
 		//---- cardLabel ----
 		cardLabel.setText("Card number:");
 		contentPane.add(cardLabel, "cell 1 9");
-		contentPane.add(passwordField, "cell 2 12 18 3");
+		contentPane.add(passwordField, "cell 2 12 18 4");
 
 		//---- pinLabel ----
 		pinLabel.setText("Pin number:");
