@@ -87,15 +87,26 @@ public class Transaction {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount has to be positive.");
         }
+
+        // Update balances
+        double newTotalBalance = a1.getTotalBalance() - amount;
+        double newTransferLimit = a1.getTransferLimit() - amount;
+        a1.setTotalBalance(newTotalBalance);
+        a1.setTransferLimit(newTransferLimit);
+
         SQLQueries q = new SQLQueries();
         q.executeQueryAccounts(a1, a2);
+        
+        newTotalBalance = a2.getTotalBalance() + amount;
+        a2.setTotalBalance(newTotalBalance);
+
         // Update transactions
         java.sql.Date sqlDate = new java.sql.Date(transactionDate.getTime());
         Transaction transaction = new Transaction(a1, a1.getAccountNumber(), "MoneyForYou", "554433", sqlDate, amount,
                 0.0, a1.getTotalBalance());
         q.executeQueryTransactions(transaction);
-        transaction = new Transaction(a2, a2.getAccountNumber(), "MoneyForYou", "223344", sqlDate, amount,
-                0.0, a2.getTotalBalance());
+        transaction = new Transaction(a2, a2.getAccountNumber(), "MoneyForYou", "223344", sqlDate, 0.0,
+                amount, a2.getTotalBalance());
         q.executeQueryTransactions(transaction);
 
         return "Tranfer is Successful";
@@ -110,19 +121,18 @@ public class Transaction {
         // Update transactions
         SQLQueries q = new SQLQueries();
         java.sql.Date sqlDate = new java.sql.Date(transactionDate.getTime());
+
+        // Update balance
+        double newTotalBalance = a1.getTotalBalance() + amount;
+        q.executeQueryAccounts(a1, null);
+
+        a1.setTotalBalance(newTotalBalance);
         // public Transaction(Account a1, String accountNumber, String
         // transactionDetails,
         // String chqNumber, Date valueDate, Double withdrawal, Double balance) {
         Transaction transaction = new Transaction(a1, a1.getAccountNumber(), "MoneyForYou", "123987", sqlDate, 0.0,
                 amount, a1.getTotalBalance());
         q.executeQueryTransactions(transaction);
-
-        // a1.getAccountNumber(), sqlDate, "", "",sqlDate, 0.0, amount,
-        // a1.getTotalBalance()
-
-        // Update account balance -> deposit
-        q.executeQueryAccounts(a1, null);
-
         return "Deposit Successful";
     }
 
@@ -134,12 +144,13 @@ public class Transaction {
             throw new InsufficientFundsException(-(a1.getAvailableBalance() - amount));
         }
 
+        // Update balances
+        SQLQueries q = new SQLQueries();
         double newTotalBalance = a1.getTotalBalance() - amount;
         double newAvailableBalance = a1.getAvailableBalance() - amount;
         a1.setTotalBalance(newTotalBalance);
         a1.setAvailableBalance(newAvailableBalance);
 
-        SQLQueries q = new SQLQueries();
         // Update transactions
         java.sql.Date sqlDate = new java.sql.Date(transactionDate.getTime());
         Transaction transaction = new Transaction(a1, a1.getAccountNumber(), "MoneyForYou", "996633", sqlDate,
