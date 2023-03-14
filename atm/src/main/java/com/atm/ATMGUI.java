@@ -8,7 +8,24 @@ import net.miginfocom.swing.MigLayout;
 
 
 public class ATMGUI extends JFrame {
-	public ATMGUI() {
+	private Client client;
+
+	public ATMGUI(Client client) {
+		super("ATM");
+		this.client = client;
+		
+		// Basic Constructor Setup
+		setResizable(false);
+		setLocationRelativeTo(null);
+		initComponents();
+		setVisible(true);
+		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	}
+
+	public ATMGUI(Client client, String username) {
+		super("ATM - " + username);
+		this.client = client;
+
 		// Basic Constructor Setup
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -70,18 +87,18 @@ public class ATMGUI extends JFrame {
 		displayArea = new JLabel();
 		inputArea = new JLabel();
 		separator = new JSeparator();
-		button1 = new JButton();
-		button2 = new JButton();
-		button3 = new JButton();
-		button4 = new JButton();
-		button5 = new JButton();
-		button6 = new JButton();
-		button7 = new JButton();
-		button8 = new JButton();
-		button9 = new JButton();
-		button0 = new JButton();
-		buttonClear = new JButton();
-		buttonEnter = new JButton();
+		button1 = new GUIButton();
+		button2 = new GUIButton();
+		button3 = new GUIButton();
+		button4 = new GUIButton();
+		button5 = new GUIButton();
+		button6 = new GUIButton();
+		button7 = new GUIButton();
+		button8 = new GUIButton();
+		button9 = new GUIButton();
+		button0 = new GUIButton();
+		buttonClear = new GUIButton();
+		buttonEnter = new GUIButton();
 
 		//======== this ========
 		Container contentPane = getContentPane();
@@ -256,17 +273,17 @@ public class ATMGUI extends JFrame {
 	private JLabel displayArea;
 	private JLabel inputArea;
 	private JSeparator separator;
-	private JButton button1;
-	private JButton button2;
-	private JButton button3;
-	private JButton button4;
-	private JButton button5;
-	private JButton button6;
-	private JButton button7;
-	private JButton button8;
-	private JButton button9;
-	private JButton button0;
-	private JButton buttonClear;
-	private JButton buttonEnter;
+	private GUIButton button1;
+	private GUIButton button2;
+	private GUIButton button3;
+	private GUIButton button4;
+	private GUIButton button5;
+	private GUIButton button6;
+	private GUIButton button7;
+	private GUIButton button8;
+	private GUIButton button9;
+	private GUIButton button0;
+	private GUIButton buttonClear;
+	private GUIButton buttonEnter;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

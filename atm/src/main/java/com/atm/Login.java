@@ -27,10 +27,11 @@ public class Login extends JFrame {
 
 	private void sendUsernamePassword(AWTEvent e) {
 		String authReply = null;
+		String username = "";
 		int numTries = client.getNumTries();
 		if (numTries < 2) {
 			// Only allow 3 tries for user authentication
-			String username = usernameField.getText();
+			username = usernameField.getText();
 			String password = new String(passwordField.getPassword());
 			if (username != null && username.length() > 0 &&
 				password != null && password.length() > 0) {
@@ -50,7 +51,7 @@ public class Login extends JFrame {
 		if (authReply != null && authReply.contains("User authenticated")) {
 			// Go to ATM app
 			dispose();
-			new ATMGUI();
+			new ATMGUI(client, username);
 		} else {
 			JOptionPane.showMessageDialog(null, "Username password combination is incorrect!\n" + (2 - numTries) + " attempts remaining!");
 		}
