@@ -1,4 +1,4 @@
-package com.atm;
+package com.atm.frontend;
 
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;

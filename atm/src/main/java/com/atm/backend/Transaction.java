@@ -1,4 +1,4 @@
-package com.atm;
+package com.atm.backend;
 
 import java.util.Date;
 
@@ -171,7 +171,7 @@ class InsufficientFundsException extends Exception {
         this.amount = amount;
     }
 
-    public double getAmount() {
+    protected double getAmount() {
         return amount;
     }
 }

@@ -1,4 +1,4 @@
-package com.atm;
+package com.atm.backend;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -286,15 +286,5 @@ public class SQLQueries {
         } catch (Exception e) {
             return;
         }
-    }
-}
-
-class AccUserObj {
-    Account account;
-    User user;
-
-    AccUserObj (Account acc, User user) {
-        this.account = acc;
-        this.user = user;
     }
 }

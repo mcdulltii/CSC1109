@@ -1,17 +1,17 @@
-package com.atm;
+package com.atm.backend;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-class AtmService {
+public class AtmService {
     private Account acc;
     private User user;
     private Transaction transaction;
     private BufferedReader inputReader;
     private PrintWriter outputStream;
 
-    AtmService(Account acc, User user, PrintWriter outputStream, BufferedReader inputReader) {
+    public AtmService(Account acc, User user, PrintWriter outputStream, BufferedReader inputReader) {
         this.acc = acc;
         this.user = user;
         this.transaction = new Transaction(acc);
@@ -44,7 +44,7 @@ class AtmService {
         return transferAccount;
     }
 
-    protected String getUserInput() {
+    public String getUserInput() {
         this.endLine();
         String s = "";
         try {
@@ -168,7 +168,7 @@ class AtmService {
         }
     }
 
-    protected void selectionMenu() {
+    public void selectionMenu() {
         outputStream.printf("%n---------- %s ----------%n", "Available Services");
         outputStream.printf("| %-36s |%n", "(0) Exit");
         // User options
@@ -183,7 +183,7 @@ class AtmService {
         outputStream.print("Please enter an option: ");
     }
 
-    protected void selection(int option) {
+    public void selection(int option) {
         switch (option) {
             case 0:
                 break;

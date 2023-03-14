@@ -6,6 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import net.miginfocom.swing.MigLayout;
+import com.atm.frontend.GUIButton;
 
 
 public class ATMGUI extends JFrame {

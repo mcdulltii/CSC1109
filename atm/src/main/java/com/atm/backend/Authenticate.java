@@ -1,4 +1,4 @@
-package com.atm;
+package com.atm.backend;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
