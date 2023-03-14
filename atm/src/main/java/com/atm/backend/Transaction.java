@@ -13,35 +13,35 @@ public class Transaction {
     private Double deposit;
     private Double balance;
 
-    public String getAccountNumber() {
+    protected String getAccountNumber() {
         return accountNumber;
     }
 
-    public Date getTransactionDate() {
+    protected Date getTransactionDate() {
         return transactionDate;
     }
 
-    public String getTransactionDetails() {
+    protected String getTransactionDetails() {
         return transactionDetails;
     }
 
-    public String getChqNumber() {
+    protected String getChqNumber() {
         return chqNumber;
     }
 
-    public java.sql.Date getValueDate() {
+    protected java.sql.Date getValueDate() {
         return valueDate;
     }
 
-    public Double getWithdrawal() {
+    protected Double getWithdrawal() {
         return withdrawal;
     }
 
-    public Double getDeposit() {
+    protected Double getDeposit() {
         return deposit;
     }
 
-    public Double getBalance() {
+    protected Double getBalance() {
         return balance;
     }
 
@@ -65,14 +65,14 @@ public class Transaction {
         this.balance = balance;
     }
 
-    public boolean hasAvailableBalance(double amount) {
+    protected boolean hasAvailableBalance(double amount) {
         if (amount < a1.getAvailableBalance()) {
             return true;
         }
         return false;
     }
 
-    public boolean belowTransferLimit(double amount) {
+    protected boolean belowTransferLimit(double amount) {
         if (amount < a1.getTransferLimit()) {
             return true;
         }
@@ -80,7 +80,7 @@ public class Transaction {
     }
 
     // transfer between accounts
-    public String transferToAccount(Account a1, Account a2, double amount) throws InsufficientFundsException {
+    protected String transferToAccount(Account a1, Account a2, double amount) throws InsufficientFundsException {
         if (amount > a1.getAvailableBalance()) {
             throw new InsufficientFundsException(-(a1.getAvailableBalance() - amount));
         }
@@ -113,7 +113,7 @@ public class Transaction {
     }
 
     // deposit
-    public String deposit(Account a1, double amount) {
+    protected String deposit(Account a1, double amount) {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount has to be positive.");
         }
@@ -137,7 +137,7 @@ public class Transaction {
     }
 
     // withdraw
-    public String withdraw(Account a1, double amount) throws InsufficientFundsException {
+    protected String withdraw(Account a1, double amount) throws InsufficientFundsException {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount has to be positive.");
         } else if (amount > a1.getAvailableBalance()) {
@@ -167,7 +167,7 @@ public class Transaction {
 class InsufficientFundsException extends Exception {
     private double amount;
 
-    public InsufficientFundsException(double amount) {
+    protected InsufficientFundsException(double amount) {
         this.amount = amount;
     }
 

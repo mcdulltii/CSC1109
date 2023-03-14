@@ -8,9 +8,9 @@ import java.sql.*;
 
 public class SQLQueries {
     final String db_url = "jdbc:mysql://localhost:3306/oopasgdb";
-    public String transactionId;
+    private String transactionId;
 
-    public void executeQueryTransactions(Transaction tr) {
+    protected void executeQueryTransactions(Transaction tr) {
         Connection conn = getConnection();
 
         String getTransactionCount = "SELECT transactionId FROM transactions ORDER BY transactionId desc limit 1";
@@ -47,7 +47,7 @@ public class SQLQueries {
     }
 
     // Update accounts table based on selected action (Deposit/Withdraw)
-    public void executeQueryAccounts(Account a1, Account a2) {
+    protected void executeQueryAccounts(Account a1, Account a2) {
         Connection conn = getConnection();
 
         String updateQuery = "UPDATE accounts SET TotalBalance = ?, AvailableBalance = ?, TransferLimit = ? WHERE AccountNumber = ?";
@@ -72,7 +72,7 @@ public class SQLQueries {
         }
     }
 
-    public void executeQuerySettings(Account ac, String field) {
+    protected void executeQuerySettings(Account ac, String field) {
         Connection conn = getConnection();
         String updateQuery = "";
         PreparedStatement preparedStmt;
@@ -93,7 +93,7 @@ public class SQLQueries {
         }
     }
 
-    public void executeQuerySettings(User user, String field) {
+    protected void executeQuerySettings(User user, String field) {
         Connection conn = getConnection();
         String updateQuery = "";
         PreparedStatement preparedStmt;
@@ -146,7 +146,7 @@ public class SQLQueries {
         return obj;
     }
 
-    public Account getAccountfromAccountNumber(Long accountNumber) {
+    protected Account getAccountfromAccountNumber(Long accountNumber) {
         double availableBalance = 0, totalBalance = 0, transferLimit = 0;
 
         String selectQuery = "SELECT * FROM accounts WHERE AccountNumber = " + accountNumber;
@@ -168,7 +168,7 @@ public class SQLQueries {
         return newAccount;
     }
 
-    public String getPasswordfromUsername(String username) {
+    protected String getPasswordfromUsername(String username) {
         String password = "";
 
         String selectQuery = "SELECT * FROM accounts WHERE UserName = \"" + username + "\"";

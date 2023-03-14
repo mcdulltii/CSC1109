@@ -29,31 +29,31 @@ public class Account {
         storeAccountNumber();
     }
 
-    public String getAccountNumber() {
+    protected String getAccountNumber() {
         return this.accountNumber;
     }
 
-    public double getTransferLimit() {
+    protected double getTransferLimit() {
         return this.transferLimit;
     }
 
-    public void setTransferLimit(double transferLimit) {
+    protected void setTransferLimit(double transferLimit) {
         this.transferLimit = transferLimit;
     }
 
-    public double getAvailableBalance() {
+    protected double getAvailableBalance() {
         return this.availableBalance;
     }
 
-    public double getTotalBalance() {
+    protected double getTotalBalance() {
         return this.totalBalance;
     }
 
-    public void setTotalBalance(double balance) {
+    protected void setTotalBalance(double balance) {
         this.totalBalance = balance;
     }
 
-    public void setAvailableBalance(double availableBalance) {
+    protected void setAvailableBalance(double availableBalance) {
         this.availableBalance = availableBalance;
     }
 

@@ -14,7 +14,7 @@ public class Authenticate {
         this.numTries = 0;
     }
 
-    public String hashString(String str) {
+    protected String hashString(String str) {
         return encryptSHA256(str);
     }
 
