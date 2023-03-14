@@ -76,7 +76,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.atm.Login</mainClass>
+                            <mainClass>com.atm.Client</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
