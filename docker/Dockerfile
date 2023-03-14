@@ -1,7 +1,7 @@
 FROM maven:latest
 COPY atm /home/app/atm
 
-WORKDIR /home/app/atm/src/main/java/com/atm
+WORKDIR /home/app/atm/src/main/java/com/atm/backend
 RUN sed -i "s/localhost:3306/mysql:3306/g" SQLQueries.java
 RUN sed -i "s/atm\/res/res/g" SQLQueries.java
 
