@@ -3,6 +3,7 @@ package com.atm;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.UIManager.*;
 import net.miginfocom.swing.MigLayout;
 
 public class Login extends JFrame {
@@ -150,7 +151,7 @@ public class Login extends JFrame {
 				sendUsernamePassword(e);
 			}
 		});
-		contentPane.add(okButton, "cell 2 19");
+		contentPane.add(okButton, "cell 2 20");
 
 		//---- exitButton ----
 		exitButton.setText("Exit");
@@ -160,7 +161,7 @@ public class Login extends JFrame {
 				exitWindow(e);
 			}
 		});
-		contentPane.add(exitButton, "cell 7 19");
+		contentPane.add(exitButton, "cell 7 20");
 		pack();
 		setLocationRelativeTo(getOwner());
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
@@ -177,6 +178,19 @@ public class Login extends JFrame {
 	// JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 
     public static void main(String args[]) {
+		// Set GUI theme
+		try {
+			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+				if ("GTK+".equals(info.getName())) {
+					UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+		// Instantiate login UI
 		new Login();
     }
 }
