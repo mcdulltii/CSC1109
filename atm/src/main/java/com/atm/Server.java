@@ -10,6 +10,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
+import com.atm.backend.AccUserObj;
+import com.atm.backend.Account;
+import com.atm.backend.AtmService;
+import com.atm.backend.Authenticate;
+import com.atm.backend.SQLQueries;
+import com.atm.backend.User;
+
 public class Server extends Thread {
     private ServerSocket serverSocket;
 
@@ -165,8 +172,8 @@ class ThreadClientHandler extends Thread {
                 if (au.checkPassword(username, password)) {
                     // Set user based on username input
                     obj = getCurrentUserAcc(username);
-                    acc = obj.account;
-                    user = obj.user;
+                    acc = obj.getAccount();
+                    user = obj.getUser();
                     authenticated = true;
                     break;
                 }
