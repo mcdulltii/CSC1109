@@ -1,6 +1,7 @@
 package com.atm;
 
 import java.awt.*;
+import java.awt.Color;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -99,6 +100,26 @@ public class ATMGUI extends JFrame {
 		button0 = new GUIButton();
 		buttonClear = new GUIButton();
 		buttonEnter = new GUIButton();
+
+		Color bgColor = new Color(0x39,0x30,0x53);
+		displayArea.setOpaque(true);
+		displayArea.setBackground(bgColor);
+		inputArea.setOpaque(true);
+		inputArea.setBackground(bgColor);
+		button1.setBackground(Color.DARK_GRAY);
+		button2.setBackground(Color.DARK_GRAY);
+		button3.setBackground(Color.DARK_GRAY);
+		button4.setBackground(Color.DARK_GRAY);
+		button5.setBackground(Color.DARK_GRAY);
+		button6.setBackground(Color.DARK_GRAY);
+		button7.setBackground(Color.DARK_GRAY);
+		button8.setBackground(Color.DARK_GRAY);
+		button9.setBackground(Color.DARK_GRAY);
+		button0.setBackground(Color.DARK_GRAY);
+		Color DARK_RED = new Color(0xCC,0x36,0x36);
+		buttonClear.setBackground(DARK_RED);
+		Color DARK_GREEN = new Color(0x36,0x7E,0x18);
+		buttonEnter.setBackground(DARK_GREEN);
 
 		//======== this ========
 		Container contentPane = getContentPane();
