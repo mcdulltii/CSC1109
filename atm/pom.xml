@@ -33,6 +33,11 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>8.0.32</version>
         </dependency>
+        <dependency>
+            <groupId>io.github.warnotte</groupId>
+            <artifactId>waxlib3</artifactId>
+            <version>0.0.1.6</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

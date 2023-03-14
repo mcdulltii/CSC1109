@@ -5,42 +5,44 @@ import java.util.Random;
 public class User {
     final int userIdLength = 6;
     private int userId;
-    protected String firstName;
-    protected String lastName;
-    protected String userName;
-    protected String pinNumber;
-    protected boolean isAdmin;
-    protected static Settings settings;
+    private String AccNo;
+    private String firstName;
+    private String lastName;
+    private String pinNumber;
+    private int isAdmin;
 
-    User(String firstName, String lastName, String userName, String pinNumber,
-            boolean isAdmin) {
+    User(String AccNo, String firstName, String lastName, int isAdmin) {
+        this.AccNo = AccNo;
         this.userId = this.getNewUserId();
         this.firstName = firstName;
         this.lastName = lastName;
-        this.userName = userName;
-        this.pinNumber = pinNumber;
+        this.pinNumber = "";
         this.isAdmin = isAdmin;
-        settings = new Settings(this);
     }
 
-    public int getUserId() {
-        return userId;
+    protected int getUserId() {
+        return this.userId;
     }
 
-    public String getUserName() {
-        return userName;
+    protected String getAccNo() {
+        return this.AccNo;
     }
 
-    public String getFirstName() {
-        return firstName;
+    protected String getFirstName() {
+        return this.firstName;
     }
 
-    public String getLastName() {
-        return lastName;
+    protected String getLastName() {
+        return this.lastName;
     }
 
-    public String getPinNumber() {
-        return pinNumber;
+    protected String getPin() {
+        return this.pinNumber;
+    }
+
+    protected void setPin(String pin) {
+        Authenticate auth = new Authenticate();
+        this.pinNumber = auth.hashString(pin);
     }
 
     private int getNewUserId() {

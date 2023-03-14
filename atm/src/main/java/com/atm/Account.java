@@ -8,7 +8,6 @@ public class Account {
     private double availableBalance;
     private double totalBalance;
     protected double transferLimit;
-    protected static Settings settings;
 
     public Account(double availableBalance,
             double totalBalance, double transferLimit) {
@@ -17,7 +16,6 @@ public class Account {
         this.availableBalance = availableBalance;
         this.totalBalance = totalBalance;
         this.transferLimit = transferLimit;
-        settings = new Settings(this);
         storeAccountNumber();
     }
 
@@ -28,7 +26,6 @@ public class Account {
         this.availableBalance = availableBalance;
         this.totalBalance = totalBalance;
         this.transferLimit = transferLimit;
-        settings = new Settings(this);
         storeAccountNumber();
     }
 
@@ -38,6 +35,10 @@ public class Account {
 
     public double getTransferLimit() {
         return this.transferLimit;
+    }
+
+    public void setTransferLimit(double transferLimit) {
+        this.transferLimit = transferLimit;
     }
 
     public double getAvailableBalance() {
@@ -54,10 +55,6 @@ public class Account {
 
     public void setAvailableBalance(double availableBalance) {
         this.availableBalance = availableBalance;
-    }
-
-    public void setTransferLimit(double transferLimit) {
-        this.transferLimit = transferLimit;
     }
 
     private String getNewAccountNumber() {
