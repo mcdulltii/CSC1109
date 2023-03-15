@@ -30,7 +30,7 @@ public class Server extends Thread {
             System.out.println("Port parameter is out of range");
         } catch (IOException e) {
             System.out.println("Unable to start server.");;
-        } 
+        }
     }
 
     public void stopServer() {
