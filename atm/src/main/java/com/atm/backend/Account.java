@@ -16,7 +16,6 @@ public class Account {
         this.availableBalance = availableBalance;
         this.totalBalance = totalBalance;
         this.transferLimit = transferLimit;
-        //storeAccountNumber();
     }
 
     public Account(String accountNumber, double availableBalance,
@@ -26,7 +25,6 @@ public class Account {
         this.availableBalance = availableBalance;
         this.totalBalance = totalBalance;
         this.transferLimit = transferLimit;
-        //storeAccountNumber();
     }
 
     protected String getAccountNumber() {
