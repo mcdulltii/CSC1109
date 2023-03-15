@@ -230,7 +230,6 @@ public class SQLQueries {
                 preparedStmt.setFloat(10, 0); // Set TransferLimit
                 preparedStmt.setBoolean(11, true); // Set IsAdmin
                 preparedStmt.execute();
-                sc.close();
             } else {
                 passwordString = this.getAdminPassword();
             }
