@@ -63,23 +63,27 @@ public class Server extends Thread {
 
         // Fill account database
         SQLQueries q = new SQLQueries();
+        String adminPassword = null;
         try {
             q.importAccounts();
+            adminPassword = q.importAdminAccount();
         } catch (FileNotFoundException e) {
             System.out.println("Import Accounts File not found.");
         }
 
         Scanner sc = new Scanner(System.in);
+        Authenticate au = new Authenticate();
         login: while (true) {
-            System.out.println("Enter admin password:");
-            String password = sc.next();
-            if (password.equals("admin")) //authenticate user
+            System.out.print("Enter admin password: ");
+            String password = sc.nextLine().strip();
+            if (au.hashString(password).equals(adminPassword))
             {
                 System.out.println("Welcome Admin!");
                 while (true) {
                     System.out.println("Available Options:\n(1) Display all accounts\n(0) Logout admin");
-                    System.out.println("Enter option:");
+                    System.out.print("Enter option: ");
                     int choice = sc.nextInt();
+                    sc.nextLine();
                     switch (choice) {
                         case 1:
                             printAllAccounts();
@@ -92,9 +96,7 @@ public class Server extends Thread {
                     }
                 }
             }
-
         }
-
     }
 
     private static void printAllAccounts() {
