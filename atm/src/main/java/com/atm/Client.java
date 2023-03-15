@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 class ReceivedMessage {
@@ -19,15 +20,18 @@ public class Client {
     private Boolean isCLI;
     private int numTries;
 
-    public Client(String ip, int port) {
+    public Client(String ip, int port)  {
         this.numTries = 0;
         this.isCLI = true;
         try {
             this.socket = new Socket(ip, port);
+        } catch (UnknownHostException e) {
+            outputStream.println("Please check host address input.");
+        } catch (IllegalArgumentException e) {
+            outputStream.println("Port parameter is out of range.");
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+            outputStream.println("Unable to create socket.");
+        } 
     }
 
     public Client(String ip, int port, Boolean isCLI) {
@@ -35,10 +39,13 @@ public class Client {
         this.isCLI = isCLI;
         try {
             this.socket = new Socket(ip, port);
+        } catch (UnknownHostException e) {
+            outputStream.println("Please check host address input.");
+        } catch (IllegalArgumentException e) {
+            outputStream.println("Port parameter is out of range.");
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+            outputStream.println("Unable to create socket.");
+        } 
     }
 
     public void startConnection() {
@@ -46,7 +53,7 @@ public class Client {
             outputStream = new PrintStream(socket.getOutputStream(), true);
             inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch (IOException e) {
-            e.printStackTrace();
+            outputStream.println("Unable to connect. ");
         }
     }
 
@@ -84,7 +91,7 @@ public class Client {
                     responseLine = inputReader.readLine();
             }
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            outputStream.println("Unable to read stream.");;
         }
         recvMsg.isOpen = true;
         return recvMsg;
@@ -114,7 +121,7 @@ public class Client {
             outputStream.close();
             socket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            outputStream.println("Unable to close socket.");
         }
     }
 
