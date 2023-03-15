@@ -139,3 +139,118 @@ classDiagram
         +setLastName()
     }
 ```
+
+## Class Diagram UPDATE (Incomplete)
+
+```mermaid
+classDiagram
+    class Account {
+        -accountNumber
+        -availableBalance
+        -totalBalance
+        -transferLimit
+        +getAccountNumber()
+        +getTransferLimit()
+        +setTransferLimit(transferLimit: double)
+        +getAvailableBalance()
+        +setAvailableBalance(availableBalance: double)
+        +getTotalBalance()
+        +setTotalBalance(totalBalance: double)
+        +getNewAccountNumber()
+    }
+    Authenticate <|-- Account
+    class Authenticate {
+        -numTries
+        +hashString()
+        +checkPassword()
+        +getNumTries() 
+    }
+    Transaction <|-- Account
+    class Transaction {
+        -accountNumber
+        -transactionDate
+        -transactionDetails
+        -chqNumber
+        -valueDate
+        -withdrawal
+        -deposit
+        -balance
+        +getAccountNumber()
+        +getTransactionDate()
+        +getTransactionDetails()
+        +getChqNumber()
+        +getValueDate()
+        +getWithdrawal()
+        +getDeposit()
+        +getBalance()
+        +hasAvailableBalance()
+        +belowTransferLimit()
+        +transferToAccount(a1: Account, a2: Account, amount: double)
+        +deposit(a1: Account, amount: double)
+        +withdraw(a1: Account, amount: double)
+    }
+    Settings <|-- Account
+    class Settings {
+      +setTransferLimit(limit: double)
+      +setPinNumber(pinNumber: String)
+    }
+    AccountSettings <|.. Settings: uses
+    class AccountSettings{
+        <<interface>> 
+        +setTransferLimit(limit: double)
+    }
+    UserSettings <|.. Settings: uses
+    class UserSettings{
+        <<interface>> 
+        +setPinNumber(pinNumber: String)
+    }
+    Account <|--AccUserObj
+    User <|-- AccUserObj
+    class AccUserObj{
+        +getAccount()
+        +getUser()
+    }
+    AtmService <|-- Account
+    AtmService <|-- User
+    AtmService <|-- Transaction
+    class AtmService{
+        +getUserInput()
+        +systemMenu()
+        +userSystemMenu()
+        +userSystemMenuOutput()
+        +accountSystemMenu()
+        +accountSystemMenuOutput()
+        +selectionMenu()
+        +selection()
+    }
+    SQLQueries <|-- Account
+    SQLQueries <|-- Settings
+    SQLQueries <|-- Transaction
+    class SQLQueries{
+        +executeQueryTransactions(tr: Transaction)
+        +executeQueryAccounts(a1: Account, a2: Account)
+        +executeQuerySettings(ac: Account, field: String)
+        +executeQuerySettings(user: User, field: String)
+        +getAccountfromUsername(username: String)
+        +getAccountfromAccountNumber(accountNumber: Long)
+        +getPasswordfromUsername(username: String)
+        +importAccounts()
+        +executeQuery(query: String)
+        +getConnection()
+    }
+    class User{
+        -userId
+        -AccNo
+        -firstName
+        -lastName
+        -pinNumber
+        -isAdmin
+        +getUserId()
+        +getAccNo()
+        +getFirstName()
+        +getLastName()
+        +getPin()
+        +setPin(pin: String)
+        +getNewUserId()
+    }
+```
