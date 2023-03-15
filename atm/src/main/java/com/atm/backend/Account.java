@@ -16,7 +16,7 @@ public class Account {
         this.availableBalance = availableBalance;
         this.totalBalance = totalBalance;
         this.transferLimit = transferLimit;
-        storeAccountNumber();
+        //storeAccountNumber();
     }
 
     public Account(String accountNumber, double availableBalance,
@@ -26,7 +26,7 @@ public class Account {
         this.availableBalance = availableBalance;
         this.totalBalance = totalBalance;
         this.transferLimit = transferLimit;
-        storeAccountNumber();
+        //storeAccountNumber();
     }
 
     protected String getAccountNumber() {
@@ -80,7 +80,4 @@ public class Account {
         return uuid;
     }
 
-    private void storeAccountNumber() {
-        // TODO Store new account in accounts sql table
-    }
 }

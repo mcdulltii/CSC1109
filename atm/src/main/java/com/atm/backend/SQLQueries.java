@@ -67,8 +67,7 @@ public class SQLQueries {
             }
 
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.out.println("Unable to access database.");
         }
     }
 
@@ -89,7 +88,7 @@ public class SQLQueries {
                     break;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Unable to access database.");
         }
     }
 
@@ -110,7 +109,7 @@ public class SQLQueries {
                     break;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Unable to access database.");
         }
     }
 
@@ -133,9 +132,8 @@ public class SQLQueries {
                 transferLimit = rs.getDouble("TransferLimit");
                 isAdmin = rs.getInt("IsAdmin");
             }
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Please check column label and database connection.");
         }
 
         Account newUserAcc = new Account(accountNumber, availableBalance,
@@ -158,9 +156,8 @@ public class SQLQueries {
                 totalBalance = rs.getDouble("TotalBalance");
                 transferLimit = rs.getDouble("TransferLimit");
             }
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Please check column label and database connection.");
         }
 
         Account newAccount = new Account(String.valueOf(accountNumber), availableBalance,
@@ -178,9 +175,8 @@ public class SQLQueries {
             while (rs.next()) {
                 password = rs.getString("Password");
             }
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Please check column label and database connection.");
         }
 
         return password;
@@ -199,7 +195,7 @@ public class SQLQueries {
                 try {
                     br.readLine();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println("Unable to read file.");
                 }
 
                 Connection conn = getConnection();
@@ -208,7 +204,7 @@ public class SQLQueries {
                     try {
                         row = br.readLine();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        System.out.println("Unable to read file.");
                         break;
                     }
                     if (row == null)
@@ -248,8 +244,7 @@ public class SQLQueries {
                 }
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.out.println("Unable to access database.");
         }
     }
 
