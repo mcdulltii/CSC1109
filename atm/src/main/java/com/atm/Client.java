@@ -26,11 +26,11 @@ public class Client {
         try {
             this.socket = new Socket(ip, port);
         } catch (UnknownHostException e) {
-            outputStream.println("Please check host address input.");
+            System.out.println("Please check host address input.");
         } catch (IllegalArgumentException e) {
-            outputStream.println("Port parameter is out of range.");
+            System.out.println("Port parameter is out of range.");
         } catch (IOException e) {
-            outputStream.println("Unable to create socket.");
+            System.out.println("Unable to create socket.");
         } 
     }
 
@@ -40,11 +40,11 @@ public class Client {
         try {
             this.socket = new Socket(ip, port);
         } catch (UnknownHostException e) {
-            outputStream.println("Please check host address input.");
+            System.out.println("Please check host address input.");
         } catch (IllegalArgumentException e) {
-            outputStream.println("Port parameter is out of range.");
+            System.out.println("Port parameter is out of range.");
         } catch (IOException e) {
-            outputStream.println("Unable to create socket.");
+            System.out.println("Unable to create socket.");
         } 
     }
 
@@ -53,7 +53,7 @@ public class Client {
             outputStream = new PrintStream(socket.getOutputStream(), true);
             inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch (IOException e) {
-            outputStream.println("Unable to connect. ");
+            System.out.println("Unable to connect. ");
         }
     }
 
@@ -91,7 +91,7 @@ public class Client {
                     responseLine = inputReader.readLine();
             }
         } catch (IOException | InterruptedException e) {
-            outputStream.println("Unable to read stream.");;
+            System.out.println("Unable to read stream.");;
         }
         recvMsg.isOpen = true;
         return recvMsg;
@@ -121,7 +121,7 @@ public class Client {
             outputStream.close();
             socket.close();
         } catch (IOException e) {
-            outputStream.println("Unable to close socket.");
+            System.out.println("Unable to close socket.");
         }
     }
 
