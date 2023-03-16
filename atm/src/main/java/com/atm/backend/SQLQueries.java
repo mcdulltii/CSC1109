@@ -213,9 +213,13 @@ public class SQLQueries {
                 PreparedStatement preparedStmt = conn.prepareStatement(sql);
 
                 System.out.println("Admin account not found!");
+                Boolean firstRun = true;
                 while (passwordString.length() != 6 || !passwordString.matches("[0-9]{6}")) {
+                    if (!firstRun)
+                        System.out.println("Enter a 6 digit password!");
                     System.out.print("Enter admin password to set admin account: ");
                     passwordString = sc.nextLine().strip();
+                    firstRun = false;
                 }
                 Authenticate au = new Authenticate();
                 preparedStmt.setLong(1, 0); // Set CardNumber
