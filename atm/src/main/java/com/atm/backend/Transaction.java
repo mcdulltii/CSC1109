@@ -1,6 +1,7 @@
 package com.atm.backend;
 
 import java.util.Date;
+import java.util.Random;
 
 public class Transaction {
     private Account a1;
@@ -100,12 +101,21 @@ public class Transaction {
         newTotalBalance = a2.getTotalBalance() + amount;
         a2.setTotalBalance(newTotalBalance);
 
+        // Generate random 6 digit or empty string for chqNumber
+        String number = String.format("%06d",new Random().nextInt(999999)+100000);
+        String [] arr = {number,""};
+        int randomSelect = new Random().nextInt(arr.length);
+        String chqNumber = arr[randomSelect];
+
+        // Generate transaction details
+        String details = "TRF FROM "+a1.getAccountNumber();
+        
         // Update transactions
         java.sql.Date sqlDate = new java.sql.Date(transactionDate.getTime());
-        Transaction transaction = new Transaction(a1, a1.getAccountNumber(), "MoneyForYou", "554433", sqlDate, amount,
+        Transaction transaction = new Transaction(a1, a1.getAccountNumber(), details, chqNumber, sqlDate, amount,
                 0.0, a1.getTotalBalance());
         q.executeQueryTransactions(transaction);
-        transaction = new Transaction(a2, a2.getAccountNumber(), "MoneyForYou", "223344", sqlDate, 0.0,
+        transaction = new Transaction(a2, a2.getAccountNumber(), details, chqNumber, sqlDate, 0.0,
                 amount, a2.getTotalBalance());
         q.executeQueryTransactions(transaction);
 
