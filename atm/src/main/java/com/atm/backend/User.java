@@ -11,7 +11,7 @@ public class User {
     private String pinNumber;
     private int isAdmin;
 
-    User(String AccNo, String firstName, String lastName, int isAdmin) {
+    public User(String AccNo, String firstName, String lastName, int isAdmin) {
         this.AccNo = AccNo;
         this.userId = this.getNewUserId();
         this.firstName = firstName;
@@ -42,7 +42,9 @@ public class User {
 
     protected void setPin(String pin) {
         Authenticate auth = new Authenticate();
-        this.pinNumber = auth.hashString(pin);
+        SQLQueries q = new SQLQueries();
+        byte[] passwordSalt = q.executeQuerySettings(this, "salt");
+        this.pinNumber = auth.hashString(pin, passwordSalt);
     }
 
     private int getNewUserId() {

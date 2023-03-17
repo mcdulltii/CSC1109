@@ -93,11 +93,12 @@ public class SQLQueries {
         }
     }
 
-    protected void executeQuerySettings(User user, String field) {
+    protected byte[] executeQuerySettings(User user, String field) {
         Connection conn = getConnection();
         String updateQuery = "";
         PreparedStatement preparedStmt;
         long accNo = Long.parseLong(user.getAccNo());
+        byte[] retValue = {};
 
         try {
             switch (field) {
@@ -108,10 +109,21 @@ public class SQLQueries {
                     preparedStmt.setLong(2, accNo);
                     preparedStmt.executeUpdate();
                     break;
+                case "salt":
+                    Authenticate au = new Authenticate();
+                    byte[] passwordSalt = au.getRandomNonce();
+                    updateQuery = "UPDATE accounts SET PasswordSalt = ? WHERE AccountNumber = ?";
+                    preparedStmt = conn.prepareStatement(updateQuery);
+                    preparedStmt.setBytes(1, passwordSalt);
+                    preparedStmt.setLong(2, accNo);
+                    preparedStmt.executeUpdate();
+                    retValue = passwordSalt;
+                    break;
             }
         } catch (SQLException e) {
             System.out.println("Unable to access database.");
         }
+        return retValue;
     }
 
     // Create and return Account object from accounts table based on username input
@@ -183,6 +195,23 @@ public class SQLQueries {
         return password;
     }
 
+    public byte[] getPasswordSaltfromUsername(String username) {
+        byte[] passwordSalt = {};
+
+        String selectQuery = "SELECT * FROM accounts WHERE UserName = \"" + username + "\"";
+        ResultSet rs = executeQuery(selectQuery);
+
+        try {
+            while (rs.next()) {
+                passwordSalt = rs.getBytes("PasswordSalt");
+            }
+        } catch (SQLException e) {
+            System.out.println("Please check column label and database connection.");
+        }
+
+        return passwordSalt;
+    }
+
     private String getAdminPassword() {
         String password = "";
 
@@ -209,7 +238,7 @@ public class SQLQueries {
             if (!rs.next()) {
                 Scanner sc = new Scanner(System.in);
                 Connection conn = getConnection();
-                sql = "INSERT INTO accounts(CardNumber, AccountNumber, UserName, Password, FirstName, LastName, PinNumber, AvailableBalance, TotalBalance, TransferLimit, IsAdmin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                sql = "INSERT INTO accounts(CardNumber, AccountNumber, UserName, Password, FirstName, LastName, PasswordSalt, AvailableBalance, TotalBalance, TransferLimit, IsAdmin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement preparedStmt = conn.prepareStatement(sql);
 
                 System.out.println("Admin account not found!");
@@ -222,13 +251,14 @@ public class SQLQueries {
                     firstRun = false;
                 }
                 Authenticate au = new Authenticate();
+                byte[] passwordSalt = au.getRandomNonce();
                 preparedStmt.setLong(1, 0); // Set CardNumber
                 preparedStmt.setLong(2, 0); // Set AccountNumber
                 preparedStmt.setString(3, "ADMIN"); // Set Username
-                preparedStmt.setString(4, au.hashString(passwordString)); // Set Password
+                preparedStmt.setString(4, au.hashString(passwordString, passwordSalt)); // Set Password
                 preparedStmt.setString(5, "ADMIN"); // Set FirstName
                 preparedStmt.setString(6, "ADMIN"); // Set LastName
-                preparedStmt.setLong(7, Long.parseLong(passwordString)); // Set PinNumber
+                preparedStmt.setBytes(7, passwordSalt); // Set PasswordSalt
                 preparedStmt.setFloat(8, 0); // Set AvailableBalance
                 preparedStmt.setFloat(9, 0); // Set TotalBalance
                 preparedStmt.setFloat(10, 0); // Set TransferLimit
@@ -271,10 +301,11 @@ public class SQLQueries {
                     if (row == null)
                         break;
 
-                    sql = "INSERT INTO accounts(CardNumber, AccountNumber, UserName, Password, FirstName, LastName, PinNumber, AvailableBalance, TotalBalance, TransferLimit, IsAdmin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    sql = "INSERT INTO accounts(CardNumber, AccountNumber, UserName, Password, FirstName, LastName, PasswordSalt, AvailableBalance, TotalBalance, TransferLimit, IsAdmin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     PreparedStatement preparedStmt = conn.prepareStatement(sql);
                     String[] data = row.split(",");
 
+                    byte[] passwordSalt = au.getRandomNonce();
                     for (int i = 0; i < data.length; i++) {
                         switch (i) {
                             case 0: // Set CardNumber
@@ -286,9 +317,9 @@ public class SQLQueries {
                             case 5: // Set LastName
                                 preparedStmt.setString(i + 1, data[i]);
                                 break;
-                            case 6: // Set PinNumber and Password
-                                preparedStmt.setLong(i + 1, Long.parseLong(data[i]));
-                                preparedStmt.setString(4, au.hashString(data[i]));
+                            case 6: // Set PasswordSalt and Password
+                                preparedStmt.setBytes(i + 1, passwordSalt);
+                                preparedStmt.setString(4, au.hashString(data[i], passwordSalt));
                                 break;
                             case 7: // Set AvailableBalance
                             case 8: // Set TotalBalance

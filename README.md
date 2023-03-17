@@ -48,7 +48,7 @@
       `Password` VARCHAR(128) NOT NULL,
       `FirstName` VARCHAR(45) NOT NULL,
       `LastName` VARCHAR(45) NOT NULL,
-      `PinNumber`INT(6) NOT NULL,
+      `PasswordSalt` VARBINARY(128) NOT NULL,
       `AvailableBalance` FLOAT(45) NOT NULL,
       `TotalBalance` FLOAT(45) NOT NULL,
       `TransferLimit` FLOAT(45) NOT NULL,
