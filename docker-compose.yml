@@ -5,6 +5,7 @@ services:
     image: mysql:latest
     restart: always
     container_name: mysql
+    profiles: ['sql', 'all']
     environment:
       MYSQL_DATABASE: oopasgdb
       MYSQL_ROOT_PASSWORD: root
@@ -23,6 +24,7 @@ services:
       dockerfile: ./docker/Dockerfile
     restart: always
     container_name: atm-server
+    profiles: ['atm', 'all']
     ports:
       - '${DOCKER_PLATFORM_PORT:-7777}:7777'
     depends_on:

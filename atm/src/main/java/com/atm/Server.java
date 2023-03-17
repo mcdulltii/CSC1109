@@ -24,8 +24,12 @@ public class Server extends Thread {
         try {
             serverSocket = new ServerSocket(port);
             this.start();
+        } catch (IllegalThreadStateException e){
+            System.out.println("Thread has already started.");
+        } catch (IllegalArgumentException e){
+            System.out.println("Port parameter is out of range");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Unable to start server.");;
         }
     }
 
@@ -33,7 +37,7 @@ public class Server extends Thread {
         try {
             serverSocket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Unable to close server.");;
         }
         this.interrupt();
     }
@@ -46,7 +50,9 @@ public class Server extends Thread {
                 ThreadClientHandler handler = new ThreadClientHandler(socket);
                 handler.start();
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Error when waiting for connection.");;
+            } catch (IllegalThreadStateException e){
+                System.out.println("Thread has already started.");
             }
         }
     }
@@ -57,23 +63,27 @@ public class Server extends Thread {
 
         // Fill account database
         SQLQueries q = new SQLQueries();
+        String adminPassword = null;
         try {
             q.importAccounts();
+            adminPassword = q.importAdminAccount();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("Import Accounts File not found.");
         }
 
         Scanner sc = new Scanner(System.in);
+        Authenticate au = new Authenticate();
         login: while (true) {
-            System.out.println("Enter admin password:");
-            String password = sc.next();
-            if (password.equals("admin")) // TODO: Authenticate
+            System.out.print("Enter admin password: ");
+            String password = sc.nextLine().strip();
+            if (au.hashString(password).equals(adminPassword))
             {
                 System.out.println("Welcome Admin!");
                 while (true) {
                     System.out.println("Available Options:\n(1) Display all accounts\n(0) Logout admin");
-                    System.out.println("Enter option:");
+                    System.out.print("Enter option: ");
                     int choice = sc.nextInt();
+                    sc.nextLine();
                     switch (choice) {
                         case 1:
                             printAllAccounts();
@@ -86,9 +96,7 @@ public class Server extends Thread {
                     }
                 }
             }
-
         }
-
     }
 
     private static void printAllAccounts() {
@@ -106,8 +114,12 @@ public class Server extends Thread {
                         Float.parseFloat(data[6]), Float.parseFloat(data[7])));
             }
             br.close();
+        } catch (FileNotFoundException e){
+            System.out.println("Accounts CSV File not found.");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Unable to read file.");;
+        } catch (NumberFormatException e){
+            System.out.println("Unable to parse string.");
         }
     }
 }
@@ -128,7 +140,7 @@ class ThreadClientHandler extends Thread {
         try {
             s = inputReader.readLine();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Unable to read user input.");;
         }
         return s.strip();
     }
@@ -143,7 +155,7 @@ class ThreadClientHandler extends Thread {
             outputStream = new PrintWriter(clientSocket.getOutputStream(), true);
             inputReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Unable to create stream. Please check socket connection.");
             return;
         }
 
@@ -217,7 +229,7 @@ class ThreadClientHandler extends Thread {
             outputStream.close();
             clientSocket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Unable to close connection.");;
         }
     }
 

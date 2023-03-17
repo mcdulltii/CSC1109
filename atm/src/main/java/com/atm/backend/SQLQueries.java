@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
+import java.util.Scanner;
 
 public class SQLQueries {
     final String db_url = "jdbc:mysql://localhost:3306/oopasgdb";
@@ -67,8 +68,7 @@ public class SQLQueries {
             }
 
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.out.println("Unable to access database.");
         }
     }
 
@@ -89,7 +89,7 @@ public class SQLQueries {
                     break;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Unable to access database.");
         }
     }
 
@@ -110,7 +110,7 @@ public class SQLQueries {
                     break;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Unable to access database.");
         }
     }
 
@@ -133,9 +133,8 @@ public class SQLQueries {
                 transferLimit = rs.getDouble("TransferLimit");
                 isAdmin = rs.getInt("IsAdmin");
             }
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Please check column label and database connection.");
         }
 
         Account newUserAcc = new Account(accountNumber, availableBalance,
@@ -158,9 +157,8 @@ public class SQLQueries {
                 totalBalance = rs.getDouble("TotalBalance");
                 transferLimit = rs.getDouble("TransferLimit");
             }
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Please check column label and database connection.");
         }
 
         Account newAccount = new Account(String.valueOf(accountNumber), availableBalance,
@@ -178,12 +176,71 @@ public class SQLQueries {
             while (rs.next()) {
                 password = rs.getString("Password");
             }
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Please check column label and database connection.");
         }
 
         return password;
+    }
+
+    private String getAdminPassword() {
+        String password = "";
+
+        String selectQuery = "SELECT * FROM accounts WHERE IsAdmin=1";
+        ResultSet rs = executeQuery(selectQuery);
+
+        try {
+            while (rs.next()) {
+                password = rs.getString("Password");
+            }
+        } catch (SQLException e) {
+            System.out.println("Please check column label and database connection.");
+        }
+
+        return password;
+    }
+
+    public String importAdminAccount() {
+        String sql = "SELECT * FROM accounts WHERE IsAdmin=1";
+        ResultSet rs = executeQuery(sql);
+        String passwordString = "";
+
+        try {
+            if (!rs.next()) {
+                Scanner sc = new Scanner(System.in);
+                Connection conn = getConnection();
+                sql = "INSERT INTO accounts(CardNumber, AccountNumber, UserName, Password, FirstName, LastName, PinNumber, AvailableBalance, TotalBalance, TransferLimit, IsAdmin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                PreparedStatement preparedStmt = conn.prepareStatement(sql);
+
+                System.out.println("Admin account not found!");
+                Boolean firstRun = true;
+                while (passwordString.length() != 6 || !passwordString.matches("[0-9]{6}")) {
+                    if (!firstRun)
+                        System.out.println("Enter a 6 digit password!");
+                    System.out.print("Enter admin password to set admin account: ");
+                    passwordString = sc.nextLine().strip();
+                    firstRun = false;
+                }
+                Authenticate au = new Authenticate();
+                preparedStmt.setLong(1, 0); // Set CardNumber
+                preparedStmt.setLong(2, 0); // Set AccountNumber
+                preparedStmt.setString(3, "ADMIN"); // Set Username
+                preparedStmt.setString(4, au.hashString(passwordString)); // Set Password
+                preparedStmt.setString(5, "ADMIN"); // Set FirstName
+                preparedStmt.setString(6, "ADMIN"); // Set LastName
+                preparedStmt.setLong(7, Long.parseLong(passwordString)); // Set PinNumber
+                preparedStmt.setFloat(8, 0); // Set AvailableBalance
+                preparedStmt.setFloat(9, 0); // Set TotalBalance
+                preparedStmt.setFloat(10, 0); // Set TransferLimit
+                preparedStmt.setBoolean(11, true); // Set IsAdmin
+                preparedStmt.execute();
+            } else {
+                passwordString = this.getAdminPassword();
+            }
+        } catch (SQLException e) {
+            System.out.println("Unable to access database.");
+        }
+        return passwordString;
     }
 
     public void importAccounts() throws FileNotFoundException {
@@ -199,7 +256,7 @@ public class SQLQueries {
                 try {
                     br.readLine();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println("Unable to read file.");
                 }
 
                 Connection conn = getConnection();
@@ -208,7 +265,7 @@ public class SQLQueries {
                     try {
                         row = br.readLine();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        System.out.println("Unable to read file.");
                         break;
                     }
                     if (row == null)
@@ -220,36 +277,38 @@ public class SQLQueries {
 
                     for (int i = 0; i < data.length; i++) {
                         switch (i) {
-                            case 0:
-                            case 1:
-                                preparedStmt.setLong(i + 1, Long.parseLong(data[i]));
+                            case 0: // Set CardNumber
+                            case 1: // Set AccountNumber
                                 preparedStmt.setLong(i + 1, Long.parseLong(data[i]));
                                 break;
-                            case 2:
-                            case 3:
-                            case 4:
-                            case 5:
+                            case 2: // Set Username
+                            case 4: // Set FirstName
+                            case 5: // Set LastName
                                 preparedStmt.setString(i + 1, data[i]);
                                 break;
-                            case 6:
+                            case 6: // Set PinNumber and Password
                                 preparedStmt.setLong(i + 1, Long.parseLong(data[i]));
                                 preparedStmt.setString(4, au.hashString(data[i]));
                                 break;
-                            case 7:
-                            case 8:
-                            case 9:
+                            case 7: // Set AvailableBalance
+                            case 8: // Set TotalBalance
+                            case 9: // Set TransferLimit
                                 preparedStmt.setFloat(i + 1, Float.parseFloat(data[i]));
                                 break;
-                            case 10:
+                            case 10: // Set IsAdmin
                                 preparedStmt.setBoolean(i + 1, Boolean.parseBoolean(data[i]));
                         }
                     }
                     preparedStmt.execute();
                 }
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    System.out.println("Unable to close database.");
+                }
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.out.println("Unable to access database.");
         }
     }
 
