@@ -36,8 +36,18 @@ public class ATMGUI extends JFrame {
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	}
 
+	private void numberButtonMouseClicked(MouseEvent e, JButton[] numberButtons){
+		for(int i=0; i<10; i++){
+			if (e.getSource() == numberButtons[i]){
+				inputArea.setText(inputArea.getText().concat(String.valueOf(i)));
+			}
+		}
+	}
+/* 
 	private void button1MouseClicked(MouseEvent e) {
 		// TODO add your code here
+		if (e.getSource() == button1)
+			inputArea.setText(inputArea.getText().concat(String.valueOf(1)));
 	}
 
 	private void button2MouseClicked(MouseEvent e) {
@@ -75,13 +85,15 @@ public class ATMGUI extends JFrame {
 	private void button0MouseClicked(MouseEvent e) {
 		// TODO add your code here
 	}
-
+*/
 	private void buttonClearMouseClicked(MouseEvent e) {
 		// TODO add your code here
+		inputArea.setText("");
 	}
 
 	private void buttonEnterMouseClicked(MouseEvent e) {
 		// TODO add your code here
+		int input = Integer.parseInt(inputArea.getText());
 	}
 
 	private void initComponents() {
@@ -102,11 +114,30 @@ public class ATMGUI extends JFrame {
 		buttonClear = new GUIButton();
 		buttonEnter = new GUIButton();
 
+		JButton[] numberButtons = new JButton[10];
+		numberButtons[0] = button0;
+		numberButtons[1] = button1;
+		numberButtons[2] = button2;
+		numberButtons[3] = button3;
+		numberButtons[4] = button4;
+		numberButtons[5] = button5;
+		numberButtons[6] = button6;
+		numberButtons[7] = button7;
+		numberButtons[8] = button8;
+		numberButtons[9] = button9;
+
 		Color bgColor = new Color(0x39,0x30,0x53);
 		displayArea.setOpaque(true);
 		displayArea.setBackground(bgColor);
+		inputArea.setForeground(Color.WHITE);
 		inputArea.setOpaque(true);
 		inputArea.setBackground(bgColor);
+
+		for (int i=0; i<10; i++){
+			numberButtons[i].setBackground(Color.DARK_GRAY);
+			numberButtons[i].setForeground(Color.WHITE);
+		}
+		/* 
 		button1.setBackground(Color.DARK_GRAY);
 		button2.setBackground(Color.DARK_GRAY);
 		button3.setBackground(Color.DARK_GRAY);
@@ -116,7 +147,7 @@ public class ATMGUI extends JFrame {
 		button7.setBackground(Color.DARK_GRAY);
 		button8.setBackground(Color.DARK_GRAY);
 		button9.setBackground(Color.DARK_GRAY);
-		button0.setBackground(Color.DARK_GRAY);
+		button0.setBackground(Color.DARK_GRAY); */
 		Color DARK_RED = new Color(0xCC,0x36,0x36);
 		buttonClear.setBackground(DARK_RED);
 		Color DARK_GREEN = new Color(0x36,0x7E,0x18);
@@ -167,6 +198,33 @@ public class ATMGUI extends JFrame {
 		contentPane.add(inputArea, "cell 5 1 10 2,height 180:180:180");
 		contentPane.add(separator, "cell 3 0 1 16");
 
+		//---- number buttons ----
+		for (int i=0; i<10; i++){
+			numberButtons[i].setText(Integer.toString(i));
+			numberButtons[i].addMouseListener(new MouseAdapter(){
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					numberButtonMouseClicked(e, numberButtons);
+				}
+			});
+		}
+		contentPane.add(numberButtons[0], "cell 6 12 2 2");
+		contentPane.add(numberButtons[1], "cell 6 3 2 2");
+		contentPane.add(numberButtons[2], "cell 9 3 2 2");
+		contentPane.add(numberButtons[3], "cell 12 3 2 2");
+		contentPane.add(numberButtons[4], "cell 6 6 2 2");
+		contentPane.add(numberButtons[5], "cell 9 6 2 2");
+		contentPane.add(numberButtons[6], "cell 12 6 2 2");
+		contentPane.add(numberButtons[7], "cell 6 9 2 2");
+		contentPane.add(numberButtons[8], "cell 9 9 2 2");
+		contentPane.add(numberButtons[9], "cell 12 9 2 2");
+
+
+
+
+
+
+		/* 
 		//---- button1 ----
 		button1.setText("1");
 		button1.addMouseListener(new MouseAdapter() {
@@ -266,7 +324,7 @@ public class ATMGUI extends JFrame {
 			}
 		});
 		contentPane.add(button0, "cell 6 12 2 2");
-
+*/
 		//---- buttonClear ----
 		buttonClear.setText("Clear");
 		buttonClear.addMouseListener(new MouseAdapter() {
