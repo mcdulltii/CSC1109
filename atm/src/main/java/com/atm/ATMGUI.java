@@ -70,6 +70,10 @@ public class ATMGUI extends JFrame {
 								 displayTextEnd);
 	}
 
+	private void buttonBackMouseClicked(MouseEvent e) {
+		// TODO add your code here
+	}
+
 	private void buttonClearMouseClicked(MouseEvent e) {
 		// TODO add your code here
 		inputArea.setText("");
@@ -100,6 +104,7 @@ public class ATMGUI extends JFrame {
 		button8 = new GUIButton();
 		button9 = new GUIButton();
 		button0 = new GUIButton();
+		buttonBack = new GUIButton();
 		buttonClear = new GUIButton();
 		buttonEnter = new GUIButton();
 
@@ -132,6 +137,8 @@ public class ATMGUI extends JFrame {
 			numberButtons[i].setBackground(Color.DARK_GRAY);
 			numberButtons[i].setForeground(Color.WHITE);
 		}
+		Color DARK_BROWN = new Color(0xF2, 0xD3, 0x88);
+		buttonBack.setBackground(DARK_BROWN);
 		Color DARK_RED = new Color(0xCC,0x36,0x36);
 		buttonClear.setBackground(DARK_RED);
 		Color DARK_GREEN = new Color(0x36,0x7E,0x18);
@@ -174,6 +181,9 @@ public class ATMGUI extends JFrame {
 			"[]" +
 			"[]" +
 			"[]" +
+			"[]" +
+			"[]" +
+			"[]" +
 			"[]"));
 		Border border = BorderFactory.createLineBorder(Color.DARK_GRAY, 5);
 		displayArea.setBorder(border);
@@ -192,7 +202,7 @@ public class ATMGUI extends JFrame {
 				}
 			});
 		}
-		contentPane.add(numberButtons[0], "cell 6 12 2 2");
+		contentPane.add(numberButtons[0], "cell 9 12 2 2");
 		contentPane.add(numberButtons[1], "cell 6 3 2 2");
 		contentPane.add(numberButtons[2], "cell 9 3 2 2");
 		contentPane.add(numberButtons[3], "cell 12 3 2 2");
@@ -203,6 +213,16 @@ public class ATMGUI extends JFrame {
 		contentPane.add(numberButtons[8], "cell 9 9 2 2");
 		contentPane.add(numberButtons[9], "cell 12 9 2 2");
 
+		//---- buttonBack ----
+		buttonBack.setText("Back");
+		buttonClear.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				buttonBackMouseClicked(e);
+			}
+		});
+		contentPane.add(buttonBack, "cell 6 15 1 2");
+
 		//---- buttonClear ----
 		buttonClear.setText("Clear");
 		buttonClear.addMouseListener(new MouseAdapter() {
@@ -211,7 +231,7 @@ public class ATMGUI extends JFrame {
 				buttonClearMouseClicked(e);
 			}
 		});
-		contentPane.add(buttonClear, "cell 9 12 2 2");
+		contentPane.add(buttonClear, "cell 9 15 2 2");
 
 		//---- buttonEnter ----
 		buttonEnter.setText("Enter");
@@ -221,7 +241,7 @@ public class ATMGUI extends JFrame {
 				buttonEnterMouseClicked(e);
 			}
 		});
-		contentPane.add(buttonEnter, "cell 12 12 2 2");
+		contentPane.add(buttonEnter, "cell 12 15 2 2");
 		pack();
 		setLocationRelativeTo(getOwner());
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
@@ -241,6 +261,7 @@ public class ATMGUI extends JFrame {
 	private GUIButton button8;
 	private GUIButton button9;
 	private GUIButton button0;
+	private GUIButton buttonBack;
 	private GUIButton buttonClear;
 	private GUIButton buttonEnter;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
