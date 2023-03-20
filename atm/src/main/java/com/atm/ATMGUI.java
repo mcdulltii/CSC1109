@@ -24,7 +24,22 @@ public class ATMGUI extends JFrame {
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	}
 
-	public ATMGUI(Client client, String username) {
+	public ATMGUI(Client client, String authReply) {
+		super("ATM");
+		this.client = client;
+
+		// Basic Constructor Setup
+		setResizable(false);
+		setLocationRelativeTo(null);
+		initComponents();
+		setVisible(true);
+		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		
+		String[] reply = authReply.split("\n", 2);
+		this.updateDisplayArea(reply[1]);
+	}
+
+	public ATMGUI(Client client, String authReply, String username) {
 		super("ATM - " + username);
 		this.client = client;
 
@@ -34,6 +49,9 @@ public class ATMGUI extends JFrame {
 		initComponents();
 		setVisible(true);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+		String[] reply = authReply.split("\n", 2);
+		this.updateDisplayArea(reply[1]);
 	}
 
 	private void numberButtonMouseClicked(MouseEvent e, JButton[] numberButtons){
@@ -43,57 +61,28 @@ public class ATMGUI extends JFrame {
 			}
 		}
 	}
-/* 
-	private void button1MouseClicked(MouseEvent e) {
-		// TODO add your code here
-		if (e.getSource() == button1)
-			inputArea.setText(inputArea.getText().concat(String.valueOf(1)));
+
+	private void updateDisplayArea(String recvMsg) {
+		String displayTextStart = "<html><p>";
+		String displayTextEnd = "</p></html>";
+		this.displayArea.setText(displayTextStart + 
+								 recvMsg.replaceAll("\n", "<br/>") +
+								 displayTextEnd);
 	}
 
-	private void button2MouseClicked(MouseEvent e) {
-		// TODO add your code here
-	}
-
-	private void button3MouseClicked(MouseEvent e) {
-		// TODO add your code here
-	}
-
-	private void button4MouseClicked(MouseEvent e) {
-		// TODO add your code here
-	}
-
-	private void button5MouseClicked(MouseEvent e) {
-		// TODO add your code here
-	}
-
-	private void button6MouseClicked(MouseEvent e) {
-		// TODO add your code here
-	}
-
-	private void button7MouseClicked(MouseEvent e) {
-		// TODO add your code here
-	}
-
-	private void button8MouseClicked(MouseEvent e) {
-		// TODO add your code here
-	}
-
-	private void button9MouseClicked(MouseEvent e) {
-		// TODO add your code here
-	}
-
-	private void button0MouseClicked(MouseEvent e) {
-		// TODO add your code here
-	}
-*/
 	private void buttonClearMouseClicked(MouseEvent e) {
 		// TODO add your code here
 		inputArea.setText("");
+		// Need to reconfigure server to return to selection menu
+		// ReceivedMessage recvMsg = client.sendMessage(null);
+		// this.updateDisplayArea(recvMsg.msg);
 	}
 
 	private void buttonEnterMouseClicked(MouseEvent e) {
-		// TODO add your code here
-		int input = Integer.parseInt(inputArea.getText());
+		String input = inputArea.getText();
+		inputArea.setText("");
+		ReceivedMessage recvMsg = client.sendMessage(input);
+		this.updateDisplayArea(recvMsg.msg);
 	}
 
 	private void initComponents() {
@@ -129,25 +118,15 @@ public class ATMGUI extends JFrame {
 		Color bgColor = new Color(0x39,0x30,0x53);
 		displayArea.setOpaque(true);
 		displayArea.setBackground(bgColor);
-		inputArea.setForeground(Color.WHITE);
+		displayArea.setForeground(Color.WHITE);
 		inputArea.setOpaque(true);
 		inputArea.setBackground(bgColor);
+		inputArea.setForeground(Color.WHITE);
 
 		for (int i=0; i<10; i++){
 			numberButtons[i].setBackground(Color.DARK_GRAY);
 			numberButtons[i].setForeground(Color.WHITE);
 		}
-		/* 
-		button1.setBackground(Color.DARK_GRAY);
-		button2.setBackground(Color.DARK_GRAY);
-		button3.setBackground(Color.DARK_GRAY);
-		button4.setBackground(Color.DARK_GRAY);
-		button5.setBackground(Color.DARK_GRAY);
-		button6.setBackground(Color.DARK_GRAY);
-		button7.setBackground(Color.DARK_GRAY);
-		button8.setBackground(Color.DARK_GRAY);
-		button9.setBackground(Color.DARK_GRAY);
-		button0.setBackground(Color.DARK_GRAY); */
 		Color DARK_RED = new Color(0xCC,0x36,0x36);
 		buttonClear.setBackground(DARK_RED);
 		Color DARK_GREEN = new Color(0x36,0x7E,0x18);
@@ -219,112 +198,6 @@ public class ATMGUI extends JFrame {
 		contentPane.add(numberButtons[8], "cell 9 9 2 2");
 		contentPane.add(numberButtons[9], "cell 12 9 2 2");
 
-
-
-
-
-
-		/* 
-		//---- button1 ----
-		button1.setText("1");
-		button1.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				button1MouseClicked(e);
-			}
-		});
-		contentPane.add(button1, "cell 6 3 2 2");
-
-		//---- button2 ----
-		button2.setText("2");
-		button2.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				button2MouseClicked(e);
-			}
-		});
-		contentPane.add(button2, "cell 9 3 2 2");
-
-		//---- button3 ----
-		button3.setText("3");
-		button3.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				button3MouseClicked(e);
-			}
-		});
-		contentPane.add(button3, "cell 12 3 2 2");
-
-		//---- button4 ----
-		button4.setText("4");
-		button4.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				button4MouseClicked(e);
-			}
-		});
-		contentPane.add(button4, "cell 6 6 2 2");
-
-		//---- button5 ----
-		button5.setText("5");
-		button5.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				button5MouseClicked(e);
-			}
-		});
-		contentPane.add(button5, "cell 9 6 2 2");
-
-		//---- button6 ----
-		button6.setText("6");
-		button6.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				button6MouseClicked(e);
-			}
-		});
-		contentPane.add(button6, "cell 12 6 2 2");
-
-		//---- button7 ----
-		button7.setText("7");
-		button7.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				button7MouseClicked(e);
-			}
-		});
-		contentPane.add(button7, "cell 6 9 2 2");
-
-		//---- button8 ----
-		button8.setText("8");
-		button8.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				button8MouseClicked(e);
-			}
-		});
-		contentPane.add(button8, "cell 9 9 2 2");
-
-		//---- button9 ----
-		button9.setText("9");
-		button9.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				button9MouseClicked(e);
-			}
-		});
-		contentPane.add(button9, "cell 12 9 2 2");
-
-		//---- button0 ----
-		button0.setText("0");
-		button0.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				button0MouseClicked(e);
-			}
-		});
-		contentPane.add(button0, "cell 6 12 2 2");
-*/
 		//---- buttonClear ----
 		buttonClear.setText("Clear");
 		buttonClear.addMouseListener(new MouseAdapter() {

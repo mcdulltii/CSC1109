@@ -71,12 +71,12 @@ public class Client {
                         if (this.isCLI)
                             System.out.print(responseString);
                         recvMsg.isOpen = true;
-                        recvMsg.msg += responseString;
+                        recvMsg.msg += responseString + "\n";
                         return recvMsg;
                     } else {
                         if (this.isCLI)
                             System.out.println(responseLine);
-                        recvMsg.msg += responseLine;
+                        recvMsg.msg += responseLine + "\n";
                     }
                 }
                 Thread.sleep(50);

@@ -51,7 +51,7 @@ public class Login extends JFrame {
 		if (authReply != null && authReply.contains("User authenticated")) {
 			// Go to ATM app
 			dispose();
-			new ATMGUI(client, username);
+			new ATMGUI(client, authReply, username);
 		} else {
 			JOptionPane.showMessageDialog(null, "Username password combination is incorrect!\n" + (2 - numTries) + " attempts remaining!");
 		}
@@ -183,6 +183,7 @@ public class Login extends JFrame {
 		// Set GUI theme
 		try {
 			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+				// System.out.println(info.getName());
 				if ("GTK+".equals(info.getName())) {
 					UIManager.setLookAndFeel(info.getClassName());
 					break;
