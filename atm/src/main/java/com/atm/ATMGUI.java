@@ -15,7 +15,7 @@ public class ATMGUI extends JFrame {
 	public ATMGUI(Client client) {
 		super("ATM");
 		this.client = client;
-		
+
 		// Basic Constructor Setup
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -34,7 +34,7 @@ public class ATMGUI extends JFrame {
 		initComponents();
 		setVisible(true);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		
+
 		String[] reply = authReply.split("\n", 2);
 		this.updateDisplayArea(reply[1]);
 	}
@@ -65,7 +65,7 @@ public class ATMGUI extends JFrame {
 	private void updateDisplayArea(String recvMsg) {
 		String displayTextStart = "<html><p>";
 		String displayTextEnd = "</p></html>";
-		this.displayArea.setText(displayTextStart + 
+		this.displayArea.setText(displayTextStart +
 								 recvMsg.replaceAll("\n", "<br/>") +
 								 displayTextEnd);
 	}
@@ -125,7 +125,7 @@ public class ATMGUI extends JFrame {
 		displayArea.setOpaque(true);
 		displayArea.setBackground(bgColor);
 		displayArea.setForeground(Color.WHITE);
-		
+
 		inputArea.setFont(new Font("Arial", Font.PLAIN, 32));
 		inputArea.setOpaque(true);
 		inputArea.setBackground(bgColor);
@@ -188,7 +188,7 @@ public class ATMGUI extends JFrame {
 		Border border = BorderFactory.createLineBorder(Color.DARK_GRAY, 5);
 		displayArea.setBorder(border);
 		inputArea.setBorder(border);
-		contentPane.add(displayArea, "cell 1 1 1 14,height 360:360:360");
+		contentPane.add(displayArea, "cell 1 1 1 14,height 400:400:400");
 		contentPane.add(inputArea, "cell 5 1 10 2,height 180:180:180");
 		contentPane.add(separator, "cell 3 0 1 16");
 
