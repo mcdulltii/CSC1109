@@ -1,8 +1,10 @@
 package com.atm.backend;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Formatter;
 
 public class Authenticate {
@@ -14,34 +16,54 @@ public class Authenticate {
         this.numTries = 0;
     }
 
-    public String hashString(String str) {
-        return encryptSHA256(str);
+    public String hashString(String str, byte[] salt) {
+        return encryptSHA256(str, salt);
     }
 
     public Boolean checkPassword(String username, String password) {
         this.numTries++;
-        return this.hashString(password).equals(q.getPasswordfromUsername(username));
+        byte[] passwordSalt = q.getPasswordSaltfromUsername(username);
+        return this.hashString(password, passwordSalt).equals(q.getPasswordfromUsername(username));
     }
 
     public int getNumTries() {
         return this.numTries;
     }
 
-    private String encryptSHA256(String password) {
+    private String encryptSHA256(String password, byte[] salt) {
         String sha256 = "";
+        byte[] passwordStr = {};
+        try {
+            passwordStr = ByteBuffer.allocate(password.length() + salt.length)
+                                            .put(salt)
+                                            .put(password.getBytes("UTF-8"))
+                                            .array();
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("Pin number should be in ASCII format.");
+        }
 
         try {
             MessageDigest crypt = MessageDigest.getInstance("SHA-256");
             crypt.reset();
-            crypt.update(password.getBytes("UTF-8"));
+            crypt.update(passwordStr);
             sha256 = byteToHex(crypt.digest());
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            System.out.println("Unable to encrypt pin number.");
         }
 
         return sha256;
+    }
+
+    protected byte[] getRandomNonce() {
+        byte[] nonce = new byte[16];
+        new SecureRandom().nextBytes(nonce);
+        return nonce;
+    }
+
+    protected byte[] getRandomNonce(int numBytes) {
+        byte[] nonce = new byte[numBytes];
+        new SecureRandom().nextBytes(nonce);
+        return nonce;
     }
 
     private String byteToHex(final byte[] hash) {
