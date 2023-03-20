@@ -116,12 +116,17 @@ public class ATMGUI extends JFrame {
 		numberButtons[9] = button9;
 
 		Color bgColor = new Color(0x39,0x30,0x53);
+		displayArea.setFont(new Font("Arial", Font.PLAIN, 18));
 		displayArea.setOpaque(true);
 		displayArea.setBackground(bgColor);
 		displayArea.setForeground(Color.WHITE);
+		
+		inputArea.setFont(new Font("Arial", Font.PLAIN, 32));
 		inputArea.setOpaque(true);
 		inputArea.setBackground(bgColor);
 		inputArea.setForeground(Color.WHITE);
+		inputArea.setHorizontalAlignment(SwingConstants.CENTER);
+		inputArea.setVerticalAlignment(SwingConstants.CENTER);
 
 		for (int i=0; i<10; i++){
 			numberButtons[i].setBackground(Color.DARK_GRAY);
