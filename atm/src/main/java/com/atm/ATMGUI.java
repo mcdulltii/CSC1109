@@ -188,7 +188,7 @@ public class ATMGUI extends JFrame {
 		Border border = BorderFactory.createLineBorder(Color.DARK_GRAY, 5);
 		displayArea.setBorder(border);
 		inputArea.setBorder(border);
-		contentPane.add(displayArea, "cell 1 1 1 14,height 400:400:400");
+		contentPane.add(displayArea, "cell 1 1 1 17,height 400:400:400");
 		contentPane.add(inputArea, "cell 5 1 10 2,height 180:180:180");
 		contentPane.add(separator, "cell 3 0 1 16");
 
