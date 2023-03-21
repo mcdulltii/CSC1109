@@ -72,6 +72,8 @@ public class ATMGUI extends JFrame {
 
 	private void buttonBackMouseClicked(MouseEvent e) {
 		// TODO add your code here
+		ReceivedMessage recvMsg = client.sendMessage("-1");
+		this.updateDisplayArea(recvMsg.msg);
 	}
 
 	private void buttonClearMouseClicked(MouseEvent e) {
@@ -218,7 +220,7 @@ public class ATMGUI extends JFrame {
 
 		//---- buttonBack ----
 		buttonBack.setText("Back");
-		buttonClear.addMouseListener(new MouseAdapter() {
+		buttonBack.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				buttonBackMouseClicked(e);
