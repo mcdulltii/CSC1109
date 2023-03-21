@@ -139,10 +139,13 @@ public class ATMGUI extends JFrame {
 		}
 		Color DARK_BROWN = new Color(0xF2, 0xD3, 0x88);
 		buttonBack.setBackground(DARK_BROWN);
+		buttonBack.setForeground(Color.BLACK);
 		Color DARK_RED = new Color(0xCC,0x36,0x36);
 		buttonClear.setBackground(DARK_RED);
+		buttonClear.setForeground(Color.BLACK);
 		Color DARK_GREEN = new Color(0x36,0x7E,0x18);
 		buttonEnter.setBackground(DARK_GREEN);
+		buttonEnter.setForeground(Color.WHITE);
 
 		//======== this ========
 		Container contentPane = getContentPane();
@@ -188,7 +191,7 @@ public class ATMGUI extends JFrame {
 		Border border = BorderFactory.createLineBorder(Color.DARK_GRAY, 5);
 		displayArea.setBorder(border);
 		inputArea.setBorder(border);
-		contentPane.add(displayArea, "cell 1 1 1 17,height 400:400:400");
+		contentPane.add(displayArea, "cell 1 1 1 17,height 420:420:420");
 		contentPane.add(inputArea, "cell 5 1 10 2,height 180:180:180");
 		contentPane.add(separator, "cell 3 0 1 16");
 
