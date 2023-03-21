@@ -3,7 +3,9 @@ package com.atm;
 import java.awt.*;
 import java.awt.Color;
 import java.awt.event.*;
+import java.util.Arrays;
 import javax.swing.*;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import net.miginfocom.swing.MigLayout;
 import com.atm.frontend.GUIButton;
@@ -11,10 +13,14 @@ import com.atm.frontend.GUIButton;
 
 public class ATMGUI extends JFrame {
 	private Client client;
+	private int loginRounds;
+	private String username;
+	private String password;
+	private String[] credDisplay;
 
-	public ATMGUI(Client client) {
+	public ATMGUI() {
 		super("ATM");
-		this.client = client;
+		this.resetVariables();
 
 		// Basic Constructor Setup
 		setResizable(false);
@@ -22,42 +28,85 @@ public class ATMGUI extends JFrame {
 		initComponents();
 		setVisible(true);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+		this.client = this.connectClient();
 	}
 
-	public ATMGUI(Client client, String authReply) {
-		super("ATM");
-		this.client = client;
-
-		// Basic Constructor Setup
-		setResizable(false);
-		setLocationRelativeTo(null);
-		initComponents();
-		setVisible(true);
-		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-		String[] reply = authReply.split("\n", 2);
-		this.updateDisplayArea(reply[1]);
+	private void resetVariables() {
+		this.loginRounds = 0;
+		this.username = "";
+		this.password = "";
 	}
 
-	public ATMGUI(Client client, String authReply, String username) {
-		super("ATM - " + username);
-		this.client = client;
+	private Client connectClient() {
+		// Connect to ATM server
+        client = new Client("127.0.0.1", 7777, false);
+        client.startConnection();
+        client.sendMessage(null); // Receive server prompt
+		ReceivedMessage recvMsg = client.receiveMessage();
+		this.formatCredMessage(recvMsg.msg);
+		this.updateCredDisplayArea();
+		return client;
+	}
 
-		// Basic Constructor Setup
-		setResizable(false);
-		setLocationRelativeTo(null);
-		initComponents();
-		setVisible(true);
-		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	private void formatCredMessage(String msg) {
+		this.credDisplay = msg.split("\n");
+		this.credDisplay = Arrays.copyOf(this.credDisplay, this.credDisplay.length + 4);
+		// Replace server reply
+		int length = this.credDisplay.length;
+		this.credDisplay[length-5] = "Enter Card number:";
+		this.credDisplay[length-3] = "";
+		this.credDisplay[length-2] = "Enter Pin number:";
+	}
 
-		String[] reply = authReply.split("\n", 2);
-		this.updateDisplayArea(reply[1]);
+	private void updateCredDisplayArea() {
+		int length = this.credDisplay.length;
+		this.credDisplay[length-4] = this.username;
+		this.credDisplay[length-1] = this.password;
+		this.updateDisplayArea(String.join("\n", this.credDisplay));
+	}
+
+	private String sendUsernamePassword() {
+		String authReply = null;
+		int numTries = client.getNumTries();
+		if (numTries < 2) {
+			// Only allow 3 tries for user authentication
+			if (this.username != null && this.username.length() > 0 &&
+				this.password != null && this.password.length() > 0) {
+				authReply = client.sendUsernamePassword(username, password);
+			} else {
+				// Popup invalid input window
+				JOptionPane.showMessageDialog(null, "Failed to read input!");
+				return null;
+			}
+		} else {
+			// Exit when user hits 3 tries
+			JOptionPane.showMessageDialog(null, "No attempts remaining!\n Terminating program.");
+			this.exitWindow();
+		}
+
+		// Check server authentication
+		if (authReply != null && authReply.contains("User authenticated")) {
+			// Go to ATM app
+			return authReply;
+		} else {
+			JOptionPane.showMessageDialog(null, "Username password combination is incorrect!\n" + (2 - numTries) + " attempts remaining!");
+			return null;
+		}
+	}
+
+	private void exitWindow() {
+        client.close();
+		this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 	}
 
 	private void numberButtonMouseClicked(MouseEvent e, JButton[] numberButtons){
 		for(int i=0; i<10; i++){
 			if (e.getSource() == numberButtons[i]){
-				inputArea.setText(inputArea.getText().concat(String.valueOf(i)));
+				String inputText = inputArea.getText();
+				// Limit input character length
+				if (inputText.length() <= 16)
+					inputArea.setText(inputText.concat(String.valueOf(i)));
 			}
 		}
 	}
@@ -83,10 +132,41 @@ public class ATMGUI extends JFrame {
 	}
 
 	private void buttonEnterMouseClicked(MouseEvent e) {
-		String input = inputArea.getText();
-		inputArea.setText("");
-		ReceivedMessage recvMsg = client.sendMessage(input);
-		this.updateDisplayArea(recvMsg.msg);
+		switch (this.loginRounds) {
+			case 0:
+				// Save input as username
+				this.username = inputArea.getText();
+				inputArea.setText("");
+				this.updateCredDisplayArea();
+				this.loginRounds++;
+				break;
+			case 1:
+				// Save input as password
+				this.password = inputArea.getText();
+				inputArea.setText("");
+				this.updateCredDisplayArea();
+				// Send username password to server
+				String authReply = this.sendUsernamePassword();
+				if (authReply == null) {
+					// Username password combination fails
+					this.resetVariables();
+					this.updateCredDisplayArea();
+				} else {
+					// Username password combination passes
+					this.loginRounds = 2;
+					String[] reply = authReply.split("\n", 2);
+					this.updateDisplayArea(reply[1]);
+				}
+				break;
+			case 2:
+			default:
+				// Authentication loop passes, reached main input loop
+				String input = inputArea.getText();
+				inputArea.setText("");
+				ReceivedMessage recvMsg = client.sendMessage(input);
+				this.updateDisplayArea(recvMsg.msg);
+				break;
+		}
 	}
 
 	private void initComponents() {
@@ -268,4 +348,35 @@ public class ATMGUI extends JFrame {
 	private GUIButton buttonClear;
 	private GUIButton buttonEnter;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
+
+	public static void main(String args[]) {
+		// Set GUI theme
+		UIManager.put( "control", new Color( 60, 60, 60) );
+		UIManager.put( "info", new Color( 60,60,60) );
+		UIManager.put( "nimbusBase", new Color( 18, 30, 49) );
+		UIManager.put( "nimbusAlertYellow", new Color( 248, 187, 0) );
+		UIManager.put( "nimbusDisabledText", new Color( 128, 128, 128) );
+		UIManager.put( "nimbusFocus", new Color(115,164,209) );
+		UIManager.put( "nimbusGreen", new Color(176,179,50) );
+		UIManager.put( "nimbusInfoBlue", new Color( 66, 139, 221) );
+		UIManager.put( "nimbusLightBackground", new Color( 18, 30, 49) );
+		UIManager.put( "nimbusOrange", new Color(191,98,4) );
+		UIManager.put( "nimbusRed", new Color(169,46,34) );
+		UIManager.put( "nimbusSelectedText", new Color( 255, 255, 255) );
+		UIManager.put( "nimbusSelectionBackground", new Color( 104, 93, 156) );
+		UIManager.put( "text", new Color( 230, 230, 230) );
+		try {
+			for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+				if ("Nimbus".equals(info.getName())) {
+					UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+		// Instantiate ATM GUI
+		new ATMGUI();
+    }
 }
