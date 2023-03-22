@@ -141,7 +141,7 @@ public class Server extends Thread {
                 if (row == null)
                     break;
                 String[] data = row.split(",");
-                System.out.println(String.format("%20s %20s %20s %20.2f %20.2f %20.2f", data[0], data[1], data[2], data[3], data[4], data[5],
+                System.out.println(String.format("%20s %20s %20s %20s %20s %20s %20.2f %20.2f %20.2f", data[0], data[1], data[2], data[3], data[4], data[5],
                         Float.parseFloat(data[6]), Float.parseFloat(data[7]), Float.parseFloat(data[8])));
             }
             br.close();
