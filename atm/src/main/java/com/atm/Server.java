@@ -70,7 +70,12 @@ public class Server extends Thread {
         } catch (FileNotFoundException e) {
             System.out.println("Import Accounts File not found.");
         }
-
+        try {
+            q.importTransactions();
+            adminPassword = q.importAdminAccount();
+        } catch (FileNotFoundException e) {
+            System.out.println("Import Transactions File not found.");
+        }
         Scanner sc = new Scanner(System.in);
         Authenticate au = new Authenticate();
         login: while (true) {
@@ -80,13 +85,16 @@ public class Server extends Thread {
             {
                 System.out.println("Welcome Admin!");
                 while (true) {
-                    System.out.println("Available Options:\n(1) Display all accounts\n(0) Logout admin");
+                    System.out.println("Available Options:\n(1) Display all accounts\n(2) Display all transactions\n(0) Logout admin");
                     System.out.print("Enter option: ");
                     int choice = sc.nextInt();
                     sc.nextLine();
                     switch (choice) {
                         case 1:
                             printAllAccounts();
+                            break;
+                        case 2:
+                            printAllTransactions();
                             break;
                         case 0:
                             System.out.println("Logout Successful!");
@@ -116,6 +124,29 @@ public class Server extends Thread {
             br.close();
         } catch (FileNotFoundException e){
             System.out.println("Accounts CSV File not found.");
+        } catch (IOException e) {
+            System.out.println("Unable to read file.");;
+        } catch (NumberFormatException e){
+            System.out.println("Unable to parse string.");
+        }
+    }
+
+    private static void printAllTransactions() {
+        System.out.println(String.format("%20s %20s %20s %20s %20s %20s %20s %20s %20s", "Transaction ID", "Account Number","Transaction Date","Transaction Details","Chq Number","Value Date","Withdrawal","Deposit","Balance"));
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("atm/res/transactions_new.csv"));
+            br.readLine(); // skip headers
+            while (true) {
+                String row = br.readLine();
+                if (row == null)
+                    break;
+                String[] data = row.split(",");
+                System.out.println(String.format("%20s %20s %20s %20.2f %20.2f %20.2f", data[0], data[1], data[2], data[3], data[4], data[5],
+                        Float.parseFloat(data[6]), Float.parseFloat(data[7]), Float.parseFloat(data[8])));
+            }
+            br.close();
+        } catch (FileNotFoundException e){
+            System.out.println("Transactions CSV File not found.");
         } catch (IOException e) {
             System.out.println("Unable to read file.");;
         } catch (NumberFormatException e){
