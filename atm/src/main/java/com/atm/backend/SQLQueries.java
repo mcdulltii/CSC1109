@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
+import java.sql.Date;
+import java.util.*;
 import java.util.Scanner;
 
 public class SQLQueries {
@@ -297,6 +299,76 @@ public class SQLQueries {
                                 break;
                             case 10: // Set IsAdmin
                                 preparedStmt.setBoolean(i + 1, Boolean.parseBoolean(data[i]));
+                        }
+                    }
+                    preparedStmt.execute();
+                }
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    System.out.println("Unable to close database.");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Unable to access database.");
+        }
+    }
+
+    public void importTransactions() throws FileNotFoundException {
+        String sql = "SELECT * FROM transactions";
+        ResultSet rs = executeQuery(sql);
+
+        try {
+            if (!rs.next()) {
+                // Import CSV
+                BufferedReader br = new BufferedReader(new FileReader("atm/res/transactions.csv"));
+                // Authenticate au = new Authenticate();
+
+                try {
+                    br.readLine();
+                } catch (IOException e) {
+                    System.out.println("Unable to read file.");
+                }
+
+                Connection conn = getConnection();
+                while (true) {
+                    String row = null;
+                    try {
+                        row = br.readLine();
+                    } catch (IOException e) {
+                        System.out.println("Unable to read file.");
+                        break;
+                    }
+                    if (row == null)
+                        break;
+
+                    sql = "INSERT INTO transactions(transactionId, accountNumber, transactionDate, transactionDetails, chqNumber, valueDate, withdrawal, deposit, balance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    PreparedStatement preparedStmt = conn.prepareStatement(sql);
+                    String[] data = row.split(",");
+
+                    for (int i = 0; i < data.length; i++) {
+                        switch (i) {
+                            case 0: // Set transactionId
+                                preparedStmt.setString(i + 1, data[i]);
+                                break;
+                            case 1: // Set AccountNumber
+                                preparedStmt.setLong(i + 1, Long.parseLong(data[i]));
+                                break;
+                            case 2: // Set transactionDate
+                                preparedStmt.setDate(i + 1, java.sql.Date.valueOf(data[i])); //date in string format yyyy-mm-dd
+                                break;
+                            case 3: // Set transactionDetails
+                            case 4: // Set chqNumber
+                                preparedStmt.setString(i + 1, data[i]);
+                                break;
+                            case 5: // Set valueDate
+                                preparedStmt.setDate(i + 1, java.sql.Date.valueOf(data[i])); //date in string format yyyy-mm-dd
+                                break;
+                            case 6: // Set withdrawal
+                            case 7: // Set deposit
+                            case 8: // Set balance
+                                preparedStmt.setFloat(i + 1, Float.parseFloat(data[i]));
+                                break;
                         }
                     }
                     preparedStmt.execute();
