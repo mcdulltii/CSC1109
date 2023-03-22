@@ -1,22 +1,18 @@
 package com.atm.backend;
 
 import java.util.Date;
-import java.util.Random;
 import java.util.UUID;
 
 public class Transaction {
     private Account a1;
     private String accountNumber;
     private Date transactionDate;
+    private String chqNumber;
     private String transactionDetails;
     private java.sql.Date valueDate;
     private Double withdrawal;
     private Double deposit;
     private Double balance;
-
-    // Generate random 6 digit or empty string for chqNumber
-    String [] arr = {UUID.randomUUID().toString(),""};
-    private String chqNumber = arr[new Random().nextInt(arr.length)];
 
     protected String getAccountNumber() {
         return accountNumber;
@@ -107,10 +103,10 @@ public class Transaction {
         
         // Update transactions
         java.sql.Date sqlDate = new java.sql.Date(transactionDate.getTime());
-        Transaction transaction = new Transaction(a1, a1.getAccountNumber(), "TRF TO "+a2.getAccountNumber(), chqNumber, sqlDate, amount,
+        Transaction transaction = new Transaction(a1, a1.getAccountNumber(), "TRF TO "+a2.getAccountNumber(), UUID.randomUUID().toString(), sqlDate, amount,
                 0.0, a1.getTotalBalance());
         q.executeQueryTransactions(transaction);
-        transaction = new Transaction(a2, a2.getAccountNumber(), "TRF FROM "+a1.getAccountNumber(), chqNumber, sqlDate, 0.0,
+        transaction = new Transaction(a2, a2.getAccountNumber(), "TRF FROM "+a1.getAccountNumber(), UUID.randomUUID().toString(), sqlDate, 0.0,
                 amount, a2.getTotalBalance());
         q.executeQueryTransactions(transaction);
 
@@ -137,7 +133,7 @@ public class Transaction {
         // transactionDetails,
         // String chqNumber, Date valueDate, Double withdrawal, Double balance) {
 
-        Transaction transaction = new Transaction(a1, a1.getAccountNumber(), "ATM DEPOSIT", chqNumber, sqlDate, 0.0,
+        Transaction transaction = new Transaction(a1, a1.getAccountNumber(), "ATM DEPOSIT", UUID.randomUUID().toString(), sqlDate, 0.0,
                 amount, a1.getTotalBalance());
         q.executeQueryTransactions(transaction);
         return "Deposit Successful";
@@ -160,7 +156,7 @@ public class Transaction {
 
         // Update transactions
         java.sql.Date sqlDate = new java.sql.Date(transactionDate.getTime());
-        Transaction transaction = new Transaction(a1, a1.getAccountNumber(), "ATM WITHDRAWAL", chqNumber, sqlDate,
+        Transaction transaction = new Transaction(a1, a1.getAccountNumber(), "ATM WITHDRAWAL", UUID.randomUUID().toString(), sqlDate,
                 amount, 0.0, a1.getTotalBalance());
         q.executeQueryTransactions(transaction);
 

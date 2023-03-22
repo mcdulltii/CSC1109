@@ -321,7 +321,7 @@ public class SQLQueries {
         try {
             if (!rs.next()) {
                 // Import CSV
-                BufferedReader br = new BufferedReader(new FileReader("atm/res/transactions.csv"));
+                BufferedReader br = new BufferedReader(new FileReader("atm/res/transactions_new.csv"));
                 // Authenticate au = new Authenticate();
 
                 try {
