@@ -211,6 +211,9 @@ class ThreadClientHandler extends Thread {
                 svc.selectionMenu();
                 try {
                     userinput = Integer.parseInt(svc.getUserInput());
+                    if (userinput == -1){
+                        svc.selectionMenu();
+                    }
                     svc.selection(userinput);
                 } catch (NumberFormatException e) {
                     outputStream.println("Invalid choice! Please choose again!");
