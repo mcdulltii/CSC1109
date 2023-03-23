@@ -4,10 +4,12 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.LineNumberReader;
 import java.sql.*;
 import java.sql.Date;
-import java.util.*;
 import java.util.Scanner;
+
+import me.tongfei.progressbar.ProgressBar;
 
 public class SQLQueries {
     final String db_url = "jdbc:mysql://localhost:3306/oopasgdb";
@@ -252,8 +254,12 @@ public class SQLQueries {
         try {
             if (!rs.next()) {
                 // Import CSV
-                BufferedReader br = new BufferedReader(new FileReader("atm/res/accounts.csv"));
+                String filename = "atm/res/accounts.csv";
+                BufferedReader br = new BufferedReader(new FileReader(filename));
                 Authenticate au = new Authenticate();
+
+                ProgressBar pb = new ProgressBar("Importing Accounts", countLines(filename));
+                pb.start();
 
                 try {
                     br.readLine();
@@ -263,6 +269,8 @@ public class SQLQueries {
 
                 Connection conn = getConnection();
                 while (true) {
+                    pb.step();
+                    
                     String row = null;
                     try {
                         row = br.readLine();
@@ -303,6 +311,9 @@ public class SQLQueries {
                     }
                     preparedStmt.execute();
                 }
+
+                pb.stop();
+
                 try {
                     br.close();
                 } catch (IOException e) {
@@ -314,15 +325,19 @@ public class SQLQueries {
         }
     }
 
-    public void importTransactions() throws FileNotFoundException {
+    public void importTransactions(Boolean isPartial) throws FileNotFoundException {
         String sql = "SELECT * FROM transactions";
         ResultSet rs = executeQuery(sql);
 
         try {
             if (!rs.next()) {
                 // Import CSV
-                BufferedReader br = new BufferedReader(new FileReader("atm/res/transactions_new.csv"));
-                // Authenticate au = new Authenticate();
+                String filename = "atm/res/transactions_new.csv";
+                BufferedReader br = new BufferedReader(new FileReader(filename));
+                
+                int lineNumbers = countLines(filename);
+                ProgressBar pb = new ProgressBar("Importing Transactions", lineNumbers);
+                pb.start();
 
                 try {
                     br.readLine();
@@ -330,8 +345,18 @@ public class SQLQueries {
                     System.out.println("Unable to read file.");
                 }
 
+                if (isPartial)
+                    System.out.println("Importing transactions database partially.");
+                else {
+                    System.out.println("Importing entire transactions database will take a long time.");
+                    System.out.println("Provide `--partial` argument when running server to only import partially.");
+                }
+
                 Connection conn = getConnection();
+                int count = 0;
                 while (true) {
+                    pb.step();
+                    
                     String row = null;
                     try {
                         row = br.readLine();
@@ -339,7 +364,7 @@ public class SQLQueries {
                         System.out.println("Unable to read file.");
                         break;
                     }
-                    if (row == null)
+                    if (row == null || isPartial && count > (lineNumbers / 10))
                         break;
 
                     sql = "INSERT INTO transactions(transactionId, accountNumber, transactionDate, transactionDetails, chqNumber, valueDate, withdrawal, deposit, balance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -355,14 +380,14 @@ public class SQLQueries {
                                 preparedStmt.setLong(i + 1, Long.parseLong(data[i]));
                                 break;
                             case 2: // Set transactionDate
-                                preparedStmt.setDate(i + 1, java.sql.Date.valueOf(data[i])); //date in string format yyyy-mm-dd
+                                preparedStmt.setDate(i + 1, Date.valueOf(data[i])); //date in string format yyyy-mm-dd
                                 break;
                             case 3: // Set transactionDetails
                             case 4: // Set chqNumber
                                 preparedStmt.setString(i + 1, data[i]);
                                 break;
                             case 5: // Set valueDate
-                                preparedStmt.setDate(i + 1, java.sql.Date.valueOf(data[i])); //date in string format yyyy-mm-dd
+                                preparedStmt.setDate(i + 1, Date.valueOf(data[i])); //date in string format yyyy-mm-dd
                                 break;
                             case 6: // Set withdrawal
                             case 7: // Set deposit
@@ -372,7 +397,11 @@ public class SQLQueries {
                         }
                     }
                     preparedStmt.execute();
+                    count++;
                 }
+                
+                pb.stop();
+
                 try {
                     br.close();
                 } catch (IOException e) {
@@ -381,6 +410,24 @@ public class SQLQueries {
             }
         } catch (SQLException e) {
             System.out.println("Unable to access database.");
+        }
+    }
+
+    private int countLines(String filename) {
+        LineNumberReader reader = null;
+        try {
+            reader = new LineNumberReader(new FileReader(filename));
+            reader.skip(Long.MAX_VALUE);
+            return reader.getLineNumber();
+        } catch (Exception ex) {
+            System.out.println("Unable to get file line numbers.");
+            return -1;
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                System.out.println("Unable to close FileReader.");
+            }
         }
     }
 

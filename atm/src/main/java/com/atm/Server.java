@@ -66,16 +66,18 @@ public class Server extends Thread {
         String adminPassword = null;
         try {
             q.importAccounts();
-            adminPassword = q.importAdminAccount();
         } catch (FileNotFoundException e) {
             System.out.println("Import Accounts File not found.");
         }
         try {
-            q.importTransactions();
-            adminPassword = q.importAdminAccount();
+            if (args.length > 0 && args[0].equalsIgnoreCase("--partial"))
+                q.importTransactions(true);
+            else
+                q.importTransactions(false);
         } catch (FileNotFoundException e) {
             System.out.println("Import Transactions File not found.");
         }
+        adminPassword = q.importAdminAccount();
         Scanner sc = new Scanner(System.in);
         Authenticate au = new Authenticate();
         login: while (true) {
@@ -85,7 +87,7 @@ public class Server extends Thread {
             {
                 System.out.println("Welcome Admin!");
                 while (true) {
-                    System.out.println("Available Options:\n(1) Display all accounts\n(2) Display all transactions\n(0) Logout admin");
+                    System.out.println("Available Options:\n(1) Display first 100 accounts\n(2) Display first 100 transactions\n(0) Logout admin");
                     System.out.print("Enter option: ");
                     int choice = sc.nextInt();
                     sc.nextLine();
@@ -113,13 +115,15 @@ public class Server extends Thread {
         try {
             BufferedReader br = new BufferedReader(new FileReader("atm/res/accounts.csv"));
             br.readLine(); // skip headers
+            int count = 0;
             while (true) {
                 String row = br.readLine();
-                if (row == null)
+                if (row == null || count > 100)
                     break;
                 String[] data = row.split(",");
                 System.out.println(String.format("%20s %20s %20s %20.2f %20.2f", data[0], data[3], data[4],
                         Float.parseFloat(data[6]), Float.parseFloat(data[7])));
+                count++;
             }
             br.close();
         } catch (FileNotFoundException e){
@@ -136,13 +140,15 @@ public class Server extends Thread {
         try {
             BufferedReader br = new BufferedReader(new FileReader("atm/res/transactions_new.csv"));
             br.readLine(); // skip headers
+            int count = 0;
             while (true) {
                 String row = br.readLine();
-                if (row == null)
+                if (row == null || count > 100)
                     break;
                 String[] data = row.split(",");
                 System.out.println(String.format("%20s %20s %20s %20s %20s %20s %20.2f %20.2f %20.2f", data[0], data[1], data[2], data[3], data[4], data[5],
                         Float.parseFloat(data[6]), Float.parseFloat(data[7]), Float.parseFloat(data[8])));
+                count++;
             }
             br.close();
         } catch (FileNotFoundException e){
