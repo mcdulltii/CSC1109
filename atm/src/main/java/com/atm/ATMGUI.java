@@ -126,9 +126,7 @@ public class ATMGUI extends JFrame {
 
     private void buttonDeleteMouseClicked(MouseEvent e) {
         String inputText = inputArea.getText();
-        if (inputText.length() == 0)
-            inputArea.setText(inputText);
-        else
+        if (inputText.length() > 0)
             inputArea.setText(inputText.substring(0, inputText.length() - 1));
     }
 
