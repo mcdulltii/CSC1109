@@ -115,6 +115,11 @@ public class Client {
         return this.numTries;
     }
 
+    public String getInteractions() {
+        ReceivedMessage recvMsg = this.receiveMessage();
+        return recvMsg.msg;
+    }
+
     public void close() {
         try {
             inputReader.close();
