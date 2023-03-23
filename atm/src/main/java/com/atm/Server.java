@@ -210,6 +210,7 @@ class ThreadClientHandler extends Thread {
             do {
                 svc.selectionMenu();
                 try {
+                    
                     userinput = Integer.parseInt(svc.getUserInput());
                     if (userinput == -1){
                         svc.selectionMenu();
