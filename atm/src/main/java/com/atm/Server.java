@@ -8,12 +8,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
 import java.util.Scanner;
 
 import com.atm.backend.AccUserObj;
 import com.atm.backend.Account;
 import com.atm.backend.AtmService;
 import com.atm.backend.Authenticate;
+import com.atm.backend.DBConnection;
 import com.atm.backend.SQLQueries;
 import com.atm.backend.User;
 
@@ -79,7 +81,8 @@ public class Server extends Thread {
         }
         adminPassword = q.importAdminAccount();
         Scanner sc = new Scanner(System.in);
-        Authenticate au = new Authenticate();
+        Connection conn = new DBConnection().getConnection();
+        Authenticate au = new Authenticate(conn);
         login: while (true) {
             System.out.print("Enter admin password: ");
             String password = sc.nextLine().strip();
@@ -210,7 +213,8 @@ class ThreadClientHandler extends Thread {
         AccUserObj obj = null;
         Account acc = null;
         User user = null;
-        Authenticate au = new Authenticate();
+        Connection conn = new DBConnection().getConnection();
+        Authenticate au = new Authenticate(conn);
         while (!authenticated) {
             outputStream.print("Enter username: ");
             String username = getUserInput();

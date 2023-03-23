@@ -3,8 +3,10 @@ package com.atm.backend;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 
 public class AtmService {
+    protected static Connection conn;
     private Account acc;
     private User user;
     private Transaction transaction;
@@ -13,23 +15,24 @@ public class AtmService {
 
     public AtmService(Account acc, User user, PrintWriter outputStream, BufferedReader inputReader) {
         this.acc = acc;
+        AtmService.conn = new DBConnection().getConnection();
         this.user = user;
-        this.transaction = new Transaction(acc);
+        this.transaction = new Transaction(acc, conn);
         this.outputStream = outputStream;
         this.inputReader = inputReader;
     }
 
     private String deposit(double amount) {
-        return transaction.deposit(acc, amount);
+        return transaction.deposit(acc, amount, conn);
     }
 
     private String withdraw(double amount) throws InsufficientFundsException {
-        return transaction.withdraw(acc, amount);
+        return transaction.withdraw(acc, amount, conn);
     }
 
     private String transfer(long transferAccNo, double amount) throws InsufficientFundsException {
         Account a2 = getTransferAccount(transferAccNo);
-        return transaction.transferToAccount(acc, a2, amount);
+        return transaction.transferToAccount(acc, a2, amount, conn);
     }
 
     private double[] getBalance() {
@@ -39,7 +42,7 @@ public class AtmService {
 
     // Create Account object based on accountNumber (For transfer)
     private static Account getTransferAccount(Long accountNumber) {
-        SQLQueries q = new SQLQueries();
+        SQLQueries q = new SQLQueries(conn);
         Account transferAccount = q.getAccountfromAccountNumber(accountNumber);
         return transferAccount;
     }
@@ -80,7 +83,7 @@ public class AtmService {
     }
 
     private void userSystemMenuOpt(int opt) {
-        Settings settings = new Settings(user);
+        Settings settings = new Settings(user, conn);
 
         if (opt == 1) {
             String userinput;
@@ -154,7 +157,7 @@ public class AtmService {
                             continue;
                         }
 
-                        Settings settings = new Settings(acc);
+                        Settings settings = new Settings(acc, conn);
                         double[] limits = {1000, 2000, 5000, 10000};
                         settings.setTransferLimit(limits[userinput - 1]);
                         outputStream.print("Transfer limit Updated");

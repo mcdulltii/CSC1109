@@ -1,5 +1,6 @@
 package com.atm.backend;
 
+import java.sql.Connection;
 import java.util.Date;
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ public class Transaction {
     private Double withdrawal;
     private Double deposit;
     private Double balance;
+    private SQLQueries q;
 
     protected String getAccountNumber() {
         return accountNumber;
@@ -46,14 +48,16 @@ public class Transaction {
         return balance;
     }
 
-    public Transaction(Account a1) {
+    public Transaction(Account a1, Connection conn) {
         // to add more fields
         this.a1 = a1;
         this.transactionDate = new Date();
+        this.q = new SQLQueries(conn);
     }
 
     public Transaction(Account a1, String accountNumber, String transactionDetails,
-            String chqNumber, java.sql.Date valueDate, Double withdrawal, Double deposit, Double balance) {
+            String chqNumber, java.sql.Date valueDate, Double withdrawal,
+            Double deposit, Double balance, Connection conn) {
         // to add more fields
         this.a1 = a1;
         this.accountNumber = accountNumber;
@@ -64,6 +68,7 @@ public class Transaction {
         this.withdrawal = withdrawal;
         this.deposit = deposit;
         this.balance = balance;
+        this.q = new SQLQueries(conn);
     }
 
     protected boolean hasAvailableBalance(double amount) {
@@ -81,7 +86,7 @@ public class Transaction {
     }
 
     // transfer between accounts
-    protected String transferToAccount(Account a1, Account a2, double amount) throws InsufficientFundsException {
+    protected String transferToAccount(Account a1, Account a2, double amount, Connection conn) throws InsufficientFundsException {
         if (amount > a1.getAvailableBalance()) {
             throw new InsufficientFundsException(-(a1.getAvailableBalance() - amount));
         }
@@ -95,7 +100,6 @@ public class Transaction {
         a1.setTotalBalance(newTotalBalance);
         a1.setTransferLimit(newTransferLimit);
 
-        SQLQueries q = new SQLQueries();
         q.executeQueryAccounts(a1, a2);
         
         newTotalBalance = a2.getTotalBalance() + amount;
@@ -104,23 +108,22 @@ public class Transaction {
         // Update transactions
         java.sql.Date sqlDate = new java.sql.Date(transactionDate.getTime());
         Transaction transaction = new Transaction(a1, a1.getAccountNumber(), "TRF TO "+a2.getAccountNumber(), UUID.randomUUID().toString(), sqlDate, amount,
-                0.0, a1.getTotalBalance());
+                0.0, a1.getTotalBalance(), conn);
         q.executeQueryTransactions(transaction);
         transaction = new Transaction(a2, a2.getAccountNumber(), "TRF FROM "+a1.getAccountNumber(), UUID.randomUUID().toString(), sqlDate, 0.0,
-                amount, a2.getTotalBalance());
+                amount, a2.getTotalBalance(), conn);
         q.executeQueryTransactions(transaction);
 
         return "Tranfer is Successful";
     }
 
     // deposit
-    protected String deposit(Account a1, double amount) {
+    protected String deposit(Account a1, double amount, Connection conn) {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount has to be positive.");
         }
 
         // Update transactions
-        SQLQueries q = new SQLQueries();
         java.sql.Date sqlDate = new java.sql.Date(transactionDate.getTime());
 
         // Update balance
@@ -134,13 +137,13 @@ public class Transaction {
         // String chqNumber, Date valueDate, Double withdrawal, Double balance) {
 
         Transaction transaction = new Transaction(a1, a1.getAccountNumber(), "ATM DEPOSIT", UUID.randomUUID().toString(), sqlDate, 0.0,
-                amount, a1.getTotalBalance());
+                amount, a1.getTotalBalance(), conn);
         q.executeQueryTransactions(transaction);
         return "Deposit Successful";
     }
 
     // withdraw
-    protected String withdraw(Account a1, double amount) throws InsufficientFundsException {
+    protected String withdraw(Account a1, double amount, Connection conn) throws InsufficientFundsException {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount has to be positive.");
         } else if (amount > a1.getAvailableBalance()) {
@@ -148,7 +151,6 @@ public class Transaction {
         }
 
         // Update balances
-        SQLQueries q = new SQLQueries();
         double newTotalBalance = a1.getTotalBalance() - amount;
         double newAvailableBalance = a1.getAvailableBalance() - amount;
         a1.setTotalBalance(newTotalBalance);
@@ -157,7 +159,7 @@ public class Transaction {
         // Update transactions
         java.sql.Date sqlDate = new java.sql.Date(transactionDate.getTime());
         Transaction transaction = new Transaction(a1, a1.getAccountNumber(), "ATM WITHDRAWAL", UUID.randomUUID().toString(), sqlDate,
-                amount, 0.0, a1.getTotalBalance());
+                amount, 0.0, a1.getTotalBalance(), conn);
         q.executeQueryTransactions(transaction);
 
         // Update account balance -> withdraw

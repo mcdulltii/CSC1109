@@ -1,5 +1,6 @@
 package com.atm.backend;
 
+import java.sql.Connection;
 import java.util.Random;
 
 public class User {
@@ -28,11 +29,11 @@ public class User {
         return this.AccNo;
     }
 
-    protected String getFirstName() {
+    public String getFirstName() {
         return this.firstName;
     }
 
-    protected String getLastName() {
+    public String getLastName() {
         return this.lastName;
     }
 
@@ -40,11 +41,15 @@ public class User {
         return this.pinNumber;
     }
 
-    protected void setPin(String pin) {
-        Authenticate auth = new Authenticate();
+    public void setPin(String pin, Connection conn) {
+        Authenticate auth = new Authenticate(conn);
         SQLQueries q = new SQLQueries();
         byte[] passwordSalt = q.executeQuerySettings(this, "salt");
         this.pinNumber = auth.hashString(pin, passwordSalt);
+    }
+
+    public int getIsAdmin() {
+        return this.isAdmin;
     }
 
     private int getNewUserId() {

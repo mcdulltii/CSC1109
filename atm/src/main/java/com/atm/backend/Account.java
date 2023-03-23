@@ -27,31 +27,31 @@ public class Account {
         this.transferLimit = transferLimit;
     }
 
-    protected String getAccountNumber() {
+    public String getAccountNumber() {
         return this.accountNumber;
     }
 
-    protected double getTransferLimit() {
+    public double getTransferLimit() {
         return this.transferLimit;
     }
 
-    protected void setTransferLimit(double transferLimit) {
+    public void setTransferLimit(double transferLimit) {
         this.transferLimit = transferLimit;
     }
 
-    protected double getAvailableBalance() {
+    public double getAvailableBalance() {
         return this.availableBalance;
     }
 
-    protected double getTotalBalance() {
+    public double getTotalBalance() {
         return this.totalBalance;
     }
 
-    protected void setTotalBalance(double balance) {
+    public void setTotalBalance(double balance) {
         this.totalBalance = balance;
     }
 
-    protected void setAvailableBalance(double availableBalance) {
+    public void setAvailableBalance(double availableBalance) {
         this.availableBalance = availableBalance;
     }
 
