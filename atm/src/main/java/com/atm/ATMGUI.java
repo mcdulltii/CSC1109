@@ -105,7 +105,7 @@ public class ATMGUI extends JFrame {
             if (e.getSource() == numberButtons[i]){
                 String inputText = inputArea.getText();
                 // Limit input character length
-                if (inputText.length() <= 16)
+                if (inputText.length() < 16)
                     inputArea.setText(inputText.concat(String.valueOf(i)));
             }
         }
@@ -119,18 +119,17 @@ public class ATMGUI extends JFrame {
                                  displayTextEnd);
     }
 
-	private void buttonBackMouseClicked(MouseEvent e) {
-		ReceivedMessage recvMsg = client.sendMessage("-1");
-		this.updateDisplayArea(recvMsg.msg);
-		// TODO add your code here
-	}
+    private void buttonBackMouseClicked(MouseEvent e) {
+        ReceivedMessage recvMsg = client.sendMessage("-1");
+        this.updateDisplayArea(recvMsg.msg);
+    }
 
-    private void buttonClearMouseClicked(MouseEvent e) {
-        // TODO add your code here
-        inputArea.setText("");
-        // Need to reconfigure server to return to selection menu
-        // ReceivedMessage recvMsg = client.sendMessage(null);
-        // this.updateDisplayArea(recvMsg.msg);
+    private void buttonDeleteMouseClicked(MouseEvent e) {
+        String inputText = inputArea.getText();
+        if (inputText.length() == 0)
+            inputArea.setText(inputText);
+        else
+            inputArea.setText(inputText.substring(0, inputText.length() - 1));
     }
 
     private void buttonEnterMouseClicked(MouseEvent e) {
@@ -174,7 +173,7 @@ public class ATMGUI extends JFrame {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         displayArea = new JLabel();
-        inputArea = new JLabel();
+        inputArea = new JTextArea();
         separator = new JSeparator();
         button1 = new GUIButton();
         button2 = new GUIButton();
@@ -187,7 +186,7 @@ public class ATMGUI extends JFrame {
         button9 = new GUIButton();
         button0 = new GUIButton();
         buttonBack = new GUIButton();
-        buttonClear = new GUIButton();
+        buttonDelete = new GUIButton();
         buttonEnter = new GUIButton();
 
         JButton[] numberButtons = new JButton[10];
@@ -208,12 +207,13 @@ public class ATMGUI extends JFrame {
         displayArea.setBackground(bgColor);
         displayArea.setForeground(Color.WHITE);
 
-        inputArea.setFont(new Font("Arial", Font.PLAIN, 32));
+        inputArea.setFont(new Font("Arial", Font.PLAIN, 34));
         inputArea.setOpaque(true);
         inputArea.setBackground(bgColor);
         inputArea.setForeground(Color.WHITE);
-        inputArea.setHorizontalAlignment(SwingConstants.CENTER);
-        inputArea.setVerticalAlignment(SwingConstants.CENTER);
+        inputArea.setEditable(false);
+        inputArea.setLineWrap(true);
+        inputArea.setWrapStyleWord(true);
 
         for (int i=0; i<10; i++){
             numberButtons[i].setBackground(Color.DARK_GRAY);
@@ -223,11 +223,11 @@ public class ATMGUI extends JFrame {
         buttonBack.setBackground(DARK_BROWN);
         buttonBack.setForeground(Color.BLACK);
         Color DARK_RED = new Color(0xCC,0x36,0x36);
-        buttonClear.setBackground(DARK_RED);
-        buttonClear.setForeground(Color.BLACK);
+        buttonDelete.setBackground(DARK_RED);
+        buttonDelete.setForeground(Color.BLACK);
         Color DARK_GREEN = new Color(0x36,0x7E,0x18);
         buttonEnter.setBackground(DARK_GREEN);
-        buttonEnter.setForeground(Color.WHITE);
+        buttonEnter.setForeground(Color.BLACK);
 
         //======== this ========
         Container contentPane = getContentPane();
@@ -298,25 +298,25 @@ public class ATMGUI extends JFrame {
         contentPane.add(numberButtons[8], "cell 9 9 2 2");
         contentPane.add(numberButtons[9], "cell 12 9 2 2");
 
-		//---- buttonBack ----
-		buttonBack.setText("Back");
-		buttonBack.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				buttonBackMouseClicked(e);
-			}
-		});
-		contentPane.add(buttonBack, "cell 6 15 1 2");
-
-        //---- buttonClear ----
-        buttonClear.setText("Clear");
-        buttonClear.addMouseListener(new MouseAdapter() {
+        //---- buttonBack ----
+        buttonBack.setText("Back");
+        buttonBack.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                buttonClearMouseClicked(e);
+                buttonBackMouseClicked(e);
             }
         });
-        contentPane.add(buttonClear, "cell 9 15 2 2");
+        contentPane.add(buttonBack, "cell 6 15 1 2");
+
+        //---- buttonDelete ----
+        buttonDelete.setText("Delete");
+        buttonDelete.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                buttonDeleteMouseClicked(e);
+            }
+        });
+        contentPane.add(buttonDelete, "cell 9 15 2 2");
 
         //---- buttonEnter ----
         buttonEnter.setText("Enter");
@@ -334,7 +334,7 @@ public class ATMGUI extends JFrame {
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     private JLabel displayArea;
-    private JLabel inputArea;
+    private JTextArea inputArea;
     private JSeparator separator;
     private GUIButton button1;
     private GUIButton button2;
@@ -347,7 +347,7 @@ public class ATMGUI extends JFrame {
     private GUIButton button9;
     private GUIButton button0;
     private GUIButton buttonBack;
-    private GUIButton buttonClear;
+    private GUIButton buttonDelete;
     private GUIButton buttonEnter;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 
