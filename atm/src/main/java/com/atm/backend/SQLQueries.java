@@ -230,10 +230,27 @@ public class SQLQueries {
         return password;
     }
 
-    public byte[] getPasswordSaltfromUsername(String username) {
+    protected byte[] getPasswordSaltfromCardNumber(String cardNumber) {
         byte[] passwordSalt = {};
 
-        String selectQuery = "SELECT * FROM accounts WHERE UserName = \"" + username + "\"";
+        String selectQuery = "SELECT * FROM accounts WHERE CardNumber = \"" + cardNumber + "\"";
+        ResultSet rs = executeQuery(selectQuery);
+
+        try {
+            while (rs.next()) {
+                passwordSalt = rs.getBytes("PasswordSalt");
+            }
+        } catch (SQLException e) {
+            System.out.println("Please check column label and database connection.");
+        }
+
+        return passwordSalt;
+    }
+
+    public byte[] getAdminPasswordSalt() {
+        byte[] passwordSalt = {};
+
+        String selectQuery = "SELECT * FROM accounts WHERE IsAdmin=1";
         ResultSet rs = executeQuery(selectQuery);
 
         try {

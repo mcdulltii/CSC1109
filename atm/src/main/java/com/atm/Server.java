@@ -83,7 +83,7 @@ public class Server extends Thread {
         login: while (true) {
             System.out.print("Enter admin password: ");
             String password = sc.nextLine().strip();
-            byte[] passwordSalt = q.getPasswordSaltfromUsername("ADMIN");
+            byte[] passwordSalt = q.getAdminPasswordSalt();
             if (au.hashString(password, passwordSalt).equals(adminPassword))
             {
                 System.out.println("Welcome Admin!");
