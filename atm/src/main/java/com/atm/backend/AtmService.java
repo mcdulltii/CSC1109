@@ -3,6 +3,8 @@ package com.atm.backend;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class AtmService {
     private Account acc;
@@ -10,6 +12,7 @@ public class AtmService {
     private Transaction transaction;
     private BufferedReader inputReader;
     private PrintWriter outputStream;
+    private ArrayList<String> interactions;
 
     public AtmService(Account acc, User user, PrintWriter outputStream, BufferedReader inputReader) {
         this.acc = acc;
@@ -17,6 +20,7 @@ public class AtmService {
         this.transaction = new Transaction(acc);
         this.outputStream = outputStream;
         this.inputReader = inputReader;
+        this.interactions = new ArrayList<String>();
     }
 
     private String deposit(double amount) {
@@ -93,7 +97,8 @@ public class AtmService {
 
                 outputStream.print("Please enter your new pin: ");
                 userinput = getUserInput();
-
+                if (Integer.parseInt(userinput) == -1)
+                    break;
                 try {
                     if (userinput.equals(new String("0")) && userinput.length() == 1) {
                         break;
@@ -107,6 +112,7 @@ public class AtmService {
 
                     settings.setPinNumber(userinput);
                     outputStream.println("Pin Updated");
+                    this.interactions.add("Changed pin number");
                     break;
                 } catch (NumberFormatException e) {
                     outputStream.printf("Please enter a valid 6-digit numeric pin%n");
@@ -158,6 +164,7 @@ public class AtmService {
                         double[] limits = {1000, 2000, 5000, 10000};
                         settings.setTransferLimit(limits[userinput - 1]);
                         outputStream.print("Transfer limit Updated");
+                        this.interactions.add("Set transfer limit as $" + limits[userinput - 1]);
                         break;
                     } catch (NumberFormatException e) {
                         outputStream.println("Please enter a valid option");
@@ -196,6 +203,7 @@ public class AtmService {
                 try {
                     outputStream.println(deposit(depositAmount));
                     outputStream.println("Your Total Balance is after deposit is: $" + acc.getTotalBalance());
+                    this.interactions.add("Deposit: $" + depositAmount);
                 } catch (IllegalArgumentException e) {
                     outputStream.println(e.getMessage());
                 }
@@ -207,6 +215,7 @@ public class AtmService {
                 try {
                     outputStream.println(withdraw(withdrawalAmount));
                     outputStream.println("Your Total Balance is after withdrawal is: $" + acc.getTotalBalance());
+                    this.interactions.add("Withdraw: $" + withdrawalAmount);
                 } catch (IllegalArgumentException e) {
                     outputStream.println(e.getMessage());
                 } catch (InsufficientFundsException e) {
@@ -217,10 +226,13 @@ public class AtmService {
                 // Transfer
                 outputStream.println("Please enter account number to transfer to: ");
                 long transferAccountNumber = Long.parseLong(getUserInput());
+                if (transferAccountNumber == -1)
+                    break;
                 outputStream.println("Please enter amount to be transferred: ");
                 double amount = Double.parseDouble(getUserInput());
                 try {
                     transfer(transferAccountNumber, amount);
+                    this.interactions.add("Transferred $" + amount + " to " + transferAccountNumber);
                 } catch (IllegalArgumentException e) {
                     outputStream.println(e.getMessage());
                 } catch (InsufficientFundsException e) {
@@ -240,7 +252,7 @@ public class AtmService {
                     try {
                         int userinput = Integer.parseInt(getUserInput());
 
-                        if (userinput == 0) {
+                        if (userinput == 0 || userinput == -1) {
                             break;
                         } else if (userinput == 1) {
                             userSystemMenu();
@@ -270,5 +282,16 @@ public class AtmService {
                 outputStream.println("Invalid choice! Please choose again!");
                 break;
         }
+    }
+
+    public String getInteractions() {
+        String receipt = new Date().toString() + "\nName: " + this.user.getFirstName() + " " + this.user.getLastName() + "\n";
+        receipt += "Account number: " + this.user.getAccNo() + "\n\n<hr>\n";
+        if (this.interactions.size() > 0) {
+            receipt += String.join("\n", this.interactions);
+        } else {
+            receipt += "NIL";
+        }
+        return receipt;
     }
 }
