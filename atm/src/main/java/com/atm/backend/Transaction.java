@@ -125,6 +125,7 @@ public class Transaction {
 
         // Update balance
         double newTotalBalance = a1.getTotalBalance() + amount;
+        a1.setTotalBalance(newTotalBalance);
         q.executeQueryAccounts(a1, null);
 
         a1.setTotalBalance(newTotalBalance);
@@ -160,7 +161,7 @@ public class Transaction {
                 amount, 0.0, a1.getTotalBalance());
         q.executeQueryTransactions(transaction);
 
-        // Update account balance -> withdraw
+        // Update account balance
         q.executeQueryAccounts(a1, null);
 
         return "Withdraw Successful";

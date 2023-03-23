@@ -206,22 +206,22 @@ class ThreadClientHandler extends Thread {
         outputStream.printf("|        Welcome to ATM!       |%n");
         outputStream.printf("%s%n%n", "-".repeat(32));
 
-        // Get client username and password
+        // Get client card number and password
         AccUserObj obj = null;
         Account acc = null;
         User user = null;
         Authenticate au = new Authenticate();
         while (!authenticated) {
-            outputStream.print("Enter username: ");
-            String username = getUserInput();
+            outputStream.print("Enter Card Number: ");
+            String cardNumber = getUserInput();
 
             outputStream.print("Enter password: ");
             String password = getUserInput();
 
-            if (username.length() != 0 && password.length() != 0) {
-                if (au.checkPassword(username, password)) {
-                    // Set user based on username input
-                    obj = getCurrentUserAcc(username);
+            if (cardNumber.length() != 0 && password.length() != 0) {
+                if (au.checkPassword(cardNumber, password)) {
+                    // Set user based on card number input
+                    obj = getCurrentUserAcc(cardNumber);
                     acc = obj.getAccount();
                     user = obj.getUser();
                     authenticated = true;
@@ -248,7 +248,11 @@ class ThreadClientHandler extends Thread {
             do {
                 svc.selectionMenu();
                 try {
+                    
                     userinput = Integer.parseInt(svc.getUserInput());
+                    if (userinput == -1){
+                        svc.selectionMenu();
+                    }
                     svc.selection(userinput);
                 } catch (NumberFormatException e) {
                     outputStream.println("Invalid choice! Please choose again!");
@@ -259,6 +263,10 @@ class ThreadClientHandler extends Thread {
             // Thank You Message
             outputStream.println("Thank You and Have a Nice Day!");
             endSession(outputStream);
+
+            // Send receipt
+            outputStream.println(svc.getInteractions());
+            this.endLine();
         }
 
         // Close connection
@@ -271,10 +279,10 @@ class ThreadClientHandler extends Thread {
         }
     }
 
-    // Create Account object based on username input
-    private static AccUserObj getCurrentUserAcc(String username) {
+    // Create Account object based on card number input
+    private static AccUserObj getCurrentUserAcc(String cardNumber) {
         SQLQueries q = new SQLQueries();
-        AccUserObj currentUserAcc = q.getAccountfromUsername(username);
+        AccUserObj currentUserAcc = q.getAccountfromCardNumber(cardNumber);
         return currentUserAcc;
     }
 
@@ -282,27 +290,3 @@ class ThreadClientHandler extends Thread {
         outputStream.println("FIN");
     }
 }
-
-/*
- * // Some sample codes, entering terminate closes the server, typing anything
- * else echoes it back
- * try {
- * inputLine = inputReader.readLine();
- * while (true) {
- * if (inputLine != null && inputLine.length() > 0) {
- * 
- * if (inputLine.equalsIgnoreCase("terminate")) {
- * outputStream.println("Connection Terminated.\n");
- * outputStream.flush();
- * break;
- * }
- * 
- * outputStream.println("From Server: " + inputLine);
- * outputStream.println(""); // alternatively to \n you can do this but pls dont
- * }
- * inputLine = inputReader.readLine();
- * }
- * } catch (IOException e) {
- * e.printStackTrace();
- * }
- */

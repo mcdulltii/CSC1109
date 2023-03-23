@@ -161,6 +161,37 @@ public class SQLQueries {
         return obj;
     }
 
+    // Create and return Account object from accounts table based on Card Number input
+    public AccUserObj getAccountfromCardNumber(String cardNumber) {
+        String accountNumber = "", firstname = "", lastname = "";
+        int isAdmin = 0;
+        double availableBalance = 0, totalBalance = 0, transferLimit = 0;
+
+        String selectQuery = "SELECT * FROM accounts WHERE CardNumber = \"" + cardNumber + "\"";
+        ResultSet rs = executeQuery(selectQuery);
+
+        try {
+            while (rs.next()) {
+                accountNumber = String.valueOf(rs.getLong("AccountNumber"));
+                firstname = rs.getString("FirstName");
+                lastname = rs.getString("LastName");
+                availableBalance = rs.getDouble("AvailableBalance");
+                totalBalance = rs.getDouble("TotalBalance");
+                transferLimit = rs.getDouble("TransferLimit");
+                isAdmin = rs.getInt("IsAdmin");
+            }
+        } catch (SQLException e) {
+            System.out.println("Please check column label and database connection.");
+        }
+
+        Account newUserAcc = new Account(accountNumber, availableBalance,
+                totalBalance, transferLimit);
+        User newUser = new User(accountNumber, firstname, lastname, isAdmin);
+        AccUserObj obj = new AccUserObj(newUserAcc, newUser);
+
+        return obj;
+    }
+
     protected Account getAccountfromAccountNumber(Long accountNumber) {
         double availableBalance = 0, totalBalance = 0, transferLimit = 0;
 
@@ -182,10 +213,10 @@ public class SQLQueries {
         return newAccount;
     }
 
-    protected String getPasswordfromUsername(String username) {
+    protected String getPasswordfromCardNumber(String cardNumber) {
         String password = "";
 
-        String selectQuery = "SELECT * FROM accounts WHERE UserName = \"" + username + "\"";
+        String selectQuery = "SELECT * FROM accounts WHERE CardNumber = \"" + cardNumber + "\"";
         ResultSet rs = executeQuery(selectQuery);
 
         try {
