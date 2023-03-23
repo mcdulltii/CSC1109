@@ -93,7 +93,8 @@ public class AtmService {
 
                 outputStream.print("Please enter your new pin: ");
                 userinput = getUserInput();
-
+                if (Integer.parseInt(userinput) == -1)
+                    break;
                 try {
                     if (userinput.equals(new String("0")) && userinput.length() == 1) {
                         break;
@@ -185,9 +186,6 @@ public class AtmService {
 
     public void selection(int option) {
         switch (option) {
-            case -1:
-                selectionMenu();
-                break;
             case 0:
                 break;
             case 1:
@@ -218,7 +216,7 @@ public class AtmService {
                 // Transfer
                 outputStream.println("Please enter account number to transfer to: ");
                 long transferAccountNumber = Long.parseLong(getUserInput());
-                if (option != -1)
+                if (transferAccountNumber == -1)
                     break;
                 outputStream.println("Please enter amount to be transferred: ");
                 double amount = Double.parseDouble(getUserInput());
@@ -243,7 +241,7 @@ public class AtmService {
                     try {
                         int userinput = Integer.parseInt(getUserInput());
 
-                        if (userinput == 0) {
+                        if (userinput == 0 || userinput == -1) {
                             break;
                         } else if (userinput == 1) {
                             userSystemMenu();
