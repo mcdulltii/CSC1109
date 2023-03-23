@@ -18,9 +18,9 @@ public class Authenticate {
         return encryptSHA256(str);
     }
 
-    public Boolean checkPassword(String username, String password) {
+    public Boolean checkPassword(String cardNumber, String password) {
         this.numTries++;
-        return this.hashString(password).equals(q.getPasswordfromUsername(username));
+        return this.hashString(password).equals(q.getPasswordfromCardNumber(cardNumber));
     }
 
     public int getNumTries() {
