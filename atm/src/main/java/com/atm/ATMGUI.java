@@ -17,10 +17,12 @@ public class ATMGUI extends JFrame {
     private String username;
     private String password;
     private String[] credDisplay;
+    private Boolean isExited;
 
     public ATMGUI() {
         super("ATM");
         this.resetVariables();
+        this.isExited = false;
 
         // Basic Constructor Setup
         setResizable(false);
@@ -101,6 +103,7 @@ public class ATMGUI extends JFrame {
     }
 
     private void numberButtonMouseClicked(MouseEvent e, JButton[] numberButtons){
+        if (this.isExited) this.exitWindow();
         for(int i=0; i<10; i++){
             if (e.getSource() == numberButtons[i]){
                 String inputText = inputArea.getText();
@@ -114,23 +117,35 @@ public class ATMGUI extends JFrame {
     private void updateDisplayArea(String recvMsg) {
         String displayTextStart = "<html><p>";
         String displayTextEnd = "</p></html>";
-        this.displayArea.setText(displayTextStart +
-                                 recvMsg.replaceAll("\n", "<br/>") +
-                                 displayTextEnd);
+        if (recvMsg.contains("Thank You and Have a Nice Day!")) {
+            this.isExited = true;
+            this.displayArea.setText(displayTextStart +
+                                     "ATM Receipt" + "<br/><hr><br/>" +
+                                     client.getInteractions().replaceAll("\n", "<br/>") +
+                                     "<br/><hr><br/>" + recvMsg.replaceAll("\n", "<br/>") +
+                                     displayTextEnd);
+        } else {
+            this.displayArea.setText(displayTextStart +
+                                     recvMsg.replaceAll("\n", "<br/>") +
+                                     displayTextEnd);
+        }
     }
 
     private void buttonBackMouseClicked(MouseEvent e) {
+        if (this.isExited) this.exitWindow();
         ReceivedMessage recvMsg = client.sendMessage("-1");
         this.updateDisplayArea(recvMsg.msg);
     }
 
     private void buttonDeleteMouseClicked(MouseEvent e) {
+        if (this.isExited) this.exitWindow();
         String inputText = inputArea.getText();
         if (inputText.length() > 0)
             inputArea.setText(inputText.substring(0, inputText.length() - 1));
     }
 
     private void buttonEnterMouseClicked(MouseEvent e) {
+        if (this.isExited) this.exitWindow();
         switch (this.loginRounds) {
             case 0:
                 // Save input as username

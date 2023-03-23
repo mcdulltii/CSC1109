@@ -221,6 +221,10 @@ class ThreadClientHandler extends Thread {
             // Thank You Message
             outputStream.println("Thank You and Have a Nice Day!");
             endSession(outputStream);
+
+            // Send receipt
+            outputStream.println(svc.getInteractions());
+            this.endLine();
         }
 
         // Close connection
@@ -244,27 +248,3 @@ class ThreadClientHandler extends Thread {
         outputStream.println("FIN");
     }
 }
-
-/*
- * // Some sample codes, entering terminate closes the server, typing anything
- * else echoes it back
- * try {
- * inputLine = inputReader.readLine();
- * while (true) {
- * if (inputLine != null && inputLine.length() > 0) {
- * 
- * if (inputLine.equalsIgnoreCase("terminate")) {
- * outputStream.println("Connection Terminated.\n");
- * outputStream.flush();
- * break;
- * }
- * 
- * outputStream.println("From Server: " + inputLine);
- * outputStream.println(""); // alternatively to \n you can do this but pls dont
- * }
- * inputLine = inputReader.readLine();
- * }
- * } catch (IOException e) {
- * e.printStackTrace();
- * }
- */
