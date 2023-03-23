@@ -22,7 +22,7 @@ public class Authenticate {
 
     public Boolean checkPassword(String cardNumber, String password) {
         this.numTries++;
-        byte[] passwordSalt = q.getPasswordSaltfromUsername(username);
+        byte[] passwordSalt = q.getPasswordSaltfromCardNumber(cardNumber);
         return this.hashString(password, passwordSalt).equals(q.getPasswordfromCardNumber(cardNumber));
     }
 

@@ -230,10 +230,10 @@ public class SQLQueries {
         return password;
     }
 
-    public byte[] getPasswordSaltfromUsername(String username) {
+    public byte[] getPasswordSaltfromCardNumber(String cardNumber) {
         byte[] passwordSalt = {};
 
-        String selectQuery = "SELECT * FROM accounts WHERE UserName = \"" + username + "\"";
+        String selectQuery = "SELECT * FROM accounts WHERE CardNumber = \"" + cardNumber + "\"";
         ResultSet rs = executeQuery(selectQuery);
 
         try {
