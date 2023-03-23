@@ -38,6 +38,11 @@
             <artifactId>waxlib3</artifactId>
             <version>0.0.1.6</version>
         </dependency>
+        <dependency>
+            <groupId>me.tongfei</groupId>
+            <artifactId>progressbar</artifactId>
+            <version>0.5.5</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -47,6 +52,9 @@
                 <version>3.0.0</version>
                 <configuration>
                     <mainClass>com.atm.Server</mainClass>
+                    <arguments>
+                        <argument>--partial</argument>
+                    </arguments>
                 </configuration>
             </plugin>
             <plugin>
