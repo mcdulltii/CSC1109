@@ -4,8 +4,12 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.LineNumberReader;
 import java.sql.*;
+import java.sql.Date;
 import java.util.Scanner;
+
+import me.tongfei.progressbar.ProgressBar;
 
 public class SQLQueries {
     final String db_url = "jdbc:mysql://localhost:3306/oopasgdb";
@@ -93,11 +97,12 @@ public class SQLQueries {
         }
     }
 
-    protected void executeQuerySettings(User user, String field) {
+    protected byte[] executeQuerySettings(User user, String field) {
         Connection conn = getConnection();
         String updateQuery = "";
         PreparedStatement preparedStmt;
         long accNo = Long.parseLong(user.getAccNo());
+        byte[] retValue = {};
 
         try {
             switch (field) {
@@ -108,10 +113,21 @@ public class SQLQueries {
                     preparedStmt.setLong(2, accNo);
                     preparedStmt.executeUpdate();
                     break;
+                case "salt":
+                    Authenticate au = new Authenticate();
+                    byte[] passwordSalt = au.getRandomNonce();
+                    updateQuery = "UPDATE accounts SET PasswordSalt = ? WHERE AccountNumber = ?";
+                    preparedStmt = conn.prepareStatement(updateQuery);
+                    preparedStmt.setBytes(1, passwordSalt);
+                    preparedStmt.setLong(2, accNo);
+                    preparedStmt.executeUpdate();
+                    retValue = passwordSalt;
+                    break;
             }
         } catch (SQLException e) {
             System.out.println("Unable to access database.");
         }
+        return retValue;
     }
 
     // Create and return Account object from accounts table based on username input
@@ -214,6 +230,23 @@ public class SQLQueries {
         return password;
     }
 
+    public byte[] getPasswordSaltfromUsername(String username) {
+        byte[] passwordSalt = {};
+
+        String selectQuery = "SELECT * FROM accounts WHERE UserName = \"" + username + "\"";
+        ResultSet rs = executeQuery(selectQuery);
+
+        try {
+            while (rs.next()) {
+                passwordSalt = rs.getBytes("PasswordSalt");
+            }
+        } catch (SQLException e) {
+            System.out.println("Please check column label and database connection.");
+        }
+
+        return passwordSalt;
+    }
+
     private String getAdminPassword() {
         String password = "";
 
@@ -240,7 +273,7 @@ public class SQLQueries {
             if (!rs.next()) {
                 Scanner sc = new Scanner(System.in);
                 Connection conn = getConnection();
-                sql = "INSERT INTO accounts(CardNumber, AccountNumber, UserName, Password, FirstName, LastName, PinNumber, AvailableBalance, TotalBalance, TransferLimit, IsAdmin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                sql = "INSERT INTO accounts(CardNumber, AccountNumber, UserName, Password, FirstName, LastName, PasswordSalt, AvailableBalance, TotalBalance, TransferLimit, IsAdmin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement preparedStmt = conn.prepareStatement(sql);
 
                 System.out.println("Admin account not found!");
@@ -253,13 +286,14 @@ public class SQLQueries {
                     firstRun = false;
                 }
                 Authenticate au = new Authenticate();
+                byte[] passwordSalt = au.getRandomNonce();
                 preparedStmt.setLong(1, 0); // Set CardNumber
                 preparedStmt.setLong(2, 0); // Set AccountNumber
                 preparedStmt.setString(3, "ADMIN"); // Set Username
-                preparedStmt.setString(4, au.hashString(passwordString)); // Set Password
+                preparedStmt.setString(4, au.hashString(passwordString, passwordSalt)); // Set Password
                 preparedStmt.setString(5, "ADMIN"); // Set FirstName
                 preparedStmt.setString(6, "ADMIN"); // Set LastName
-                preparedStmt.setLong(7, Long.parseLong(passwordString)); // Set PinNumber
+                preparedStmt.setBytes(7, passwordSalt); // Set PasswordSalt
                 preparedStmt.setFloat(8, 0); // Set AvailableBalance
                 preparedStmt.setFloat(9, 0); // Set TotalBalance
                 preparedStmt.setFloat(10, 0); // Set TransferLimit
@@ -281,8 +315,12 @@ public class SQLQueries {
         try {
             if (!rs.next()) {
                 // Import CSV
-                BufferedReader br = new BufferedReader(new FileReader("atm/res/accounts.csv"));
+                String filename = "atm/res/accounts.csv";
+                BufferedReader br = new BufferedReader(new FileReader(filename));
                 Authenticate au = new Authenticate();
+
+                ProgressBar pb = new ProgressBar("Importing Accounts", countLines(filename));
+                pb.start();
 
                 try {
                     br.readLine();
@@ -292,6 +330,8 @@ public class SQLQueries {
 
                 Connection conn = getConnection();
                 while (true) {
+                    pb.step();
+                    
                     String row = null;
                     try {
                         row = br.readLine();
@@ -302,10 +342,11 @@ public class SQLQueries {
                     if (row == null)
                         break;
 
-                    sql = "INSERT INTO accounts(CardNumber, AccountNumber, UserName, Password, FirstName, LastName, PinNumber, AvailableBalance, TotalBalance, TransferLimit, IsAdmin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    sql = "INSERT INTO accounts(CardNumber, AccountNumber, UserName, Password, FirstName, LastName, PasswordSalt, AvailableBalance, TotalBalance, TransferLimit, IsAdmin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     PreparedStatement preparedStmt = conn.prepareStatement(sql);
                     String[] data = row.split(",");
 
+                    byte[] passwordSalt = au.getRandomNonce();
                     for (int i = 0; i < data.length; i++) {
                         switch (i) {
                             case 0: // Set CardNumber
@@ -317,9 +358,9 @@ public class SQLQueries {
                             case 5: // Set LastName
                                 preparedStmt.setString(i + 1, data[i]);
                                 break;
-                            case 6: // Set PinNumber and Password
-                                preparedStmt.setLong(i + 1, Long.parseLong(data[i]));
-                                preparedStmt.setString(4, au.hashString(data[i]));
+                            case 6: // Set PasswordSalt and Password
+                                preparedStmt.setBytes(i + 1, passwordSalt);
+                                preparedStmt.setString(4, au.hashString(data[i], passwordSalt));
                                 break;
                             case 7: // Set AvailableBalance
                             case 8: // Set TotalBalance
@@ -332,6 +373,9 @@ public class SQLQueries {
                     }
                     preparedStmt.execute();
                 }
+
+                pb.stop();
+
                 try {
                     br.close();
                 } catch (IOException e) {
@@ -340,6 +384,112 @@ public class SQLQueries {
             }
         } catch (SQLException e) {
             System.out.println("Unable to access database.");
+        }
+    }
+
+    public void importTransactions(Boolean isPartial) throws FileNotFoundException {
+        String sql = "SELECT * FROM transactions";
+        ResultSet rs = executeQuery(sql);
+
+        try {
+            if (!rs.next()) {
+                // Import CSV
+                String filename = "atm/res/transactions_new.csv";
+                BufferedReader br = new BufferedReader(new FileReader(filename));
+                
+                int lineNumbers = countLines(filename);
+                ProgressBar pb = new ProgressBar("Importing Transactions", lineNumbers);
+                pb.start();
+
+                try {
+                    br.readLine();
+                } catch (IOException e) {
+                    System.out.println("Unable to read file.");
+                }
+
+                if (isPartial)
+                    System.out.println("Importing transactions database partially.");
+                else {
+                    System.out.println("Importing entire transactions database will take a long time.");
+                    System.out.println("Provide `--partial` argument when running server to only import partially.");
+                }
+
+                Connection conn = getConnection();
+                int count = 0;
+                while (true) {
+                    pb.step();
+                    
+                    String row = null;
+                    try {
+                        row = br.readLine();
+                    } catch (IOException e) {
+                        System.out.println("Unable to read file.");
+                        break;
+                    }
+                    if (row == null || isPartial && count > (lineNumbers / 10))
+                        break;
+
+                    sql = "INSERT INTO transactions(transactionId, accountNumber, transactionDate, transactionDetails, chqNumber, valueDate, withdrawal, deposit, balance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    PreparedStatement preparedStmt = conn.prepareStatement(sql);
+                    String[] data = row.split(",");
+
+                    for (int i = 0; i < data.length; i++) {
+                        switch (i) {
+                            case 0: // Set transactionId
+                                preparedStmt.setString(i + 1, data[i]);
+                                break;
+                            case 1: // Set AccountNumber
+                                preparedStmt.setLong(i + 1, Long.parseLong(data[i]));
+                                break;
+                            case 2: // Set transactionDate
+                                preparedStmt.setDate(i + 1, Date.valueOf(data[i])); //date in string format yyyy-mm-dd
+                                break;
+                            case 3: // Set transactionDetails
+                            case 4: // Set chqNumber
+                                preparedStmt.setString(i + 1, data[i]);
+                                break;
+                            case 5: // Set valueDate
+                                preparedStmt.setDate(i + 1, Date.valueOf(data[i])); //date in string format yyyy-mm-dd
+                                break;
+                            case 6: // Set withdrawal
+                            case 7: // Set deposit
+                            case 8: // Set balance
+                                preparedStmt.setFloat(i + 1, Float.parseFloat(data[i]));
+                                break;
+                        }
+                    }
+                    preparedStmt.execute();
+                    count++;
+                }
+                
+                pb.stop();
+
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    System.out.println("Unable to close database.");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Unable to access database.");
+        }
+    }
+
+    private int countLines(String filename) {
+        LineNumberReader reader = null;
+        try {
+            reader = new LineNumberReader(new FileReader(filename));
+            reader.skip(Long.MAX_VALUE);
+            return reader.getLineNumber();
+        } catch (Exception ex) {
+            System.out.println("Unable to get file line numbers.");
+            return -1;
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                System.out.println("Unable to close FileReader.");
+            }
         }
     }
 
