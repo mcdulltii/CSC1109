@@ -185,6 +185,9 @@ public class AtmService {
 
     public void selection(int option) {
         switch (option) {
+            case -1:
+                selectionMenu();
+                break;
             case 0:
                 break;
             case 1:
@@ -215,6 +218,8 @@ public class AtmService {
                 // Transfer
                 outputStream.println("Please enter account number to transfer to: ");
                 long transferAccountNumber = Long.parseLong(getUserInput());
+                if (option != -1)
+                    break;
                 outputStream.println("Please enter amount to be transferred: ");
                 double amount = Double.parseDouble(getUserInput());
                 try {
