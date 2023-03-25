@@ -9,7 +9,6 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import net.miginfocom.swing.MigLayout;
 
-import com.atm.backend.AtmService;
 import com.atm.frontend.GUIButton;
 
 
@@ -20,11 +19,14 @@ public class ATMGUI extends JFrame {
     private String password;
     private String[] credDisplay;
     private Boolean isExited;
+    private Boolean isAuthenticated;
+    private Boolean isInactive;
 
     public ATMGUI() {
         super("ATM");
         this.resetVariables();
         this.isExited = false;
+        this.isAuthenticated = false;
 
         // Basic Constructor Setup
         setResizable(false);
@@ -104,6 +106,20 @@ public class ATMGUI extends JFrame {
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
+    private void setIsInactive(Boolean isInactive) {
+        // Only track inactivity after successful authentication
+        this.isInactive = this.isAuthenticated ? isInactive : false;
+    }
+
+    protected Boolean checkIsInactive() {
+        return this.isInactive;
+    }
+
+    protected void promptTimeout() {
+        JOptionPane.showMessageDialog(null, "Session timeout.\n Terminating program.");
+        this.exitWindow();
+    }
+
     private void numberButtonMouseClicked(MouseEvent e, JButton[] numberButtons){
         if (this.isExited) this.exitWindow();
         for(int i=0; i<10; i++){
@@ -170,6 +186,7 @@ public class ATMGUI extends JFrame {
                 } else {
                     // Username password combination passes
                     this.loginRounds = 2;
+                    this.isAuthenticated = true;
                     String[] reply = authReply.split("\n", 2);
                     this.updateDisplayArea(reply[1]);
                 }
@@ -342,6 +359,18 @@ public class ATMGUI extends JFrame {
             }
         });
         contentPane.add(buttonEnter, "cell 12 15 2 2");
+
+        //---- Frame timeout ----
+        this.addWindowFocusListener(new WindowAdapter() {
+            @Override
+            public void windowGainedFocus(WindowEvent e) {
+                setIsInactive(false);
+            }
+            @Override
+            public void windowLostFocus(WindowEvent e) {
+                setIsInactive(true);
+            }
+        });
         pack();
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
@@ -394,6 +423,36 @@ public class ATMGUI extends JFrame {
             e.printStackTrace();
         }
         // Instantiate ATM GUI
-        new ATMGUI();
+        new ATMGUIWrapper(new ATMGUI());
+    }
+}
+
+class ATMGUIWrapper implements Runnable {
+    private ATMGUI frame;
+    private Thread thread = null;
+    private int seconds = 0;
+    // Max number of seconds before timeout
+    private final int max = 30;
+
+    public ATMGUIWrapper(ATMGUI frame) {
+        this.frame = frame;
+        thread = new Thread(this);
+        thread.start();
+    }
+
+    public void run(){
+        while(seconds < max){
+            if (this.frame.checkIsInactive()) {
+                seconds++;
+            } else {
+                seconds = 0;
+            }
+            try{
+                Thread.sleep(1000);
+            } catch (InterruptedException exc){
+                System.out.println("Unable to sleep.");
+            };
+        }
+        this.frame.promptTimeout();
     }
 }
