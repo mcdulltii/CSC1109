@@ -6,13 +6,13 @@ new FormModel {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "hidemode 3"
 			"$columnConstraints": "[fill][300,fill][fill][fill][fill][fill][75,fill][fill][fill][75,fill][fill][fill][75,fill][fill][fill][fill]"
-			"$rowConstraints": "[][180,fill][][][][][][][][][][][][][][]"
+			"$rowConstraints": "[][180,fill][][][][][][][][][][][][][][][][][]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "displayArea"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 1 1 14,height 360:360:360"
+				"value": "cell 1 1 1 17,height 400:400:400"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "inputArea"
@@ -22,7 +22,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JSeparator" ) {
 				name: "separator"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 0 1 16"
+				"value": "cell 3 0 1 19"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button1"
@@ -92,25 +92,31 @@ new FormModel {
 				"text": "0"
 				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "button0MouseClicked", true ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 6 12 2 2"
+				"value": "cell 9 12 2 2"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "buttonClear"
 				"text": "Clear"
 				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "buttonClearMouseClicked", true ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 9 12 2 2"
+				"value": "cell 9 15 2 2"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "buttonEnter"
 				"text": "Enter"
 				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "buttonEnterMouseClicked", true ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 12 12 2 2"
+				"value": "cell 12 15 2 2"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "buttonBack"
+				"text": "Back"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 15 1 2"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 660, 625 )
+			"size": new java.awt.Dimension( 660, 750 )
 		} )
 	}
 }
