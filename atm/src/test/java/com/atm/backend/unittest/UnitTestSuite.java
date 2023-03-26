@@ -19,6 +19,7 @@ import com.atm.backend.User;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         AccUserObjTest.class,
+        AuthenticateTest.class,
         SettingsTest.class,
         TransactionTest.class
 })
