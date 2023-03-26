@@ -78,6 +78,19 @@
   > ./stop.sh
   ```
 
+## Test
+
+1. Run standalone test
+
+```shell
+> cd atm
+> mvn test
+```
+
+2. During build time
+
+Tests will automatically run during build time
+
 ## Class Diagram
 
 ```mermaid
