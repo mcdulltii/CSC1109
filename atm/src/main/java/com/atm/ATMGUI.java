@@ -170,8 +170,13 @@ public class ATMGUI extends JFrame {
     private void buttonBackMouseClicked(MouseEvent e) {
         if (this.isExited) this.exitWindow();
         // Send -1 as return command
-        ReceivedMessage recvMsg = client.sendMessage("-1");
-        this.updateDisplayArea(recvMsg.msg);
+        if (this.isAuthenticated) {
+            ReceivedMessage recvMsg = client.sendMessage("-1");
+            this.updateDisplayArea(recvMsg.msg);
+        } else {
+            this.resetVariables();
+            this.updateCredDisplayArea();
+        }
     }
 
     private void buttonDeleteMouseClicked(MouseEvent e) {
