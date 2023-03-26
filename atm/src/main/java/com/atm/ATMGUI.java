@@ -13,13 +13,21 @@ import com.atm.frontend.GUIButton;
 
 
 public class ATMGUI extends JFrame {
+    // Client to connect to ATM server
     private Client client;
+    // Number of rounds of login tries
     private int loginRounds;
+    // Inputted username
     private String username;
+    // Inputted password
     private String password;
+    // String array to store username and password display strings
     private String[] credDisplay;
+    // Boolean to check if Client session has exited
     private Boolean isExited;
+    // Boolean to check if Client has successfully authenticated
     private Boolean isAuthenticated;
+    // Boolean to check if user is inactive
     private Boolean isInactive;
 
     public ATMGUI() {
@@ -39,6 +47,7 @@ public class ATMGUI extends JFrame {
     }
 
     private void resetVariables() {
+        // Reset global variables
         this.loginRounds = 0;
         this.username = "";
         this.password = "";
@@ -46,9 +55,10 @@ public class ATMGUI extends JFrame {
 
     private Client connectClient() {
         // Connect to ATM server
-        client = new Client("127.0.0.1", 7777, false);
+        client = new Client("127.0.0.1", 7777, false); // TODO: Change to input arguments for host:port
         client.startConnection();
-        client.sendMessage(null); // Receive server prompt
+        // Receive server prompt
+        client.sendMessage(null);
         ReceivedMessage recvMsg = client.receiveMessage();
         this.formatCredMessage(recvMsg.msg);
         this.updateCredDisplayArea();
@@ -66,6 +76,7 @@ public class ATMGUI extends JFrame {
     }
 
     private void updateCredDisplayArea() {
+        // Update display with inputted username and password
         int length = this.credDisplay.length;
         this.credDisplay[length-4] = this.username;
         this.credDisplay[length-1] = this.password;
@@ -93,7 +104,7 @@ public class ATMGUI extends JFrame {
 
         // Check server authentication
         if (authReply != null && authReply.contains("User authenticated")) {
-            // Go to ATM app
+            // Continue to ATM functions
             return authReply;
         } else {
             JOptionPane.showMessageDialog(null, "Username password combination is incorrect!\n" + (2 - numTries) + " attempts remaining!");
@@ -102,7 +113,9 @@ public class ATMGUI extends JFrame {
     }
 
     private void exitWindow() {
+        // Close client session
         client.close();
+        // Close GUI window
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
@@ -116,12 +129,14 @@ public class ATMGUI extends JFrame {
     }
 
     protected void promptTimeout() {
+        // Close GUI window upon timeout
         JOptionPane.showMessageDialog(null, "Session timeout.\n Terminating program.");
         this.exitWindow();
     }
 
     private void numberButtonMouseClicked(MouseEvent e, JButton[] numberButtons){
         if (this.isExited) this.exitWindow();
+        // Update display with inputted number from button
         for(int i=0; i<10; i++){
             if (e.getSource() == numberButtons[i]){
                 String inputText = inputArea.getText();
@@ -135,7 +150,9 @@ public class ATMGUI extends JFrame {
     private void updateDisplayArea(String recvMsg) {
         String displayTextStart = "<html><p>";
         String displayTextEnd = "</p></html>";
+        // Check if server prompts to end session
         if (recvMsg.contains("Thank You and Have a Nice Day!")) {
+            // Display ATM receipt and end message
             this.isExited = true;
             this.displayArea.setText(displayTextStart +
                                      "ATM Receipt" + "<br/><hr><br/>" +
@@ -143,6 +160,7 @@ public class ATMGUI extends JFrame {
                                      "<br/><hr><br/>" + recvMsg.replaceAll("\n", "<br/>") +
                                      displayTextEnd);
         } else {
+            // Display ATM server prompts
             this.displayArea.setText(displayTextStart +
                                      recvMsg.replaceAll("\n", "<br/>") +
                                      displayTextEnd);
@@ -151,12 +169,14 @@ public class ATMGUI extends JFrame {
 
     private void buttonBackMouseClicked(MouseEvent e) {
         if (this.isExited) this.exitWindow();
+        // Send -1 as return command
         ReceivedMessage recvMsg = client.sendMessage("-1");
         this.updateDisplayArea(recvMsg.msg);
     }
 
     private void buttonDeleteMouseClicked(MouseEvent e) {
         if (this.isExited) this.exitWindow();
+        // Strip last character from displayed input
         String inputText = inputArea.getText();
         if (inputText.length() > 0)
             inputArea.setText(inputText.substring(0, inputText.length() - 1));
@@ -436,23 +456,27 @@ class ATMGUIWrapper implements Runnable {
 
     public ATMGUIWrapper(ATMGUI frame) {
         this.frame = frame;
+        // Start timeout thread
         thread = new Thread(this);
         thread.start();
     }
 
     public void run(){
         while(seconds < max){
+            // Only increment timer when user is inactive
             if (this.frame.checkIsInactive()) {
                 seconds++;
             } else {
                 seconds = 0;
             }
+            // Sleep timeout thread
             try{
                 Thread.sleep(1000);
             } catch (InterruptedException exc){
                 System.out.println("Unable to sleep.");
             };
         }
+        // Close GUI window upon timeout
         this.frame.promptTimeout();
     }
 }
