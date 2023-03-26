@@ -12,6 +12,7 @@ import java.util.Scanner;
 import me.tongfei.progressbar.ProgressBar;
 
 public class SQLQueries {
+    private Authenticate au;
     private String transactionId;
     private Connection conn;
 
@@ -102,11 +103,10 @@ public class SQLQueries {
         }
     }
 
-    protected byte[] executeQuerySettings(User user, String field) {
+    protected void executeQuerySettings(User user, String field, byte[] ... args) {
         String updateQuery = "";
         PreparedStatement preparedStmt;
         long accNo = Long.parseLong(user.getAccNo());
-        byte[] retValue = {};
 
         try {
             switch (field) {
@@ -118,20 +118,16 @@ public class SQLQueries {
                     preparedStmt.executeUpdate();
                     break;
                 case "salt":
-                    Authenticate au = new Authenticate(conn);
-                    byte[] passwordSalt = au.getRandomNonce();
                     updateQuery = "UPDATE accounts SET PasswordSalt = ? WHERE AccountNumber = ?";
                     preparedStmt = conn.prepareStatement(updateQuery);
-                    preparedStmt.setBytes(1, passwordSalt);
+                    preparedStmt.setBytes(1, args[0]);
                     preparedStmt.setLong(2, accNo);
                     preparedStmt.executeUpdate();
-                    retValue = passwordSalt;
                     break;
             }
         } catch (SQLException e) {
             System.out.println("Unable to access database.");
         }
-        return retValue;
     }
 
     // Create and return Account object from accounts table based on username input
@@ -305,7 +301,7 @@ public class SQLQueries {
                     passwordString = sc.nextLine().strip();
                     firstRun = false;
                 }
-                Authenticate au = new Authenticate(conn);
+                au = new Authenticate(conn);
                 byte[] passwordSalt = au.getRandomNonce();
                 preparedStmt.setLong(1, 0); // Set CardNumber
                 preparedStmt.setLong(2, 0); // Set AccountNumber
@@ -337,7 +333,7 @@ public class SQLQueries {
                 // Import CSV
                 String filename = "atm/res/accounts.csv";
                 BufferedReader br = new BufferedReader(new FileReader(filename));
-                Authenticate au = new Authenticate(conn);
+                au = new Authenticate(conn);
 
                 ProgressBar pb = new ProgressBar("Importing Accounts", countLines(filename));
                 pb.start();

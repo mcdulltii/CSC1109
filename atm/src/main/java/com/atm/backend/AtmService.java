@@ -27,16 +27,16 @@ public class AtmService {
     }
 
     private String deposit(double amount) {
-        return transaction.deposit(acc, amount, conn);
+        return transaction.deposit(acc, amount);
     }
 
     private String withdraw(double amount) throws InsufficientFundsException {
-        return transaction.withdraw(acc, amount, conn);
+        return transaction.withdraw(acc, amount);
     }
 
     private String transfer(long transferAccNo, double amount) throws InsufficientFundsException {
         Account a2 = getTransferAccount(transferAccNo);
-        return transaction.transferToAccount(acc, a2, amount, conn);
+        return transaction.transferToAccount(acc, a2, amount);
     }
 
     private double[] getBalance() {
