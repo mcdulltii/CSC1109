@@ -3,10 +3,12 @@ package com.atm.backend;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class AtmService {
+    protected static Connection conn;
     private Account acc;
     private User user;
     private Transaction transaction;
@@ -16,8 +18,9 @@ public class AtmService {
 
     public AtmService(Account acc, User user, PrintWriter outputStream, BufferedReader inputReader) {
         this.acc = acc;
+        AtmService.conn = new DBConnection().getConnection();
         this.user = user;
-        this.transaction = new Transaction(acc);
+        this.transaction = new Transaction(acc, conn);
         this.outputStream = outputStream;
         this.inputReader = inputReader;
         this.interactions = new ArrayList<String>();
@@ -43,7 +46,7 @@ public class AtmService {
 
     // Create Account object based on accountNumber (For transfer)
     private static Account getTransferAccount(Long accountNumber) {
-        SQLQueries q = new SQLQueries();
+        SQLQueries q = new SQLQueries(conn);
         Account transferAccount = q.getAccountfromAccountNumber(accountNumber);
         return transferAccount;
     }
@@ -84,7 +87,7 @@ public class AtmService {
     }
 
     private void userSystemMenuOpt(int opt) {
-        Settings settings = new Settings(user);
+        Settings settings = new Settings(user, conn);
 
         if (opt == 1) {
             String userinput;
@@ -160,7 +163,7 @@ public class AtmService {
                             continue;
                         }
 
-                        Settings settings = new Settings(acc);
+                        Settings settings = new Settings(acc, conn);
                         double[] limits = {1000, 2000, 5000, 10000};
                         settings.setTransferLimit(limits[userinput - 1]);
                         outputStream.print("Transfer limit Updated");

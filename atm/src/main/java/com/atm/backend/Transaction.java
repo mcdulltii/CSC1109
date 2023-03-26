@@ -1,5 +1,6 @@
 package com.atm.backend;
 
+import java.sql.Connection;
 import java.util.Date;
 import java.util.UUID;
 
@@ -13,6 +14,9 @@ public class Transaction {
     private Double withdrawal;
     private Double deposit;
     private Double balance;
+    private Transaction transaction;
+    private Connection conn;
+    private SQLQueries q;
 
     protected String getAccountNumber() {
         return accountNumber;
@@ -46,14 +50,17 @@ public class Transaction {
         return balance;
     }
 
-    public Transaction(Account a1) {
+    public Transaction(Account a1, Connection conn) {
         // to add more fields
         this.a1 = a1;
         this.transactionDate = new Date();
+        this.conn = conn;
+        this.q = new SQLQueries(this.conn);
     }
 
-    public Transaction(Account a1, String accountNumber, String transactionDetails,
-            String chqNumber, java.sql.Date valueDate, Double withdrawal, Double deposit, Double balance) {
+    Transaction(Account a1, String accountNumber, String transactionDetails,
+            String chqNumber, java.sql.Date valueDate, Double withdrawal,
+            Double deposit, Double balance) {
         // to add more fields
         this.a1 = a1;
         this.accountNumber = accountNumber;
@@ -94,20 +101,15 @@ public class Transaction {
         double newTransferLimit = a1.getTransferLimit() - amount;
         a1.setTotalBalance(newTotalBalance);
         a1.setTransferLimit(newTransferLimit);
-
-        SQLQueries q = new SQLQueries();
-        q.executeQueryAccounts(a1, a2);
-        
         newTotalBalance = a2.getTotalBalance() + amount;
         a2.setTotalBalance(newTotalBalance);
+        q.executeQueryAccounts(a1, a2);
         
         // Update transactions
-        java.sql.Date sqlDate = new java.sql.Date(transactionDate.getTime());
-        Transaction transaction = new Transaction(a1, a1.getAccountNumber(), "TRF TO "+a2.getAccountNumber(), UUID.randomUUID().toString(), sqlDate, amount,
-                0.0, a1.getTotalBalance());
+        this.newTransaction(a1, a1.getAccountNumber(), "TRF TO " + a2.getAccountNumber(), "withdrawal", amount);
         q.executeQueryTransactions(transaction);
-        transaction = new Transaction(a2, a2.getAccountNumber(), "TRF FROM "+a1.getAccountNumber(), UUID.randomUUID().toString(), sqlDate, 0.0,
-                amount, a2.getTotalBalance());
+
+        this.newTransaction(a2, a2.getAccountNumber(), "TRF FROM " + a1.getAccountNumber(), "deposit", amount);
         q.executeQueryTransactions(transaction);
 
         return "Tranfer is Successful";
@@ -119,23 +121,17 @@ public class Transaction {
             throw new IllegalArgumentException("Amount has to be positive.");
         }
 
-        // Update transactions
-        SQLQueries q = new SQLQueries();
-        java.sql.Date sqlDate = new java.sql.Date(transactionDate.getTime());
-
         // Update balance
         double newTotalBalance = a1.getTotalBalance() + amount;
         a1.setTotalBalance(newTotalBalance);
         q.executeQueryAccounts(a1, null);
-
-        a1.setTotalBalance(newTotalBalance);
         
         // public Transaction(Account a1, String accountNumber, String
         // transactionDetails,
         // String chqNumber, Date valueDate, Double withdrawal, Double balance) {
 
-        Transaction transaction = new Transaction(a1, a1.getAccountNumber(), "ATM DEPOSIT", UUID.randomUUID().toString(), sqlDate, 0.0,
-                amount, a1.getTotalBalance());
+        // Update transactions
+        this.newTransaction(a1, a1.getAccountNumber(), "ATM DEPOSIT", "deposit", amount);
         q.executeQueryTransactions(transaction);
         return "Deposit Successful";
     }
@@ -149,22 +145,37 @@ public class Transaction {
         }
 
         // Update balances
-        SQLQueries q = new SQLQueries();
         double newTotalBalance = a1.getTotalBalance() - amount;
         double newAvailableBalance = a1.getAvailableBalance() - amount;
         a1.setTotalBalance(newTotalBalance);
         a1.setAvailableBalance(newAvailableBalance);
 
         // Update transactions
-        java.sql.Date sqlDate = new java.sql.Date(transactionDate.getTime());
-        Transaction transaction = new Transaction(a1, a1.getAccountNumber(), "ATM WITHDRAWAL", UUID.randomUUID().toString(), sqlDate,
-                amount, 0.0, a1.getTotalBalance());
+        this.newTransaction(a1, a1.getAccountNumber(), "ATM WITHDRAWAL", "withdrawal", amount);
         q.executeQueryTransactions(transaction);
 
         // Update account balance
         q.executeQueryAccounts(a1, null);
 
         return "Withdraw Successful";
+    }
+
+    // generate new transaction
+    protected void newTransaction(Account ac, String accNo,
+        String transactionDetails, String action, Double amount) {
+        Double depositAmt = 0.0;
+        Double withdrawalAmt = 0.0;
+
+        if (action == "deposit") {
+            depositAmt = amount;
+        } else if (action == "withdrawal") {
+            withdrawalAmt = amount;
+        }
+
+        java.sql.Date sqlDate = new java.sql.Date(transactionDate.getTime());
+        transaction = new Transaction(ac, ac.getAccountNumber(), transactionDetails,
+            UUID.randomUUID().toString(), sqlDate, withdrawalAmt,
+            depositAmt, ac.getTotalBalance());
     }
 }
 

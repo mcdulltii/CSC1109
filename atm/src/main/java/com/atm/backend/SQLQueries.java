@@ -12,12 +12,21 @@ import java.util.Scanner;
 import me.tongfei.progressbar.ProgressBar;
 
 public class SQLQueries {
-    final String db_url = "jdbc:mysql://localhost:3306/oopasgdb";
+    private Authenticate au;
     private String transactionId;
+    private Connection conn;
+
+    // default connection
+    public SQLQueries() {
+        DBConnection dbConn = new DBConnection();
+        this.conn = dbConn.getConnection();
+    }
+
+    public SQLQueries(Connection conn) {
+        this.conn = conn;
+    }
 
     protected void executeQueryTransactions(Transaction tr) {
-        Connection conn = getConnection();
-
         String getTransactionCount = "SELECT transactionId FROM transactions ORDER BY transactionId desc limit 1";
         String sql = "INSERT INTO transactions (transactionId, accountNumber, transactionDate, transactionDetails, chqNumber, valueDate, withdrawal, deposit, balance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         ResultSet transactionCountResult = executeQuery(getTransactionCount);
@@ -53,8 +62,6 @@ public class SQLQueries {
 
     // Update accounts table based on selected action (Deposit/Withdraw)
     protected void executeQueryAccounts(Account a1, Account a2) {
-        Connection conn = getConnection();
-
         String updateQuery = "UPDATE accounts SET TotalBalance = ?, AvailableBalance = ?, TransferLimit = ? WHERE AccountNumber = ?";
         try {
             PreparedStatement preparedStmt = conn.prepareStatement(updateQuery);
@@ -77,7 +84,6 @@ public class SQLQueries {
     }
 
     protected void executeQuerySettings(Account ac, String field) {
-        Connection conn = getConnection();
         String updateQuery = "";
         PreparedStatement preparedStmt;
         long accNo = Long.parseLong(ac.getAccountNumber());
@@ -97,12 +103,10 @@ public class SQLQueries {
         }
     }
 
-    protected byte[] executeQuerySettings(User user, String field) {
-        Connection conn = getConnection();
+    protected void executeQuerySettings(User user, String field, byte[] ... args) {
         String updateQuery = "";
         PreparedStatement preparedStmt;
         long accNo = Long.parseLong(user.getAccNo());
-        byte[] retValue = {};
 
         try {
             switch (field) {
@@ -114,20 +118,16 @@ public class SQLQueries {
                     preparedStmt.executeUpdate();
                     break;
                 case "salt":
-                    Authenticate au = new Authenticate();
-                    byte[] passwordSalt = au.getRandomNonce();
                     updateQuery = "UPDATE accounts SET PasswordSalt = ? WHERE AccountNumber = ?";
                     preparedStmt = conn.prepareStatement(updateQuery);
-                    preparedStmt.setBytes(1, passwordSalt);
+                    preparedStmt.setBytes(1, args[0]);
                     preparedStmt.setLong(2, accNo);
                     preparedStmt.executeUpdate();
-                    retValue = passwordSalt;
                     break;
             }
         } catch (SQLException e) {
             System.out.println("Unable to access database.");
         }
-        return retValue;
     }
 
     // Create and return Account object from accounts table based on username input
@@ -289,7 +289,6 @@ public class SQLQueries {
         try {
             if (!rs.next()) {
                 Scanner sc = new Scanner(System.in);
-                Connection conn = getConnection();
                 sql = "INSERT INTO accounts(CardNumber, AccountNumber, UserName, Password, FirstName, LastName, PasswordSalt, AvailableBalance, TotalBalance, TransferLimit, IsAdmin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement preparedStmt = conn.prepareStatement(sql);
 
@@ -302,7 +301,7 @@ public class SQLQueries {
                     passwordString = sc.nextLine().strip();
                     firstRun = false;
                 }
-                Authenticate au = new Authenticate();
+                au = new Authenticate(conn);
                 byte[] passwordSalt = au.getRandomNonce();
                 preparedStmt.setLong(1, 0); // Set CardNumber
                 preparedStmt.setLong(2, 0); // Set AccountNumber
@@ -334,7 +333,7 @@ public class SQLQueries {
                 // Import CSV
                 String filename = "atm/res/accounts.csv";
                 BufferedReader br = new BufferedReader(new FileReader(filename));
-                Authenticate au = new Authenticate();
+                au = new Authenticate(conn);
 
                 ProgressBar pb = new ProgressBar("Importing Accounts", countLines(filename));
                 pb.start();
@@ -345,7 +344,6 @@ public class SQLQueries {
                     System.out.println("Unable to read file.");
                 }
 
-                Connection conn = getConnection();
                 while (true) {
                     pb.step();
                     
@@ -431,7 +429,6 @@ public class SQLQueries {
                     System.out.println("Provide `--partial` argument when running server to only import partially.");
                 }
 
-                Connection conn = getConnection();
                 int count = 0;
                 while (true) {
                     pb.step();
@@ -512,7 +509,6 @@ public class SQLQueries {
 
     private ResultSet executeQuery(String query) {
         ResultSet statementResult = null;
-        Connection conn = getConnection();
 
         try {
             Statement sqlStatement = conn.createStatement();
@@ -522,19 +518,6 @@ public class SQLQueries {
         }
         // closeConnection(conn);
         return statementResult;
-    }
-
-    private Connection getConnection() {
-        Connection conn = null;
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(db_url, "testAdmin", "password1");
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-        return conn;
     }
 
     private void closeConnection(Connection conn) {

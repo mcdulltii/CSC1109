@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.sql.Connection;
 import java.util.Formatter;
 
 public class Authenticate {
@@ -12,8 +13,8 @@ public class Authenticate {
     // Number of login tries
     private int numTries;
 
-    public Authenticate() {
-        this.q = new SQLQueries();
+    public Authenticate(Connection conn) {
+        this.q = new SQLQueries(conn);
         this.numTries = 0;
     }
 
