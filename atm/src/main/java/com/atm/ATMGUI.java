@@ -9,6 +9,11 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import net.miginfocom.swing.MigLayout;
 
+import net.sourceforge.argparse4j.ArgumentParsers;
+import net.sourceforge.argparse4j.inf.ArgumentParser;
+import net.sourceforge.argparse4j.inf.ArgumentParserException;
+import net.sourceforge.argparse4j.inf.Namespace;
+
 import com.atm.frontend.GUIButton;
 
 
@@ -30,7 +35,7 @@ public class ATMGUI extends JFrame {
     // Boolean to check if user is inactive
     private Boolean isInactive;
 
-    public ATMGUI() {
+    public ATMGUI(String host, int port) {
         super("ATM");
         this.resetVariables();
         this.isExited = false;
@@ -43,7 +48,7 @@ public class ATMGUI extends JFrame {
         setVisible(true);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        this.client = this.connectClient();
+        this.client = this.connectClient(host, port);
     }
 
     private void resetVariables() {
@@ -53,10 +58,13 @@ public class ATMGUI extends JFrame {
         this.password = "";
     }
 
-    private Client connectClient() {
+    private Client connectClient(String host, int port) {
         // Connect to ATM server
-        client = new Client("127.0.0.1", 7777, false); // TODO: Change to input arguments for host:port
-        client.startConnection();
+        client = new Client(host, port, false);
+        if (!client.startConnection()) {
+            JOptionPane.showMessageDialog(null, "Unable to connect to server.");
+            System.exit(0);
+        }
         // Receive server prompt
         client.sendMessage(null);
         ReceivedMessage recvMsg = client.receiveMessage();
@@ -170,8 +178,13 @@ public class ATMGUI extends JFrame {
     private void buttonBackMouseClicked(MouseEvent e) {
         if (this.isExited) this.exitWindow();
         // Send -1 as return command
-        ReceivedMessage recvMsg = client.sendMessage("-1");
-        this.updateDisplayArea(recvMsg.msg);
+        if (this.isAuthenticated) {
+            ReceivedMessage recvMsg = client.sendMessage("-1");
+            this.updateDisplayArea(recvMsg.msg);
+        } else {
+            this.resetVariables();
+            this.updateCredDisplayArea();
+        }
     }
 
     private void buttonDeleteMouseClicked(MouseEvent e) {
@@ -416,6 +429,24 @@ public class ATMGUI extends JFrame {
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 
     public static void main(String args[]) {
+        // Retrieve commandline arguments
+        ArgumentParser parser = ArgumentParsers.newFor("ATMGUI").build()
+                .defaultHelp(true)
+                .description("ATM GUI Client frontend");
+        parser.addArgument("-H", "--host")
+                .setDefault("127.0.0.1")
+                .help("Specify which host to expose server on");
+        parser.addArgument("-P", "--port")
+                .setDefault(7777)
+                .help("Specify which port to expose server on");
+        Namespace ns = null;
+        try {
+            ns = parser.parseArgs(args);
+        } catch (ArgumentParserException e) {
+            parser.handleError(e);
+            System.exit(0);
+        }
+
         // Set GUI theme
         UIManager.put( "control", new Color( 60, 60, 60) );
         UIManager.put( "info", new Color( 60,60,60) );
@@ -443,7 +474,7 @@ public class ATMGUI extends JFrame {
             e.printStackTrace();
         }
         // Instantiate ATM GUI
-        new ATMGUIWrapper(new ATMGUI());
+        new ATMGUIWrapper(new ATMGUI(ns.getString("host"), ns.getInt("port")));
     }
 }
 

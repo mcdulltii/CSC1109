@@ -19,6 +19,12 @@ import com.atm.backend.DBConnection;
 import com.atm.backend.SQLQueries;
 import com.atm.backend.User;
 
+import net.sourceforge.argparse4j.ArgumentParsers;
+import net.sourceforge.argparse4j.impl.Arguments;
+import net.sourceforge.argparse4j.inf.ArgumentParser;
+import net.sourceforge.argparse4j.inf.ArgumentParserException;
+import net.sourceforge.argparse4j.inf.Namespace;
+
 public class Server extends Thread {
     private ServerSocket serverSocket;
 
@@ -61,8 +67,25 @@ public class Server extends Thread {
     }
 
     public static void main(String[] args) {
+        // Retrieve commandline arguments
+        ArgumentParser parser = ArgumentParsers.newFor("Server").build()
+                .defaultHelp(true)
+                .description("ATM Server backend");
+        parser.addArgument("--partial").action(Arguments.storeTrue())
+                .help("Flag to import transactions table partially");
+        parser.addArgument("-P", "--port")
+                .setDefault(7777)
+                .help("Specify which port to expose server on");
+        Namespace ns = null;
+        try {
+            ns = parser.parseArgs(args);
+        } catch (ArgumentParserException e) {
+            parser.handleError(e);
+            System.exit(0);
+        }
+
         Server s = new Server();
-        s.start(7777); // TODO: Change to input arguments for port
+        s.start(ns.getInt("port"));
 
         // Fill account database
         SQLQueries q = new SQLQueries();
@@ -73,9 +96,11 @@ public class Server extends Thread {
         } catch (FileNotFoundException e) {
             System.out.println("Import Accounts File not found.");
         }
+
+        Boolean isPartial = ns.getBoolean("partial");
         try {
             // Import transactions table
-            if (args.length > 0 && args[0].equalsIgnoreCase("--partial"))
+            if (args.length > 0 && isPartial)
                 q.importTransactions(true);
             else
                 q.importTransactions(false);

@@ -8,6 +8,11 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+import net.sourceforge.argparse4j.ArgumentParsers;
+import net.sourceforge.argparse4j.inf.ArgumentParser;
+import net.sourceforge.argparse4j.inf.ArgumentParserException;
+import net.sourceforge.argparse4j.inf.Namespace;
+
 class ReceivedMessage {
     // Boolean to check if session is open
     public Boolean isOpen = false;
@@ -53,14 +58,19 @@ public class Client {
         } 
     }
 
-    public void startConnection() {
+    public Boolean startConnection() {
         // Initialize socket input and output streams
         try {
             outputStream = new PrintStream(socket.getOutputStream(), true);
             inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch (IOException e) {
-            System.out.println("Unable to connect.");
+            System.out.println("Unable to connect to server.");
+            return false;
+        } catch (NullPointerException e) {
+            System.out.println("Unable to connect to server.");
+            return false;
         }
+        return true;
     }
 
     public ReceivedMessage receiveMessage() {
@@ -146,9 +156,28 @@ public class Client {
     }
 
     public static void main(String args[]) {
+        // Retrieve commandline arguments
+        ArgumentParser parser = ArgumentParsers.newFor("Client").build()
+                .defaultHelp(true)
+                .description("ATM Client frontend");
+        parser.addArgument("-H", "--host")
+                .setDefault("127.0.0.1")
+                .help("Specify which host to expose server on");
+        parser.addArgument("-P", "--port")
+                .setDefault(7777)
+                .help("Specify which port to expose server on");
+        Namespace ns = null;
+        try {
+            ns = parser.parseArgs(args);
+        } catch (ArgumentParserException e) {
+            parser.handleError(e);
+            System.exit(0);
+        }
+        
         Scanner scanner = new Scanner(System.in);
-        Client client = new Client("127.0.0.1", 7777);
-        client.startConnection();
+        Client client = new Client(ns.getString("host"), ns.getInt("port"));
+        if (!client.startConnection())
+            System.exit(0);
         // Receive server prompt
         client.sendMessage(null);
         client.receiveMessage();
