@@ -8,12 +8,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
 import java.util.Scanner;
 
 import com.atm.backend.AccUserObj;
 import com.atm.backend.Account;
 import com.atm.backend.AtmService;
 import com.atm.backend.Authenticate;
+import com.atm.backend.DBConnection;
 import com.atm.backend.SQLQueries;
 import com.atm.backend.User;
 
@@ -44,6 +46,7 @@ public class Server extends Thread {
 
     @Override
     public void run() {
+        // Listen to incoming client connections
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
@@ -59,17 +62,19 @@ public class Server extends Thread {
 
     public static void main(String[] args) {
         Server s = new Server();
-        s.start(7777);
+        s.start(7777); // TODO: Change to input arguments for port
 
         // Fill account database
         SQLQueries q = new SQLQueries();
         String adminPassword = null;
         try {
+            // Import accounts table
             q.importAccounts();
         } catch (FileNotFoundException e) {
             System.out.println("Import Accounts File not found.");
         }
         try {
+            // Import transactions table
             if (args.length > 0 && args[0].equalsIgnoreCase("--partial"))
                 q.importTransactions(true);
             else
@@ -77,9 +82,11 @@ public class Server extends Thread {
         } catch (FileNotFoundException e) {
             System.out.println("Import Transactions File not found.");
         }
+        // Import admin account
         adminPassword = q.importAdminAccount();
         Scanner sc = new Scanner(System.in);
-        Authenticate au = new Authenticate();
+        Connection conn = new DBConnection().getConnection();
+        Authenticate au = new Authenticate(conn);
         login: while (true) {
             System.out.print("Enter admin password: ");
             String password = sc.nextLine().strip();
@@ -166,6 +173,7 @@ class ThreadClientHandler extends Thread {
     private Socket clientSocket;
     private PrintWriter outputStream;
     private BufferedReader inputReader;
+    // Boolean to check if client is authenticated
     private Boolean authenticated = false;
 
     public ThreadClientHandler(Socket socket) {
@@ -173,6 +181,7 @@ class ThreadClientHandler extends Thread {
     }
 
     private String getUserInput() {
+        // Retrieve user input from client response
         endLine();
         String s = "";
         try {
@@ -184,6 +193,7 @@ class ThreadClientHandler extends Thread {
     }
 
     private void endLine() {
+        // Send END indicator to indicate end of server message
         outputStream.println("END");
         outputStream.flush();
     }
@@ -210,7 +220,8 @@ class ThreadClientHandler extends Thread {
         AccUserObj obj = null;
         Account acc = null;
         User user = null;
-        Authenticate au = new Authenticate();
+        Connection conn = new DBConnection().getConnection();
+        Authenticate au = new Authenticate(conn);
         while (!authenticated) {
             outputStream.print("Enter Card Number: ");
             String cardNumber = getUserInput();
@@ -219,6 +230,7 @@ class ThreadClientHandler extends Thread {
             String password = getUserInput();
 
             if (cardNumber.length() != 0 && password.length() != 0) {
+                // Check if authentication succeeds
                 if (au.checkPassword(cardNumber, password)) {
                     // Set user based on card number input
                     obj = getCurrentUserAcc(cardNumber);
@@ -240,19 +252,23 @@ class ThreadClientHandler extends Thread {
                 outputStream.println("\n");
         }
 
+        // User has authenticated, goto main server prompt loop
         if (authenticated) {
             outputStream.println("User authenticated");
             AtmService svc = new AtmService(acc, user, outputStream, inputReader);
             int userinput = 0;
 
             do {
+                // Server prompt a user selection menu
                 svc.selectionMenu();
                 try {
-                    
+                    // Retrieve user input from client response
                     userinput = Integer.parseInt(svc.getUserInput());
-                    if (userinput == -1){
+                    // If client responds to return back to menu
+                    if (userinput == -1) {
                         svc.selectionMenu();
                     }
+                    // Handle user input selection
                     svc.selection(userinput);
                 } catch (NumberFormatException e) {
                     outputStream.println("Invalid choice! Please choose again!");
@@ -280,13 +296,14 @@ class ThreadClientHandler extends Thread {
     }
 
     // Create Account object based on card number input
-    private static AccUserObj getCurrentUserAcc(String cardNumber) {
+    private AccUserObj getCurrentUserAcc(String cardNumber) {
         SQLQueries q = new SQLQueries();
         AccUserObj currentUserAcc = q.getAccountfromCardNumber(cardNumber);
         return currentUserAcc;
     }
 
     private void endSession(PrintWriter outputStream) {
+        // Send FIN indicator to indicate end of session
         outputStream.println("FIN");
     }
 }

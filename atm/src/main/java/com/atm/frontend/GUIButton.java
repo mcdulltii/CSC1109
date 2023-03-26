@@ -9,6 +9,7 @@ public class GUIButton extends JButton {
 
     public GUIButton() {
         super();
+        // Set button size
         Dimension size = getPreferredSize();
         size.width = size.height = Math.max(size.width, size.height);
         setPreferredSize(size);
@@ -16,6 +17,7 @@ public class GUIButton extends JButton {
     }
 
     protected void paintComponent(Graphics g) {
+        // Set button color
         if (getModel().isArmed()) {
              g.setColor(Color.lightGray);
         } else {
@@ -26,11 +28,13 @@ public class GUIButton extends JButton {
     }
 
     protected void paintBorder(Graphics g) {
+        // Set button border color
         g.setColor(getForeground());
         g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 15, 15);
     }
     
     public boolean contains(int x, int y) {
+        // Set button shape
         if (shape == null || !shape.getBounds().equals(getBounds())) {
                 shape = new RoundRectangle2D.Float(0, 0, getWidth()-1, getHeight()-1, 15, 15);
         }

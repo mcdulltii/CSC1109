@@ -41,10 +41,11 @@ public class User {
     }
 
     protected void setPin(String pin) {
-        Authenticate auth = new Authenticate();
-        SQLQueries q = new SQLQueries();
-        byte[] passwordSalt = q.executeQuerySettings(this, "salt");
-        this.pinNumber = auth.hashString(pin, passwordSalt);
+        this.pinNumber = pin;
+    }
+
+    protected int getIsAdmin() {
+        return this.isAdmin;
     }
 
     private int getNewUserId() {
