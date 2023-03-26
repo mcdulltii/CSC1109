@@ -12,7 +12,7 @@ class MockObjects {
     protected PreparedStatement preStatement;
     protected ResultSet resultSet;
 
-    MockObjects() throws SQLException {
+    public MockObjects() throws SQLException {
         this.connection = mock(Connection.class);
         this.statement = mock(Statement.class);
         this.preStatement = mock(PreparedStatement.class);

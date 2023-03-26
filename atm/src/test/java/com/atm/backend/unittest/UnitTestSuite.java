@@ -33,7 +33,7 @@ public class UnitTestSuite {
     Map<String, Method> protectedAccMethods;
     Map<String, Method> protectedUserMethods;
 
-    UnitTestSuite() throws SQLException {
+    public UnitTestSuite() throws SQLException {
         this.mock = new MockObjects();
 
         when(mock.resultSet.next()).thenReturn(true).thenReturn(false);
