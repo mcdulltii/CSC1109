@@ -78,6 +78,22 @@
   > ./stop.sh
   ```
 
+## Setup (Docker SQL only)
+
+1. Start sql docker container
+
+  ```shell
+  > docker-compose --profile=sql up -d
+  ```
+
+2. Run server.java
+
+3. Stop docker container once done
+
+  ```shell
+  > docker-compose --profile=sql down
+  ```
+
 ## Test
 
 1. Run standalone test
