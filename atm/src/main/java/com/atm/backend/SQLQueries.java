@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
-import java.io.OutputStream;
 import java.sql.*;
 import java.sql.Date;
 import java.util.HashSet;
@@ -318,10 +317,11 @@ public class SQLQueries {
                 }
                 au = new Authenticate(conn);
                 byte[] passwordSalt = au.getRandomNonce();
+                passwordString = au.hashString(passwordString, passwordSalt);
                 preparedStmt.setLong(1, 0); // Set CardNumber
                 preparedStmt.setLong(2, 0); // Set AccountNumber
                 preparedStmt.setString(3, "ADMIN"); // Set Username
-                preparedStmt.setString(4, au.hashString(passwordString, passwordSalt)); // Set Password
+                preparedStmt.setString(4, passwordString); // Set Password
                 preparedStmt.setString(5, "ADMIN"); // Set FirstName
                 preparedStmt.setString(6, "ADMIN"); // Set LastName
                 preparedStmt.setBytes(7, passwordSalt); // Set PasswordSalt
