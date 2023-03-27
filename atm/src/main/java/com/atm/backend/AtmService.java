@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 
 public class AtmService {
     protected static Connection conn;
@@ -40,7 +42,7 @@ public class AtmService {
     }
 
     private double[] getBalance() {
-        double[] balance = {acc.getAvailableBalance(), acc.getTotalBalance()};
+        double[] balance = { acc.getAvailableBalance(), acc.getTotalBalance() };
         return balance;
     }
 
@@ -94,7 +96,7 @@ public class AtmService {
 
             while (true) {
                 outputStream.printf("%n---------- %s ----------%n",
-                "Set Pin");
+                        "Set Pin");
                 outputStream.printf("| %-25s |%n", "(0) Cancel Operation");
                 outputStream.printf("%s%n%n", "-".repeat(29));
 
@@ -135,6 +137,49 @@ public class AtmService {
         outputStream.print("Please enter an option: ");
     }
 
+    private double getInputAmount(String action) {
+        double amount = 0.0;
+        double[] amountOptions = { 10.0, 20.0, 50.0, 100.0, 500.0, 1000.0 };
+        while (true) {
+            outputStream.printf("%n-------- %s ---------%n",
+                    "Choose Amount to " + action + " ($)");
+                    
+            outputStream.printf("| %-40s |%n", "(0) Cancel Operation");
+            outputStream.printf("| %-40s |%n", "(1) 10");
+            outputStream.printf("| %-40s |%n", "(2) 20");
+            outputStream.printf("| %-40s |%n", "(3) 50");
+            outputStream.printf("| %-40s |%n", "(4) 100");
+            outputStream.printf("| %-40s |%n", "(5) 500");
+            outputStream.printf("| %-40s |%n", "(6) 1000");
+            outputStream.printf("| %-40s |%n", "(7) Custom Amount");
+            outputStream.printf("%s%n%n", "-".repeat(44));
+            outputStream.print("Please enter an option: ");
+            try {
+                int userinput = Integer.parseInt(getUserInput());
+                if (userinput == 0 || userinput == -1)
+                    break;
+                if (userinput == 7) {
+                    outputStream.println("Enter amount to " + action + ": $");
+                    amount = Double.parseDouble(getUserInput());
+                    if (amount == -1){
+                        amount = 0;
+                        return amount;
+                    }
+                    return amount;
+                }else if (userinput < -1 || userinput > 7) {
+                    outputStream.println("Please enter a valid option");
+                    continue;
+                }
+                amount = amountOptions[userinput - 1];
+                return amount;
+            } catch (NumberFormatException e) {
+                outputStream.println("Please enter a valid option");
+                continue;
+            }
+        }
+        return amount;
+    }
+
     private void accountSystemMenuOpt(int opt) {
         switch (opt) {
             case 1:
@@ -143,7 +188,7 @@ public class AtmService {
             case 2:
                 OptMenu: while (true) {
                     outputStream.printf("%n-------- %s ---------%n",
-                    "Choose Transfer Limit ($)");
+                            "Choose Transfer Limit ($)");
                     outputStream.printf("| %-40s |%n", "(0) Cancel Operation");
                     outputStream.printf("| %-40s |%n", "(1) 1000");
                     outputStream.printf("| %-40s |%n", "(2) 2000");
@@ -156,7 +201,7 @@ public class AtmService {
                     try {
                         int userinput = Integer.parseInt(getUserInput());
 
-                        if (userinput == 0) {
+                        if (userinput == 0 || userinput == -1) {
                             break OptMenu;
                         } else if (userinput < 0 || userinput > 4) {
                             outputStream.println("Please enter a valid option");
@@ -164,7 +209,7 @@ public class AtmService {
                         }
 
                         Settings settings = new Settings(acc, conn);
-                        double[] limits = {1000, 2000, 5000, 10000};
+                        double[] limits = { 1000, 2000, 5000, 10000 };
                         settings.setTransferLimit(limits[userinput - 1]);
                         outputStream.print("Transfer limit Updated");
                         this.interactions.add("Set transfer limit as $" + limits[userinput - 1]);
@@ -195,51 +240,67 @@ public class AtmService {
 
     public void selection(int option) {
         switch (option) {
-            case -1:
-                selectionMenu();
             case 0:
                 break;
             case 1:
                 // Deposit
-                outputStream.print("Please enter an amount to deposit: $");
-                double depositAmount = Double.parseDouble(getUserInput());
-                try {
-                    outputStream.println(deposit(depositAmount));
-                    outputStream.println("Your Total Balance is after deposit is: $" + acc.getTotalBalance());
-                    this.interactions.add("Deposit: $" + depositAmount);
-                } catch (IllegalArgumentException e) {
-                    outputStream.println(e.getMessage());
+                double depositAmount = getInputAmount("Deposit");
+                if (depositAmount != 0) {
+                    try {
+                        outputStream.println(deposit(depositAmount));
+                        outputStream.println("Your Total Balance after deposit is: $" + acc.getTotalBalance());
+                        this.interactions.add("Deposit: $" + depositAmount);
+                    } catch (IllegalArgumentException e) {
+                        outputStream.println(e.getMessage());
+                    }
                 }
                 break;
             case 2:
                 // Withdraw
-                outputStream.print("Please enter an amount to withdraw: $");
-                double withdrawalAmount = Double.parseDouble(getUserInput());
-                try {
-                    outputStream.println(withdraw(withdrawalAmount));
-                    outputStream.println("Your Total Balance is after withdrawal is: $" + acc.getTotalBalance());
-                    this.interactions.add("Withdraw: $" + withdrawalAmount);
-                } catch (IllegalArgumentException e) {
-                    outputStream.println(e.getMessage());
-                } catch (InsufficientFundsException e) {
-                    outputStream.println("\nSorry, but your account is short by: $"+ e.getAmount());
+                double withdrawalAmount = getInputAmount("Withdraw");
+                if (withdrawalAmount != 0) {
+                    try {
+                        outputStream.println(withdraw(withdrawalAmount));
+                        outputStream.println("Your Total Balance after withdrawal is: $" + acc.getTotalBalance());
+                        this.interactions.add("Withdraw: $" + withdrawalAmount);
+                    } catch (IllegalArgumentException e) {
+                        outputStream.println(e.getMessage());
+                    } catch (InsufficientFundsException e) {
+                        outputStream.println("\nSorry, but your account is short by: $" + e.getAmount());
+                    }
                 }
                 break;
             case 3:
                 // Transfer
+                String userInput = "";
+                SQLQueries q = new SQLQueries();
                 outputStream.println("Please enter account number to transfer to: ");
-                long transferAccountNumber = Long.parseLong(getUserInput());
+                HashSet<String> accountNumbers = q.getAccountNumbers();
+                while (true){
+                    userInput = getUserInput();
+                    if (Long.parseLong(userInput) == -1)
+                        break;
+                    if(!accountNumbers.contains(userInput)){
+                        outputStream.println("Please enter a valid account number.");
+                        outputStream.println("Please enter account number to transfer to: ");
+                        continue;
+                    }
+                    break;
+                }
+                long transferAccountNumber = Long.parseLong(userInput);
                 if (transferAccountNumber == -1)
                     break;
-                outputStream.println("Please enter amount to be transferred: ");
-                double amount = Double.parseDouble(getUserInput());
-                try {
-                    transfer(transferAccountNumber, amount);
-                    this.interactions.add("Transferred $" + amount + " to " + transferAccountNumber);
-                } catch (IllegalArgumentException e) {
-                    outputStream.println(e.getMessage());
-                } catch (InsufficientFundsException e) {
-                    outputStream.println("\nSorry, but your account is short by: $"+ e.getAmount());
+                double transferAmount = getInputAmount("Transfer");
+                if (transferAmount != 0) {
+                    try {
+                        transfer(transferAccountNumber, transferAmount);
+                        outputStream.println("Your Total Balance after transfer is: $" + acc.getTotalBalance());
+                        this.interactions.add("Transferred $" + transferAmount + " to " + transferAccountNumber);
+                    } catch (IllegalArgumentException e) {
+                        outputStream.println(e.getMessage());
+                    } catch (InsufficientFundsException e) {
+                        outputStream.println("\nSorry, but your account is short by: $" + e.getAmount());
+                    }
                 }
                 break;
             case 4:
@@ -282,13 +343,15 @@ public class AtmService {
                 outputStream.println("Please contact the customer service hotline for any assistance.");
                 break;
             default:
-                outputStream.println("Invalid choice! Please choose again!");
+                if (option !=-1)
+                    outputStream.println("Invalid choice! Please choose again!");
                 break;
         }
     }
 
     public String getInteractions() {
-        String receipt = new Date().toString() + "\nName: " + this.user.getFirstName() + " " + this.user.getLastName() + "\n";
+        String receipt = new Date().toString() + "\nName: " + this.user.getFirstName() + " " + this.user.getLastName()
+                + "\n";
         receipt += "Account number: " + this.user.getAccNo() + "\n\n<hr>\n";
         if (this.interactions.size() > 0) {
             receipt += String.join("\n", this.interactions);
