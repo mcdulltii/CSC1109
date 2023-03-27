@@ -13,7 +13,9 @@ public class AtmService {
     protected static Connection conn;
     private Account acc;
     private User user;
-    private Transaction transaction;
+    private Withdraw withdrawal;
+    private Deposit deposit;
+    private Transfer transfer;
     private BufferedReader inputReader;
     private PrintWriter outputStream;
     private ArrayList<String> interactions;
@@ -22,23 +24,25 @@ public class AtmService {
         this.acc = acc;
         AtmService.conn = new DBConnection().getConnection();
         this.user = user;
-        this.transaction = new Transaction(acc, conn);
+        this.withdrawal = new Withdraw(acc, conn);
+        this.deposit = new Deposit(acc, conn);
+        this.transfer = new Transfer();
         this.outputStream = outputStream;
         this.inputReader = inputReader;
         this.interactions = new ArrayList<String>();
     }
 
     private String deposit(double amount) {
-        return transaction.deposit(acc, amount);
+        return deposit.execute(acc, amount);
     }
 
     private String withdraw(double amount) throws InsufficientFundsException {
-        return transaction.withdraw(acc, amount);
+        return withdrawal.execute(acc, amount);
     }
 
     private String transfer(long transferAccNo, double amount) throws InsufficientFundsException {
         Account a2 = getTransferAccount(transferAccNo);
-        return transaction.transferToAccount(acc, a2, amount);
+        return transfer.transferToAccount(acc, a2, amount);
     }
 
     private double[] getBalance() {

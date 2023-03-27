@@ -1,0 +1,48 @@
+package com.atm.backend;
+
+import java.sql.Connection;
+import java.util.UUID;
+
+public class Withdraw extends Transaction{
+    private Double withdrawal;
+    private Double deposit = 0.0;
+
+    Withdraw(Account a1, String accountNumber, String transactionDetails,
+            String chqNumber, java.sql.Date valueDate, Double withdrawal, Double deposit, Double balance) {
+        super(a1, accountNumber,transactionDetails,chqNumber,valueDate,balance);
+        this.withdrawal = withdrawal;
+    }
+
+    
+    public Withdraw(Account a1, Connection conn) {
+        // to add more fields
+        super(a1, null);
+    }
+
+    public double getWithdrawal(){
+        return withdrawal;
+    }
+
+    protected String execute(Account a1, double amount) throws InsufficientFundsException  {
+        if (amount < 0) {
+            throw new IllegalArgumentException("Amount has to be positive.");
+        } else if (amount > a1.getAvailableBalance()) {
+            throw new InsufficientFundsException(-(a1.getAvailableBalance() - amount));
+        }
+
+        // Update balances
+        double newTotalBalance = a1.getTotalBalance() - amount;
+        double newAvailableBalance = a1.getAvailableBalance() - amount;
+        a1.setTotalBalance(newTotalBalance);
+        a1.setAvailableBalance(newAvailableBalance);
+
+        // Update transactions
+        q.executeQueryTransactions(a1.getAccountNumber(),new java.sql.Date(super.getTransactionDate().getTime()), "ATM WITHDRAWAL/TRF", UUID.randomUUID().toString(), amount, deposit, newTotalBalance);
+
+        // Update account balance
+        q.executeQueryAccounts(a1, null);
+
+        return "Withdraw Successful";
+    }
+
+}

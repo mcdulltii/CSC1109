@@ -28,7 +28,7 @@ public class SQLQueries {
         this.conn = conn;
     }
 
-    protected void executeQueryTransactions(Transaction tr) {
+    protected void executeQueryTransactions(String acctNo, Date val, String det, String chq, Double with, Double dep, Double bal) {
         String getTransactionCount = "SELECT transactionId FROM transactions ORDER BY transactionId desc limit 1";
         String sql = "INSERT INTO transactions (transactionId, accountNumber, transactionDate, transactionDetails, chqNumber, valueDate, withdrawal, deposit, balance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         ResultSet transactionCountResult = executeQuery(getTransactionCount);
@@ -48,19 +48,21 @@ public class SQLQueries {
         try {
             PreparedStatement preparedStmt = conn.prepareStatement(sql);
             preparedStmt.setString(1, transactionId);
-            preparedStmt.setString(2, tr.getAccountNumber());
-            preparedStmt.setDate(3, tr.getValueDate());
-            preparedStmt.setString(4, tr.getTransactionDetails());
-            preparedStmt.setString(5, tr.getChqNumber());
-            preparedStmt.setDate(6, tr.getValueDate());
-            preparedStmt.setDouble(7, tr.getWithdrawal());
-            preparedStmt.setDouble(8, tr.getDeposit());
-            preparedStmt.setDouble(9, tr.getBalance());
+            preparedStmt.setString(2, acctNo);
+            preparedStmt.setDate(3, val);
+            preparedStmt.setString(4, det);
+            preparedStmt.setString(5, chq);
+            preparedStmt.setDate(6, val);
+            preparedStmt.setDouble(7, with);
+            preparedStmt.setDouble(8, dep);
+            preparedStmt.setDouble(9, bal);
             preparedStmt.execute();
         } catch (Exception e) {
             System.out.println(e);
         }
     }
+
+
 
     // Update accounts table based on selected action (Deposit/Withdraw)
     protected void executeQueryAccounts(Account a1, Account a2) {
