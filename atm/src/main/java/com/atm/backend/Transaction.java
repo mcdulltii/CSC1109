@@ -125,10 +125,6 @@ public class Transaction {
         double newTotalBalance = a1.getTotalBalance() + amount;
         a1.setTotalBalance(newTotalBalance);
         q.executeQueryAccounts(a1, null);
-        
-        // public Transaction(Account a1, String accountNumber, String
-        // transactionDetails,
-        // String chqNumber, Date valueDate, Double withdrawal, Double balance) {
 
         // Update transactions
         this.newTransaction(a1, a1.getAccountNumber(), "ATM DEPOSIT", "deposit", amount);

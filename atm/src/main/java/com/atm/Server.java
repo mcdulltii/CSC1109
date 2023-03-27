@@ -289,10 +289,6 @@ class ThreadClientHandler extends Thread {
                 try {
                     // Retrieve user input from client response
                     userinput = Integer.parseInt(svc.getUserInput());
-                    // If client responds to return back to menu
-                    if (userinput == -1) {
-                        svc.selectionMenu();
-                    }
                     // Handle user input selection
                     svc.selection(userinput);
                 } catch (NumberFormatException e) {

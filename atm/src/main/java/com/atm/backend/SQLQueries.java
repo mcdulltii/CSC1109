@@ -5,8 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.io.OutputStream;
 import java.sql.*;
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Scanner;
 
 import me.tongfei.progressbar.ProgressBar;
@@ -161,6 +163,20 @@ public class SQLQueries {
         return obj;
     }
 
+    public HashSet<String> getAccountNumbers(){
+        HashSet<String> accountNumbers = new HashSet<>();
+        String selectQuery = "SELECT * FROM accounts";
+        ResultSet rs = executeQuery(selectQuery); 
+        try {
+            while(rs.next()){
+                accountNumbers.add(rs.getString("AccountNumber"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Unable to access database.");
+        }
+        return accountNumbers;
+    }
+
     // Create and return Account object from accounts table based on Card Number input
     public AccUserObj getAccountfromCardNumber(String cardNumber) {
         String accountNumber = "", firstname = "", lastname = "";
@@ -226,7 +242,6 @@ public class SQLQueries {
         } catch (SQLException e) {
             System.out.println("Please check column label and database connection.");
         }
-
         return password;
     }
 
