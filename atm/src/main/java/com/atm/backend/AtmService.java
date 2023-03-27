@@ -195,8 +195,6 @@ public class AtmService {
 
     public void selection(int option) {
         switch (option) {
-            case -1:
-                selectionMenu();
             case 0:
                 break;
             case 1:
