@@ -219,7 +219,7 @@ public class Server extends Thread {
 // Thread for handling multiple clients, one client per thread
 class ThreadClientHandler extends Thread {
     private Socket clientSocket;
-    // //Stream of text that the Server sends to the Client
+    //Stream of text that the Server sends to the Client
     private PrintWriter outputStream;
     //Reader to read text that the Client sends to the Server
     private BufferedReader inputReader;
@@ -359,6 +359,10 @@ class ThreadClientHandler extends Thread {
     }
 
     // Send FIN indicator to indicate end of session
+    //
+    // # Arguments
+    // 
+    // * `outputStream` - //Stream of text that the Server sends to the Client
     private void endSession(PrintWriter outputStream) {
         outputStream.println("FIN");
     }
