@@ -341,7 +341,7 @@ public class SQLQueries {
                             data[i] = rs.getString(i+1) + "";
                             break;
                         case 1: // get AccountNumber
-                            data[i] = rs.getLong(i+1) + "";
+                            data[i] = Long.toString(rs.getLong(i+1));
                             break;
                         case 2: // get transactionDate
                         case 5: // get valueDate
@@ -350,7 +350,7 @@ public class SQLQueries {
                         case 6: // get withdrawal
                         case 7: // get deposit
                         case 8: // get balance
-                            data[i] = rs.getFloat(i+1) + "";
+                            data[i] = Float.toString(rs.getFloat(i+1));
                             break;
                     }
                 }

@@ -60,7 +60,7 @@ public class AdminTable extends JFrame {
         Dimension DimMax = Toolkit.getDefaultToolkit().getScreenSize();
         this.setMaximumSize(DimMax);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.add(new JScrollPane(table));
         this.setTitle(type);
         this.pack();

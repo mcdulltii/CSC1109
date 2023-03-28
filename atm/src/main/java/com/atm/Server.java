@@ -172,7 +172,7 @@ public class Server extends Thread {
 
     private static void printAccountFromCardNo(Long lng) {
         SQLQueries q = new SQLQueries();
-        ArrayList<String[]> data = q.getTopAccountsForAdmin(lng + "");
+        ArrayList<String[]> data = q.getTopAccountsForAdmin(Long.toString(lng));
         AdminTable adminTable = new AdminTable();
         adminTable.displayTable("Account Details", data);
         System.out.println("\nAccount data shown in a new tab.\n");
@@ -180,7 +180,7 @@ public class Server extends Thread {
 
     private static void printTransactionFromCardNo(Long lng) {
         SQLQueries q = new SQLQueries();
-        ArrayList<String[]> data = q.getTopTransactionsForAdmin(lng + "");
+        ArrayList<String[]> data = q.getTopTransactionsForAdmin(Long.toString(lng));
         AdminTable adminTable = new AdminTable();
         adminTable.displayTable("Transaction Details", data);
         System.out.println("\nTransaction data shown in a new tab.\n");
