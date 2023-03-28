@@ -7,9 +7,9 @@ public class Deposit extends Transaction {
     private Double withdrawal = 0.0;
     private Double deposit;
 
-    public Deposit(Account a1, String accountNumber, String transactionDetails,
+    public Deposit(Account a1, Connection conn, String accountNumber, String transactionDetails,
             String chqNumber, java.sql.Date valueDate, Double withdrawal, Double deposit, Double balance) {
-        super(a1, accountNumber, transactionDetails, chqNumber, valueDate, balance);
+        super(a1, conn, accountNumber, transactionDetails, chqNumber, valueDate, balance);
         this.deposit = deposit;
     }
 

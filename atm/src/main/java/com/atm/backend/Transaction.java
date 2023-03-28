@@ -21,7 +21,7 @@ public abstract class Transaction {
         this.q = new SQLQueries(this.conn);
     }
 
-    public Transaction(Account a1, String accountNumber, String transactionDetails,
+    public Transaction(Account a1, Connection conn, String accountNumber, String transactionDetails,
             String chqNumber, java.sql.Date valueDate, Double balance) {
         this.a1 = a1;
         this.accountNumber = accountNumber;
@@ -30,6 +30,8 @@ public abstract class Transaction {
         this.chqNumber = chqNumber;
         this.valueDate = valueDate;
         this.balance = balance;
+        this.conn = conn;
+        this.q = new SQLQueries(this.conn);
     }
 
     protected String getAccountNumber() {

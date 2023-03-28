@@ -3,13 +3,13 @@ package com.atm.backend;
 import java.sql.Connection;
 import java.util.UUID;
 
-public class Withdraw extends Transaction{
+public class Withdraw extends Transaction {
     private Double withdrawal;
     private Double deposit = 0.0;
 
-    public Withdraw(Account a1, String accountNumber, String transactionDetails,
+    public Withdraw(Account a1, Connection conn, String accountNumber, String transactionDetails,
             String chqNumber, java.sql.Date valueDate, Double withdrawal, Double deposit, Double balance) {
-        super(a1, accountNumber, transactionDetails, chqNumber, valueDate, balance);
+        super(a1, conn, accountNumber, transactionDetails, chqNumber, valueDate, balance);
         this.withdrawal = withdrawal;
     }
 

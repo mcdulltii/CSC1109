@@ -1,15 +1,16 @@
 package com.atm.backend;
 
+import java.sql.Connection;
 import java.util.*;
 
 // transfer from a1 to a2
-public class Transfer{
+public class Transfer {
     private Withdraw withdrawal;
     private Deposit deposit;
+    private Connection conn;
 
-    public Transfer(Withdraw withdrawal, Deposit deposit){
-        this.withdrawal = withdrawal;
-        this.deposit = deposit;
+    public Transfer(Connection conn) {
+        this.conn = conn;
     }
 
     protected String transferToAccount(Account a1, Account a2, double amount) throws InsufficientFundsException {
@@ -20,12 +21,12 @@ public class Transfer{
             throw new IllegalArgumentException("Amount has to be positive.");
         }
         
-        withdrawal = new Withdraw(a1, a1.getAccountNumber(), "ATM WITHDRAWAL/TRF", UUID.randomUUID().toString(), new java.sql.Date(Calendar.getInstance().getTime().getTime()), amount, 0.0, a1.getTotalBalance());
-        deposit = new Deposit(a2, a2.getAccountNumber(), "ATM DEPOSIT/TRF", UUID.randomUUID().toString(), new java.sql.Date(Calendar.getInstance().getTime().getTime()), 0.0, amount, a2.getTotalBalance());
+        this.withdrawal = new Withdraw(a1, conn, a1.getAccountNumber(), "ATM WITHDRAWAL/TRF", UUID.randomUUID().toString(), new java.sql.Date(Calendar.getInstance().getTime().getTime()), amount, 0.0, a1.getTotalBalance());
+        this.deposit = new Deposit(a2, conn, a2.getAccountNumber(), "ATM DEPOSIT/TRF", UUID.randomUUID().toString(), new java.sql.Date(Calendar.getInstance().getTime().getTime()), 0.0, amount, a2.getTotalBalance());
 
         // Update transactions
-        withdrawal.execute(a1, amount);
-        deposit.execute(a2, amount);
+        this.withdrawal.execute(a1, amount);
+        this.deposit.execute(a2, amount);
 
         return "Tranfer is Successful";
     }
