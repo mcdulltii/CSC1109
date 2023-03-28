@@ -19,6 +19,7 @@ import com.atm.backend.Authenticate;
 import com.atm.backend.DBConnection;
 import com.atm.backend.SQLQueries;
 import com.atm.backend.User;
+import com.atm.frontend.AdminTable;
 
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.impl.Arguments;
@@ -136,10 +137,10 @@ public class Server extends Thread {
                             printAllTransactions();
                             break;
                         case 0:
-                            System.out.println("Logout Successful!");
+                            System.out.println("\nLogout Successful!\n");
                             continue login;
                         default:
-                            System.out.println("Invalid choice! Please choose again!");
+                            System.out.println("\nInvalid choice! Please choose again!\n");
                     }
                 }
             }
@@ -147,29 +148,43 @@ public class Server extends Thread {
     }
 
     private static void printAllAccounts() {
+        /*
         System.out.println(String.format("%25s %25s %25s %25s %25s %25s %25s %25s %25s %25s %25s", "Card Number",
                 "Account Number", "Username", "Password", "First Name", "Last Name",
                 "Password Salt", "Available Balance", "Total Balance", "Transfer Limit", "IsAdmin"));
+        */
         SQLQueries q = new SQLQueries();
         ArrayList<String[]> data = q.getAllAccountsForAdmin();
+        /*
         for (String[] i : data) {
             System.out.println(String.format("%25s %25s %25s %25s %25s %25s %25s %25s %25s %25s %25s",
                     i[0], i[1], i[2], i[3], i[4], i[5],
                     i[6], i[7], i[8], i[9], i[10]));
         }
+         */
+        AdminTable t = new AdminTable();
+        t.displayTable("Accounts", data);
+        System.out.println("\nAccount data shown in a new tab.\n");
     }
 
     private static void printAllTransactions() {
+        /*
         System.out.println(String.format("%25s %25s %25s %25s %25s %25s %25s %25s %25s", "Transaction ID",
                 "Account Number", "Transaction Date", "Transaction Details", "Chq Number", "Value Date", "Withdrawal",
                 "Deposit", "Balance"));
+        */
         SQLQueries q = new SQLQueries();
         ArrayList<String[]> data = q.getAllTransactionsForAdmin();
+        /*
         for (String[] i : data) {
             System.out.println(String.format("%25s %25s %25s %25s %25s %25s %25s %25s %25s",
                     i[0], i[1], i[2], i[3], i[4], i[5],
                     i[6], i[7], i[8]));
         }
+        */
+        AdminTable t = new AdminTable();
+        t.displayTable("Transactions", data);
+        System.out.println("\nTransaction data shown in a new tab.\n");
     }
 }
 
