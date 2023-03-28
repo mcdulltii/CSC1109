@@ -151,18 +151,14 @@ public class Server extends Thread {
                 "Password Salt", "Available Balance", "Total Balance", "Transfer Limit", "IsAdmin"));
         */
         SQLQueries q = new SQLQueries();
-<<<<<<< HEAD
         ArrayList<String[]> data = q.getTopAccountsForAdmin();
         /*
-=======
-        ArrayList<String[]> data = q.getTopAccountsForAdmin();
->>>>>>> 9a4240566317a00631df1e8b84b98c8f51aedb2a
         for (String[] i : data) {
             System.out.println(String.format("%25s %25s %25s %25s %25s %25s %25s %25s %25s %25s %25s",
                     i[0], i[1], i[2], i[3], i[4], i[5],
                     i[6], i[7], i[8], i[9], i[10]));
         }
-         */
+        */
         AdminTable t = new AdminTable();
         t.displayTable("Accounts", data);
         System.out.println("\nAccount data shown in a new tab.\n");
@@ -175,12 +171,8 @@ public class Server extends Thread {
                 "Deposit", "Balance"));
         */
         SQLQueries q = new SQLQueries();
-<<<<<<< HEAD
         ArrayList<String[]> data = q.getTopTransactionsForAdmin();
         /*
-=======
-        ArrayList<String[]> data = q.getTopTransactionsForAdmin();
->>>>>>> 9a4240566317a00631df1e8b84b98c8f51aedb2a
         for (String[] i : data) {
             System.out.println(String.format("%25s %25s %25s %25s %25s %25s %25s %25s %25s",
                     i[0], i[1], i[2], i[3], i[4], i[5],
