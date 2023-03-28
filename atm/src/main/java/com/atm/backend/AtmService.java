@@ -12,7 +12,9 @@ public class AtmService {
     protected static Connection conn;
     private Account acc;
     private User user;
-    private Transaction transaction;
+    private Withdraw withdrawal;
+    private Deposit deposit;
+    private Transfer transfer;
     private BufferedReader inputReader;
     private PrintWriter outputStream;
     private ArrayList<String> interactions;
@@ -21,23 +23,25 @@ public class AtmService {
         this.acc = acc;
         AtmService.conn = new DBConnection().getConnection();
         this.user = user;
-        this.transaction = new Transaction(acc, conn);
+        this.withdrawal = new Withdraw(acc, conn);
+        this.deposit = new Deposit(acc, conn);
+        this.transfer = new Transfer(conn);
         this.outputStream = outputStream;
         this.inputReader = inputReader;
         this.interactions = new ArrayList<String>();
     }
 
     private String deposit(double amount) {
-        return transaction.deposit(acc, amount);
+        return deposit.execute(acc, amount);
     }
 
     private String withdraw(double amount) throws InsufficientFundsException {
-        return transaction.withdraw(acc, amount);
+        return withdrawal.execute(acc, amount);
     }
 
     private String transfer(long transferAccNo, double amount) throws InsufficientFundsException {
         Account a2 = getTransferAccount(transferAccNo);
-        return transaction.transferToAccount(acc, a2, amount);
+        return transfer.transferToAccount(acc, a2, amount);
     }
 
     private double[] getBalance() {
@@ -151,7 +155,7 @@ public class AtmService {
             outputStream.printf("| %-40s |%n", "(5) 500");
             outputStream.printf("| %-40s |%n", "(6) 1000");
             outputStream.printf("| %-40s |%n", "(7) Custom Amount");
-            outputStream.printf("%s%n%n", "-".repeat(44));
+            outputStream.printf("%s%n%n", "-".repeat(40));
             outputStream.print("Please enter an option: ");
             try {
                 int userinput = Integer.parseInt(getUserInput());
@@ -193,7 +197,7 @@ public class AtmService {
                     outputStream.printf("| %-40s |%n", "(2) 2000");
                     outputStream.printf("| %-40s |%n", "(3) 5000");
                     outputStream.printf("| %-40s |%n", "(4) 10000");
-                    outputStream.printf("%s%n%n", "-".repeat(44));
+                    outputStream.printf("%s%n%n", "-".repeat(40));
 
                     outputStream.print("Please enter an option: ");
 

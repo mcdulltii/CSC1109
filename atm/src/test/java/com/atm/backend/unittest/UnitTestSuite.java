@@ -21,7 +21,8 @@ import com.atm.backend.User;
         AccUserObjTest.class,
         AuthenticateTest.class,
         SettingsTest.class,
-        TransactionTest.class
+        WithdrawTest.class,
+        DepositTest.class
 })
 public class UnitTestSuite {
     MockObjects mock;
