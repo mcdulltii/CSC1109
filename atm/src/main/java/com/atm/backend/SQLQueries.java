@@ -296,9 +296,22 @@ public class SQLQueries {
         return password;
     }
 
+    // Retrieves account data for Admin
+    // If cardNumber is specified, only for the account with that Card Number
+    // Otherwise, retrieves for all accounts
+    // 
+    // # Arguments
+    // 
+    // * `cardNumber` - Card Number of User
+    //
+    // # Return Value
+    //
+    // ArrayList of account data
     public ArrayList<String[]> getTopAccountsForAdmin(String cardNumber) {
         String sql;
+        // Get account details for all accounts
         if (cardNumber.isEmpty()) sql = "SELECT * FROM accounts LIMIT 100";
+        // Get account details for one account
         else sql = "SELECT * FROM accounts WHERE CardNumber = \"" + cardNumber + "\"";
         ResultSet rs = executeQuery(sql);
         ArrayList<String[]> accountsList = new ArrayList<String[]>();
@@ -324,9 +337,22 @@ public class SQLQueries {
         return accountsList;
     }
 
+    // Retrieves transaction data for Admin
+    // If cardNumber is specified, only for the account with that Card Number
+    // Otherwise, retrieves for all accounts
+    // 
+    // # Arguments
+    // 
+    // * `cardNumber` - Card Number of User
+    //
+    // # Return Value
+    //
+    // ArrayList of transaction data
     public ArrayList<String[]> getTopTransactionsForAdmin(String cardNumber) {
         String sql;
+        //get Transaction data for all users
         if (cardNumber.isEmpty()) sql = "SELECT * FROM transactions ORDER BY transactionId desc LIMIT 100";
+        //get Transaction data for one user
         else sql = "SELECT * FROM transactions WHERE AccountNumber = (SELECT AccountNumber FROM accounts WHERE CardNumber = \"" + cardNumber + "\") ORDER BY transactionId desc LIMIT 100";
         ResultSet rs = executeQuery(sql);
         ArrayList<String[]> transactionsList = new ArrayList<String[]>();

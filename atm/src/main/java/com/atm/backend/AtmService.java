@@ -226,6 +226,7 @@ public class AtmService {
         }
     }
 
+    // Prints a list of main functions for the user to choose
     public void selectionMenu() {
         outputStream.printf("%n---------- %s ----------%n", "Available Services");
         outputStream.printf("| %-36s |%n", "(0) Exit");
@@ -241,6 +242,11 @@ public class AtmService {
         outputStream.print("Please enter an option: ");
     }
 
+    // Triggers different functions based on what the user wishes to do
+    // 
+    // # Arguments
+    // 
+    // * `option` - user's choice of function
     public void selection(int option) {
         switch (option) {
             case 0:
