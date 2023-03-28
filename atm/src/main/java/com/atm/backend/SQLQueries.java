@@ -296,8 +296,8 @@ public class SQLQueries {
         return password;
     }
 
-    public ArrayList<String[]> getAllAccountsForAdmin() {
-        String sql = "SELECT * FROM accounts";
+    public ArrayList<String[]> getTopAccountsForAdmin() {
+        String sql = "SELECT * FROM accounts LIMIT 100";
         ResultSet rs = executeQuery(sql);
         ArrayList<String[]> accountsList = new ArrayList<String[]>();
         try {
@@ -322,8 +322,8 @@ public class SQLQueries {
         return accountsList;
     }
 
-    public ArrayList<String[]> getAllTransactionsForAdmin() {
-        String sql = "SELECT * FROM transactions";
+    public ArrayList<String[]> getTopTransactionsForAdmin() {
+        String sql = "SELECT * FROM transactions LIMIT 100";
         ResultSet rs = executeQuery(sql);
         ArrayList<String[]> transactionsList = new ArrayList<String[]>();
         try {

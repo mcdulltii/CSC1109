@@ -2,7 +2,6 @@ package com.atm;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -49,7 +48,6 @@ public class Server extends Thread {
             serverSocket.close();
         } catch (IOException e) {
             System.out.println("Unable to close server.");
-            ;
         }
         this.interrupt();
     }
@@ -64,7 +62,6 @@ public class Server extends Thread {
                 handler.start();
             } catch (IOException e) {
                 System.out.println("Error when waiting for connection.");
-                ;
             } catch (IllegalThreadStateException e) {
                 System.out.println("Thread has already started.");
             }
@@ -154,8 +151,12 @@ public class Server extends Thread {
                 "Password Salt", "Available Balance", "Total Balance", "Transfer Limit", "IsAdmin"));
         */
         SQLQueries q = new SQLQueries();
-        ArrayList<String[]> data = q.getAllAccountsForAdmin();
+<<<<<<< HEAD
+        ArrayList<String[]> data = q.getTopAccountsForAdmin();
         /*
+=======
+        ArrayList<String[]> data = q.getTopAccountsForAdmin();
+>>>>>>> 9a4240566317a00631df1e8b84b98c8f51aedb2a
         for (String[] i : data) {
             System.out.println(String.format("%25s %25s %25s %25s %25s %25s %25s %25s %25s %25s %25s",
                     i[0], i[1], i[2], i[3], i[4], i[5],
@@ -174,8 +175,12 @@ public class Server extends Thread {
                 "Deposit", "Balance"));
         */
         SQLQueries q = new SQLQueries();
-        ArrayList<String[]> data = q.getAllTransactionsForAdmin();
+<<<<<<< HEAD
+        ArrayList<String[]> data = q.getTopTransactionsForAdmin();
         /*
+=======
+        ArrayList<String[]> data = q.getTopTransactionsForAdmin();
+>>>>>>> 9a4240566317a00631df1e8b84b98c8f51aedb2a
         for (String[] i : data) {
             System.out.println(String.format("%25s %25s %25s %25s %25s %25s %25s %25s %25s",
                     i[0], i[1], i[2], i[3], i[4], i[5],
@@ -207,7 +212,6 @@ class ThreadClientHandler extends Thread {
             s = inputReader.readLine();
         } catch (IOException e) {
             System.out.println("Unable to read user input.");
-            ;
         }
         return s.strip();
     }
@@ -308,7 +312,6 @@ class ThreadClientHandler extends Thread {
             clientSocket.close();
         } catch (IOException e) {
             System.out.println("Unable to close connection.");
-            ;
         }
     }
 
