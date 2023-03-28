@@ -34,6 +34,8 @@ public abstract class Transaction {
         this.balance = balance;
     }
 
+    public Transaction(){};
+
     protected String getAccountNumber() {
         return accountNumber;
     }

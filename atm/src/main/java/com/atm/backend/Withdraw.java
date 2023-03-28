@@ -13,6 +13,7 @@ public class Withdraw extends Transaction{
         this.withdrawal = withdrawal;
     }
 
+    public Withdraw(){};
     
     public Withdraw(Account a1, Connection conn) {
         // to add more fields

@@ -18,9 +18,12 @@ public class Deposit extends Transaction{
         super(a1, conn);
     }
 
+    public Deposit(){};
+
     public double getDeposit(){
         return deposit;
     }
+
     protected String execute(Account a1, double amount) {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount has to be positive.");

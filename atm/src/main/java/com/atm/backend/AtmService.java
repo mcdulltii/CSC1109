@@ -26,7 +26,7 @@ public class AtmService {
         this.user = user;
         this.withdrawal = new Withdraw(acc, conn);
         this.deposit = new Deposit(acc, conn);
-        this.transfer = new Transfer();
+        this.transfer = new Transfer(withdrawal, deposit);
         this.outputStream = outputStream;
         this.inputReader = inputReader;
         this.interactions = new ArrayList<String>();
