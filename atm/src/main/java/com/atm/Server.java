@@ -122,7 +122,7 @@ public class Server extends Thread {
                 System.out.println("Welcome Admin!");
                 while (true) {
                     System.out.println(
-                            "Available Options:\n(1) Display first 100 accounts\n(2) Display first 100 transactions\n(0) Logout admin");
+                            "Available Options:\n(1) Display first 100 accounts\n(2) Display first 100 transactions\n(3) Display account details from Card Number\n(4) Display first 100 transactions from Card Number\n(0) Logout admin");
                     System.out.print("Enter option: ");
                     int choice = sc.nextInt();
                     sc.nextLine();
@@ -132,6 +132,16 @@ public class Server extends Thread {
                             break;
                         case 2:
                             printAllTransactions();
+                            break;
+                        case 3:
+                            System.out.println("Enter card number:");
+                            Long lng = sc.nextLong();
+                            printAccountFromCardNo(lng);
+                            break;
+                        case 4:
+                            System.out.println("Enter card number:");
+                            Long lng2 = sc.nextLong();
+                            printTransactionFromCardNo(lng2);
                             break;
                         case 0:
                             System.out.println("\nLogout Successful!\n");
@@ -146,17 +156,33 @@ public class Server extends Thread {
 
     private static void printAllAccounts() {
         SQLQueries q = new SQLQueries();
-        ArrayList<String[]> data = q.getTopAccountsForAdmin();
+        ArrayList<String[]> data = q.getTopAccountsForAdmin("");
         AdminTable adminTable = new AdminTable();
-        adminTable.displayTable("Accounts", data);
+        adminTable.displayTable("Account Details", data);
         System.out.println("\nAccount data shown in a new tab.\n");
     }
 
     private static void printAllTransactions() {
         SQLQueries q = new SQLQueries();
-        ArrayList<String[]> data = q.getTopTransactionsForAdmin();
+        ArrayList<String[]> data = q.getTopTransactionsForAdmin("");
         AdminTable adminTable = new AdminTable();
-        adminTable.displayTable("Transactions", data);
+        adminTable.displayTable("Transaction Details", data);
+        System.out.println("\nTransaction data shown in a new tab.\n");
+    }
+
+    private static void printAccountFromCardNo(Long lng) {
+        SQLQueries q = new SQLQueries();
+        ArrayList<String[]> data = q.getTopAccountsForAdmin(lng + "");
+        AdminTable adminTable = new AdminTable();
+        adminTable.displayTable("Account Details", data);
+        System.out.println("\nAccount data shown in a new tab.\n");
+    }
+
+    private static void printTransactionFromCardNo(Long lng) {
+        SQLQueries q = new SQLQueries();
+        ArrayList<String[]> data = q.getTopTransactionsForAdmin(lng + "");
+        AdminTable adminTable = new AdminTable();
+        adminTable.displayTable("Transaction Details", data);
         System.out.println("\nTransaction data shown in a new tab.\n");
     }
 }

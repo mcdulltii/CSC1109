@@ -13,16 +13,16 @@ import javax.swing.table.TableModel;
 
 public class AdminTable extends JFrame {
 
-    public void displayTable(String s, ArrayList<String[]> data) {
+    public void displayTable(String type, ArrayList<String[]> data) {
         // headers for the table
         String[] headers = {};
-        if (s.equalsIgnoreCase("Accounts")) {
+        if (type.equalsIgnoreCase("Account Details")) {
             headers = new String[] {
                     "Card Number", "Account Number", "Username", "Password", "First Name", "Last Name", "Password Salt",
                     "Available Balance", "Total Balance",
                     "Transfer Limit", "IsAdmin"
             };
-        } else if (s.equalsIgnoreCase("Transactions")) {
+        } else if (type.equalsIgnoreCase("Transaction Details")) {
             headers = new String[] {
                     "Transaction ID", "Account Number", "Transaction Date", "Transaction Details", "Cheque Number",
                     "Date", "Withdrawal", "Deposit", "Balance"
@@ -62,8 +62,7 @@ public class AdminTable extends JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         this.add(new JScrollPane(table));
-        this.setTitle(s);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setTitle(type);
         this.pack();
         this.setVisible(true);
     }
