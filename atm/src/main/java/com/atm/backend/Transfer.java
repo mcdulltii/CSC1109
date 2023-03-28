@@ -13,6 +13,17 @@ public class Transfer {
         this.conn = conn;
     }
 
+    // Updates accounts and transaction tables in database after transfer using Withdraw and Deposit objects
+    //
+    // # Arguments
+    //
+    // * `a1` - Sender Account  
+    // * `a2` - Receiver Account
+    // * `amount` - Transfer amount
+    //
+    // # Return String
+    //
+    // Successful message 
     protected String transferToAccount(Account a1, Account a2, double amount) throws InsufficientFundsException {
         if (amount > a1.getAvailableBalance()) {
             throw new InsufficientFundsException(-(a1.getAvailableBalance() - amount));
