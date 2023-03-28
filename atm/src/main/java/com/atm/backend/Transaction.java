@@ -15,16 +15,14 @@ public abstract class Transaction {
     protected SQLQueries q;
 
     public Transaction(Account a1, Connection conn) {
-        // to add more fields
         this.a1 = a1;
         this.transactionDate = new Date();
         this.conn = conn;
         this.q = new SQLQueries(this.conn);
     }
 
-    Transaction(Account a1, String accountNumber, String transactionDetails,
+    public Transaction(Account a1, String accountNumber, String transactionDetails,
             String chqNumber, java.sql.Date valueDate, Double balance) {
-        // to add more fields
         this.a1 = a1;
         this.accountNumber = accountNumber;
         this.transactionDate = new Date();
@@ -33,8 +31,6 @@ public abstract class Transaction {
         this.valueDate = valueDate;
         this.balance = balance;
     }
-
-    public Transaction(){};
 
     protected String getAccountNumber() {
         return accountNumber;
@@ -75,7 +71,6 @@ public abstract class Transaction {
     }
     
     protected abstract String execute(Account a1, double amount) throws InsufficientFundsException;
-
 }
 
 class InsufficientFundsException extends Exception {

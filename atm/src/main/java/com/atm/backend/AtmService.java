@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -26,7 +25,7 @@ public class AtmService {
         this.user = user;
         this.withdrawal = new Withdraw(acc, conn);
         this.deposit = new Deposit(acc, conn);
-        this.transfer = new Transfer(withdrawal, deposit);
+        this.transfer = new Transfer(this.withdrawal, this.deposit);
         this.outputStream = outputStream;
         this.inputReader = inputReader;
         this.interactions = new ArrayList<String>();

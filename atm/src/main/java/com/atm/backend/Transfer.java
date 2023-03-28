@@ -7,9 +7,9 @@ public class Transfer{
     private Withdraw withdrawal;
     private Deposit deposit;
 
-    Transfer (Withdraw withdrawal, Deposit deposit){
-        this.withdrawal = new Withdraw();
-        this.deposit = new Deposit();
+    public Transfer(Withdraw withdrawal, Deposit deposit){
+        this.withdrawal = withdrawal;
+        this.deposit = deposit;
     }
 
     protected String transferToAccount(Account a1, Account a2, double amount) throws InsufficientFundsException {
@@ -29,5 +29,4 @@ public class Transfer{
 
         return "Tranfer is Successful";
     }
-
 }

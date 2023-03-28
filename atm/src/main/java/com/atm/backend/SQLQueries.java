@@ -62,8 +62,6 @@ public class SQLQueries {
         }
     }
 
-
-
     // Update accounts table based on selected action (Deposit/Withdraw)
     protected void executeQueryAccounts(Account a1, Account a2) {
         String updateQuery = "UPDATE accounts SET TotalBalance = ?, AvailableBalance = ?, TransferLimit = ? WHERE AccountNumber = ?";

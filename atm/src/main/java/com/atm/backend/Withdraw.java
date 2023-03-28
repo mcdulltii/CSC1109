@@ -7,16 +7,13 @@ public class Withdraw extends Transaction{
     private Double withdrawal;
     private Double deposit = 0.0;
 
-    Withdraw(Account a1, String accountNumber, String transactionDetails,
+    public Withdraw(Account a1, String accountNumber, String transactionDetails,
             String chqNumber, java.sql.Date valueDate, Double withdrawal, Double deposit, Double balance) {
-        super(a1, accountNumber,transactionDetails,chqNumber,valueDate,balance);
+        super(a1, accountNumber, transactionDetails, chqNumber, valueDate, balance);
         this.withdrawal = withdrawal;
     }
 
-    public Withdraw(){};
-    
     public Withdraw(Account a1, Connection conn) {
-        // to add more fields
         super(a1, conn);
     }
 
@@ -38,12 +35,11 @@ public class Withdraw extends Transaction{
         a1.setAvailableBalance(newAvailableBalance);
 
         // Update transactions
-        q.executeQueryTransactions(a1.getAccountNumber(),new java.sql.Date(super.getTransactionDate().getTime()), "ATM WITHDRAWAL/TRF", UUID.randomUUID().toString(), amount, deposit, newTotalBalance);
+        q.executeQueryTransactions(a1.getAccountNumber(), new java.sql.Date(super.getTransactionDate().getTime()), "ATM WITHDRAWAL/TRF", UUID.randomUUID().toString(), amount, deposit, newTotalBalance);
 
         // Update account balance
         q.executeQueryAccounts(a1, null);
 
         return "Withdraw Successful";
     }
-
 }
