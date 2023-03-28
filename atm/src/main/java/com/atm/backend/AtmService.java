@@ -156,7 +156,7 @@ public class AtmService {
             outputStream.printf("| %-40s |%n", "(5) 500");
             outputStream.printf("| %-40s |%n", "(6) 1000");
             outputStream.printf("| %-40s |%n", "(7) Custom Amount");
-            outputStream.printf("%s%n%n", "-".repeat(44));
+            outputStream.printf("%s%n%n", "-".repeat(40));
             outputStream.print("Please enter an option: ");
             try {
                 int userinput = Integer.parseInt(getUserInput());
@@ -198,7 +198,7 @@ public class AtmService {
                     outputStream.printf("| %-40s |%n", "(2) 2000");
                     outputStream.printf("| %-40s |%n", "(3) 5000");
                     outputStream.printf("| %-40s |%n", "(4) 10000");
-                    outputStream.printf("%s%n%n", "-".repeat(44));
+                    outputStream.printf("%s%n%n", "-".repeat(40));
 
                     outputStream.print("Please enter an option: ");
 
