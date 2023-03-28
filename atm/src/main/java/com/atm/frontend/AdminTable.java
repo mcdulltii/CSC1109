@@ -3,6 +3,7 @@ package com.atm.frontend;
 import java.util.ArrayList;
 
 import java.awt.Dimension;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -11,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 public class AdminTable extends JFrame {
-    
+
     public void displayTable(String s, ArrayList<String[]> data) {
         // headers for the table
         String[] headers = {};
@@ -27,11 +28,8 @@ public class AdminTable extends JFrame {
                     "Date", "Withdrawal", "Deposit", "Balance"
             };
         }
-        
+
         // format data
-        //String[] tmp = data.split(",");
-        //int countMax = headers.length;
-        //int rowNum = (tmp.length-1)/countMax;
         String[][] formattedData = new String[data.size()][];
         for (int i = 0; i<data.size(); i++) {
             formattedData[i] = data.get(i);
@@ -49,14 +47,24 @@ public class AdminTable extends JFrame {
                 return new Dimension(super.getPreferredSize().width,
                     getRowHeight() * data.size());
             }
+            
+            @Override
+            public boolean getScrollableTracksViewportWidth()
+            {
+                return getPreferredSize().width < getParent().getWidth();
+            }
         };
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        
+
+        // set frame size
+        Dimension DimMax = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setMaximumSize(DimMax);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         this.add(new JScrollPane(table));
         this.setTitle(s);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);  
-        this.pack();     
-        //this.setSize(1280, 760);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.pack();
         this.setVisible(true);
     }
 }

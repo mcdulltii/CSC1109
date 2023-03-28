@@ -337,10 +337,10 @@ public class SQLQueries {
                             data[i] = rs.getString(i+1) + "";
                             break;
                         case 1: // get AccountNumber
-                        case 5: // get valueDate
                             data[i] = rs.getLong(i+1) + "";
                             break;
                         case 2: // get transactionDate
+                        case 5: // get valueDate
                             data[i] = rs.getDate(i+1) + "";
                             break;
                         case 6: // get withdrawal
