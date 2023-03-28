@@ -51,6 +51,11 @@ public class Authenticate {
         return this.hashString(password, passwordSalt).equals(q.getPasswordfromCardNumber(cardNumber));
     }
 
+    // Get number of login tries
+    //
+    // # Return value
+    //
+    // Number of login tries
     public int getNumTries() {
         return this.numTries;
     }
