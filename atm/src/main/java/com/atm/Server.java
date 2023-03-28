@@ -134,12 +134,12 @@ public class Server extends Thread {
                             printAllTransactions();
                             break;
                         case 3:
-                            System.out.println("Enter card number:");
+                            System.out.print("Enter card number: ");
                             Long lng = sc.nextLong();
                             printAccountFromCardNo(lng);
                             break;
                         case 4:
-                            System.out.println("Enter card number:");
+                            System.out.print("Enter card number: ");
                             Long lng2 = sc.nextLong();
                             printTransactionFromCardNo(lng2);
                             break;
