@@ -15,7 +15,7 @@ public class Deposit extends Transaction{
 
     public Deposit(Account a1, Connection conn) {
         // to add more fields
-        super(a1, null);
+        super(a1, conn);
     }
 
     public double getDeposit(){

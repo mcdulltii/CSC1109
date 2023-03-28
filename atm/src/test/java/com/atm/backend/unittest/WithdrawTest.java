@@ -69,7 +69,7 @@ public class WithdrawTest {
         verify(uts.mock.connection).prepareStatement(
                 "INSERT INTO transactions (transactionId, accountNumber, transactionDate, transactionDetails, chqNumber, valueDate, withdrawal, deposit, balance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         verify(uts.mock.preStatement).setString(2, (String) getAccountNumber.invoke(uts.acc));
-        verify(uts.mock.preStatement).setString(4, "ATM WITHDRAWAL");
+        verify(uts.mock.preStatement).setString(4, "ATM WITHDRAWAL/TRF");
         verify(uts.mock.preStatement).setDouble(7, 50);
         verify(uts.mock.preStatement).setDouble(9, 149950);
 

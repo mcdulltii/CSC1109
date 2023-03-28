@@ -16,7 +16,7 @@ public class Withdraw extends Transaction{
     
     public Withdraw(Account a1, Connection conn) {
         // to add more fields
-        super(a1, null);
+        super(a1, conn);
     }
 
     public double getWithdrawal(){
