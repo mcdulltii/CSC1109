@@ -18,11 +18,31 @@ public class Authenticate {
         this.numTries = 0;
     }
 
+    // Encrypts password string and salt with SHA256
+    //
+    // # Arguments
+    //
+    // * `str` - User password
+    // * `salt` - Password salt
+    //
+    // # Return value
+    //
+    // Encrypted password hash string
     public String hashString(String str, byte[] salt) {
         // Hash input string and salt with SHA256
         return encryptSHA256(str, salt);
     }
 
+    // Checks whether password matches encrypted password
+    //
+    // # Arguments
+    //
+    // * `cardNumber` - User card number
+    // * `password` - User password
+    //
+    // # Return value
+    //
+    // true if password matches encrypted password, else false
     public Boolean checkPassword(String cardNumber, String password) {
         // Increment number of login tries
         this.numTries++;
@@ -35,6 +55,16 @@ public class Authenticate {
         return this.numTries;
     }
 
+    // Encrypts password string and salt with SHA256
+    //
+    // # Arguments
+    //
+    // * `password` - User password
+    // * `salt` - Password salt
+    //
+    // # Return value
+    //
+    // Encrypted password hash string
     private String encryptSHA256(String password, byte[] salt) {
         String sha256 = "";
         byte[] passwordStr = {};
@@ -61,6 +91,11 @@ public class Authenticate {
         return sha256;
     }
 
+    // Randomly generates a password salt
+    //
+    // # Return value
+    //
+    // Password salt of length 16
     protected byte[] getRandomNonce() {
         byte[] nonce = new byte[16];
         // Generate nonce of length 16
@@ -68,6 +103,15 @@ public class Authenticate {
         return nonce;
     }
 
+    // Randomly generates a password salt
+    //
+    // # Arguments
+    //
+    // * `numBytes` - Length of password salt
+    //
+    // # Return value
+    //
+    // Password salt of length numBytes
     protected byte[] getRandomNonce(int numBytes) {
         byte[] nonce = new byte[numBytes];
         // Generate nonce of length `numBytes`
@@ -75,6 +119,15 @@ public class Authenticate {
         return nonce;
     }
 
+    // Converts a byte array to a hex string
+    //
+    // # Arguments
+    //
+    // * `hash` - Encrypted password hash byte array
+    //
+    // # Return value
+    //
+    // Hash string
     private String byteToHex(final byte[] hash) {
         Formatter formatter = new Formatter();
 
