@@ -1,15 +1,12 @@
 package com.atm.frontend;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -57,28 +54,9 @@ public class AdminTable extends JFrame {
         
         this.add(new JScrollPane(table));
         this.setTitle(s);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);  
         this.pack();     
         //this.setSize(1280, 760);
         this.setVisible(true);
     }
-    
-    public static void main(String[] args) {
-        ArrayList<String[]> data = new ArrayList<>();
-        data.add(new String[] {
-                "Card Number", "Account Number", "Username", "Password", "First Name", "Last Name", "Password Salt",
-                "Available Balance", "Total Balance",
-                "Transfer Limit", "IsAdmin"
-        });
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                AdminTable t = new AdminTable();
-                t.displayTable("Accounts", data);
-            }
-        });
-        thread.start();
-    }
-
 }
-

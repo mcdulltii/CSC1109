@@ -145,42 +145,18 @@ public class Server extends Thread {
     }
 
     private static void printAllAccounts() {
-        /*
-        System.out.println(String.format("%25s %25s %25s %25s %25s %25s %25s %25s %25s %25s %25s", "Card Number",
-                "Account Number", "Username", "Password", "First Name", "Last Name",
-                "Password Salt", "Available Balance", "Total Balance", "Transfer Limit", "IsAdmin"));
-        */
         SQLQueries q = new SQLQueries();
         ArrayList<String[]> data = q.getTopAccountsForAdmin();
-        /*
-        for (String[] i : data) {
-            System.out.println(String.format("%25s %25s %25s %25s %25s %25s %25s %25s %25s %25s %25s",
-                    i[0], i[1], i[2], i[3], i[4], i[5],
-                    i[6], i[7], i[8], i[9], i[10]));
-        }
-        */
-        AdminTable t = new AdminTable();
-        t.displayTable("Accounts", data);
+        AdminTable adminTable = new AdminTable();
+        adminTable.displayTable("Accounts", data);
         System.out.println("\nAccount data shown in a new tab.\n");
     }
 
     private static void printAllTransactions() {
-        /*
-        System.out.println(String.format("%25s %25s %25s %25s %25s %25s %25s %25s %25s", "Transaction ID",
-                "Account Number", "Transaction Date", "Transaction Details", "Chq Number", "Value Date", "Withdrawal",
-                "Deposit", "Balance"));
-        */
         SQLQueries q = new SQLQueries();
         ArrayList<String[]> data = q.getTopTransactionsForAdmin();
-        /*
-        for (String[] i : data) {
-            System.out.println(String.format("%25s %25s %25s %25s %25s %25s %25s %25s %25s",
-                    i[0], i[1], i[2], i[3], i[4], i[5],
-                    i[6], i[7], i[8]));
-        }
-        */
-        AdminTable t = new AdminTable();
-        t.displayTable("Transactions", data);
+        AdminTable adminTable = new AdminTable();
+        adminTable.displayTable("Transactions", data);
         System.out.println("\nTransaction data shown in a new tab.\n");
     }
 }
