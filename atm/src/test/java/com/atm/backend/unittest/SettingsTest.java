@@ -66,6 +66,7 @@ public class SettingsTest {
         String pinNum = "234567";
         usrSettings.setPinNumber(pinNum);
 
+        // Verify queries statement is made with right arguments
         verify(uts.mock.connection).prepareStatement("UPDATE accounts SET Password = ? WHERE AccountNumber = ?");
         verify(uts.mock.preStatement).setString(1, (String) getPin.invoke(uts.user));
         verify(uts.mock.connection).prepareStatement("UPDATE accounts SET PasswordSalt = ? WHERE AccountNumber = ?");
@@ -80,6 +81,7 @@ public class SettingsTest {
     public void testSetTransferLimit() throws SQLException, IllegalAccessException, InvocationTargetException {
         accSettings.setTransferLimit(5000);
 
+        // Verify queries statement is made with right arguments
         verify(uts.mock.connection).prepareStatement("UPDATE accounts SET TransferLimit = ? WHERE AccountNumber = ?");
         verify(uts.mock.preStatement).setDouble(1, (double) getTransferLimit.invoke(uts.acc));
         verify(uts.mock.preStatement).setLong(2, Long.parseLong((String) getAccountNumber.invoke(uts.acc)));
