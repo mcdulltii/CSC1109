@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.sql.*;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -293,6 +294,72 @@ public class SQLQueries {
         }
 
         return password;
+    }
+
+    public ArrayList<String[]> getTopAccountsForAdmin(String cardNumber) {
+        String sql;
+        if (cardNumber.isEmpty()) sql = "SELECT * FROM accounts LIMIT 100";
+        else sql = "SELECT * FROM accounts WHERE CardNumber = \"" + cardNumber + "\"";
+        ResultSet rs = executeQuery(sql);
+        ArrayList<String[]> accountsList = new ArrayList<String[]>();
+        try {
+            while (rs.next()) {
+                String[] data = new String[11];
+                data[0] = rs.getLong(1) + ""; //get CardNumber
+                data[1] = rs.getLong(2) + ""; //get AccountNumber
+                data[2] = rs.getString(3) + ""; //get Username
+                data[3] = rs.getString(4) + ""; //get Password
+                data[4] = rs.getString(5) + ""; //get FirstName
+                data[5] = rs.getString(6) + ""; //get LastName
+                data[6] = rs.getBytes(7) + ""; //get PasswordSalt
+                data[7] = rs.getFloat(8) + ""; //get AvailableBalance
+                data[8] = rs.getFloat(9) + ""; //get TotalBalance
+                data[9] = rs.getFloat(10) + "";//get TransferLimit
+                data[10] = rs.getBoolean(11) + ""; //get IsAdmin
+                accountsList.add(data);
+            }
+        } catch (SQLException e) {
+            System.out.println("Please check column label and database connection.");
+        }
+        return accountsList;
+    }
+
+    public ArrayList<String[]> getTopTransactionsForAdmin(String cardNumber) {
+        String sql;
+        if (cardNumber.isEmpty()) sql = "SELECT * FROM transactions ORDER BY transactionId desc LIMIT 100";
+        else sql = "SELECT * FROM transactions WHERE AccountNumber = (SELECT AccountNumber FROM accounts WHERE CardNumber = \"" + cardNumber + "\") ORDER BY transactionId desc LIMIT 100";
+        ResultSet rs = executeQuery(sql);
+        ArrayList<String[]> transactionsList = new ArrayList<String[]>();
+        try {
+            while (rs.next()) {
+                String[] data = new String[9];
+                for (int i = 0; i < data.length; i++) {
+                    switch (i) {
+                        case 0: // get transactionId
+                        case 3: // get transactionDetails
+                        case 4: // get chqNumber
+                            data[i] = rs.getString(i+1) + "";
+                            break;
+                        case 1: // get AccountNumber
+                            data[i] = Long.toString(rs.getLong(i+1));
+                            break;
+                        case 2: // get transactionDate
+                        case 5: // get valueDate
+                            data[i] = rs.getDate(i+1) + "";
+                            break;
+                        case 6: // get withdrawal
+                        case 7: // get deposit
+                        case 8: // get balance
+                            data[i] = Float.toString(rs.getFloat(i+1));
+                            break;
+                    }
+                }
+                transactionsList.add(data);
+            }
+        } catch (SQLException e) {
+            System.out.println("Please check column label and database connection.");
+        }
+        return transactionsList; 
     }
 
     public String importAdminAccount() {
