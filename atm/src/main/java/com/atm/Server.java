@@ -28,11 +28,11 @@ import net.sourceforge.argparse4j.inf.Namespace;
 
 public class Server extends Thread {
     private ServerSocket serverSocket;
-    // Starts the server at the port
-    // 
-    // Arguments
-    // 
-    // \param port port number for the server to be hosted on
+    /// Starts the server at the port
+    ///
+    /// Arguments
+    ///
+    /// \param port port number for the server to be hosted on
     public void start(int port) {
         try {
             serverSocket = new ServerSocket(port);
@@ -46,7 +46,7 @@ public class Server extends Thread {
             ;
         }
     }
-    // Stops the server
+    /// Stops the server
     public void stopServer() {
         try {
             serverSocket.close();
@@ -91,7 +91,7 @@ public class Server extends Thread {
             System.exit(0);
         }
 
-        // Start the server
+        /// Start the server
         Server s = new Server();
         s.start(ns.getInt("port"));
 
@@ -105,7 +105,7 @@ public class Server extends Thread {
             System.out.println("Import Accounts File not found.");
         }
 
-        // Optionally only partially retrieves transaction details
+        /// Optionally only partially retrieves transaction details
         Boolean isPartial = ns.getBoolean("partial");
         try {
             /// Import transactions table
@@ -123,48 +123,48 @@ public class Server extends Thread {
         Connection conn = new DBConnection().getConnection();
         Authenticate au = new Authenticate(conn);
         login: while (true) {
-            // Login for admin
+            /// Login for admin
             System.out.print("Enter admin password: ");
             String password = sc.nextLine().strip();
             byte[] passwordSalt = q.getAdminPasswordSalt();
             if (au.hashString(password, passwordSalt).equals(adminPassword)) {
-                // Admin is successfully logged in
+                /// Admin is successfully logged in
                 System.out.println("Welcome Admin!");
                 while (true) {
-                    // Print options for admin to use
+                    /// Print options for admin to use
                     System.out.println(
                             "Available Options:\n(1) Display first 100 accounts\n(2) Display first 100 transactions\n(3) Display account details from Card Number\n(4) Display first 100 transactions from Card Number\n(0) Logout admin");
                     System.out.print("Enter option: ");
-                    // Get admin's choice of function
+                    /// Get admin's choice of function
                     int choice = sc.nextInt();
                     sc.nextLine();
                     switch (choice) {
                         case 1:
-                            // Print account details of all accounts
+                            /// Print account details of all accounts
                             printAllAccounts();
                             break;
                         case 2:
-                            // Print transaction details of latest 100 transactions
+                            /// Print transaction details of latest 100 transactions
                             printAllTransactions();
                             break;
                         case 3:
-                            // Print account details of a user 
+                            /// Print account details of a user
                             System.out.print("Enter card number: ");
                             Long lng = sc.nextLong();
                             printAccountFromCardNo(lng);
                             break;
                         case 4:
-                            // Print transaction history of a user
+                            /// Print transaction history of a user
                             System.out.print("Enter card number: ");
                             Long lng2 = sc.nextLong();
                             printTransactionFromCardNo(lng2);
                             break;
                         case 0:
-                            // Logs out the admin, but keeps the server running
+                            /// Logs out the admin, but keeps the server running
                             System.out.println("\nLogout Successful!\n");
                             continue login;
                         default:
-                            // Invalid Option
+                            /// Invalid Option
                             System.out.println("\nInvalid choice! Please choose again!\n");
                     }
                 }
@@ -172,7 +172,7 @@ public class Server extends Thread {
         }
     }
 
-    // Prints all accounts in a separate JFrame Table 
+    /// Prints all accounts in a separate JFrame Table
     private static void printAllAccounts() {
         SQLQueries q = new SQLQueries();
         ArrayList<String[]> data = q.getTopAccountsForAdmin("");
@@ -181,7 +181,7 @@ public class Server extends Thread {
         System.out.println("\nAccount data shown in a new tab.\n");
     }
 
-    // Prints all transactions in a separate JFrame Table
+    /// Prints all transactions in a separate JFrame Table
     private static void printAllTransactions() {
         SQLQueries q = new SQLQueries();
         ArrayList<String[]> data = q.getTopTransactionsForAdmin("");
@@ -190,11 +190,11 @@ public class Server extends Thread {
         System.out.println("\nTransaction data shown in a new tab.\n");
     }
 
-    // Prints account details for a specific user, identified by their card number
-    // 
-    // # Arguments
-    // 
-    // \param lng Card Number
+    /// Prints account details for a specific user, identified by their card number
+    ///
+    /// # Arguments
+    ///
+    /// \param lng Card Number
     private static void printAccountFromCardNo(Long lng) {
         SQLQueries q = new SQLQueries();
         ArrayList<String[]> data = q.getTopAccountsForAdmin(Long.toString(lng));
@@ -203,11 +203,11 @@ public class Server extends Thread {
         System.out.println("\nAccount data shown in a new tab.\n");
     }
 
-    // Prints transaction history for a specific user, identified by their card number
-    // 
-    // # Arguments
-    // 
-    // \param lng Card Number
+    /// Prints transaction history for a specific user, identified by their card number
+    ///
+    /// # Arguments
+    ///
+    /// \param lng Card Number
     private static void printTransactionFromCardNo(Long lng) {
         SQLQueries q = new SQLQueries();
         ArrayList<String[]> data = q.getTopTransactionsForAdmin(Long.toString(lng));
@@ -217,17 +217,17 @@ public class Server extends Thread {
     }
 }
 
-// Thread for handling multiple clients, one client per thread
+/// Thread for handling multiple clients, one client per thread
 class ThreadClientHandler extends Thread {
     private Socket clientSocket;
-    //Stream of text that the Server sends to the Client
+    /// Stream of text that the Server sends to the Client
     private PrintWriter outputStream;
-    //Reader to read text that the Client sends to the Server
+    /// Reader to read text that the Client sends to the Server
     private BufferedReader inputReader;
     /// Boolean to check if client is authenticated
     private Boolean authenticated = false;
 
-    // Default constructor
+    /// Default constructor
     public ThreadClientHandler(Socket socket) {
         this.clientSocket = socket;
     }
@@ -252,7 +252,7 @@ class ThreadClientHandler extends Thread {
 
     public void run() {
         try {
-            //setup for socket
+            /// setup for socket
             outputStream = new PrintWriter(clientSocket.getOutputStream(), true);
             inputReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         } catch (IOException e) {
@@ -344,26 +344,26 @@ class ThreadClientHandler extends Thread {
         }
     }
 
-    // Create Account object based on card number input
-    //
-    // # Arguments
-    // 
-    // \param cardNumber Card Number of User
-    //
-    // # Return Value
-    //
-    // \return Account object of user
+    /// Create Account object based on card number input
+    ///
+    /// # Arguments
+    ///
+    /// \param cardNumber Card Number of User
+    ///
+    /// # Return Value
+    ///
+    /// \return Account object of user
     private AccUserObj getCurrentUserAcc(String cardNumber) {
         SQLQueries q = new SQLQueries();
         AccUserObj currentUserAcc = q.getAccountfromCardNumber(cardNumber);
         return currentUserAcc;
     }
 
-    // Send FIN indicator to indicate end of session
-    //
-    // # Arguments
-    // 
-    // \param outputStream Stream of text that the Server sends to the Client
+    /// Send FIN indicator to indicate end of session
+    ///
+    /// # Arguments
+    ///
+    /// \param outputStream Stream of text that the Server sends to the Client
     private void endSession(PrintWriter outputStream) {
         outputStream.println("FIN");
     }

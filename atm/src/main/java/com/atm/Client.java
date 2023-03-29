@@ -22,16 +22,16 @@ class ReceivedMessage {
 
 public class Client {
     private Socket socket;
-    //Stream of text that the Client sends to the server
+    /// Stream of text that the Client sends to the server
     private PrintStream outputStream;
-    //Reader to read text that the Server sends to the client
+    /// Reader to read text that the Server sends to the client
     private BufferedReader inputReader;
     /// Boolean to check if client is in GUI or CLI mode
     private Boolean isCLI;
     /// Number of login tries
     private int numTries;
 
-    //Default Constructer for Client for CLI
+    /// Default Constructer for Client for CLI
     public Client(String ip, int port)  {
         this.numTries = 0;
         /// Initialize client as CLI mode
@@ -44,10 +44,10 @@ public class Client {
             System.out.println("Port parameter is out of range.");
         } catch (IOException e) {
             System.out.println("Unable to create socket.");
-        } 
+        }
     }
 
-    //Constructor for Client for GUI
+    /// Constructor for Client for GUI
     public Client(String ip, int port, Boolean isCLI) {
         this.numTries = 0;
         this.isCLI = isCLI;
@@ -59,14 +59,14 @@ public class Client {
             System.out.println("Port parameter is out of range.");
         } catch (IOException e) {
             System.out.println("Unable to create socket.");
-        } 
+        }
     }
 
-    // Creates the outputStream and inputReader for the Client
-    //
-    // # Return Value
-    // 
-    // \return True if connection is valid and started, otherwise false
+    /// Creates the outputStream and inputReader for the Client
+    ///
+    /// # Return Value
+    ///
+    /// \return True if connection is valid and started, otherwise false
     public Boolean startConnection() {
         /// Initialize socket input and output streams
         try {
@@ -82,11 +82,11 @@ public class Client {
         return true;
     }
 
-    // Handles message sent by Server 
-    //
-    // # Return Value
-    //
-    // \return ReceivedMessage Object containing if the connection is closed and the Server's message
+    /// Handles message sent by Server
+    ///
+    /// # Return Value
+    ///
+    /// \return ReceivedMessage Object containing if the connection is closed and the Server's message
     public ReceivedMessage receiveMessage() {
         String responseLine = "";
         ReceivedMessage recvMsg = new ReceivedMessage();
@@ -133,15 +133,15 @@ public class Client {
         return recvMsg;
     }
 
-    // Sends a message to the server and receives a message back
-    // 
-    // # Arguments
-    // 
-    // \param msg Message to be sent to the server
-    //
-    // # Return Value
-    //
-    // \return ReceivedMessage Object containing if the connection is closed and the Server's message 
+    /// Sends a message to the server and receives a message back
+    ///
+    /// # Arguments
+    ///
+    /// \param msg Message to be sent to the server
+    ///
+    /// # Return Value
+    ///
+    /// \return ReceivedMessage Object containing if the connection is closed and the Server's message
     public ReceivedMessage sendMessage(String msg) {
         /// Send client message to server, and retrieve server response
         outputStream.println(msg);
@@ -150,16 +150,16 @@ public class Client {
         return recvMsg;
     }
 
-    // Sends username and password to the Server for Login
-    // 
-    // # Arguments
-    // 
-    // \param username User's username for login verification
-    // \param password User's password for login verification
-    //
-    // # Return Value
-    //
-    // \return String containing the Server's message, notifying if login was successful
+    /// Sends username and password to the Server for Login
+    ///
+    /// # Arguments
+    ///
+    /// \param username User's username for login verification
+    /// \param password User's password for login verification
+    ///
+    /// # Return Value
+    ///
+    /// \return String containing the Server's message, notifying if login was successful
     public String sendUsernamePassword(String username, String password) {
         /// Send username and password to server for client authentication
         this.sendMessage(username);
@@ -168,27 +168,27 @@ public class Client {
         return recvMsg.msg;
     }
 
-    // Gets number of login tries
-    //
-    // # Return Value
-    //
-    // \return int of the number of tries the user has made to login
+    /// Gets number of login tries
+    ///
+    /// # Return Value
+    ///
+    /// \return int of the number of tries the user has made to login
     public int getNumTries() {
         return this.numTries;
     }
 
-    // Gets receipt text from Server
-    //
-    // # Return Value
-    //
-    // \return String of receipt text from Server
+    /// Gets receipt text from Server
+    ///
+    /// # Return Value
+    ///
+    /// \return String of receipt text from Server
     public String getInteractions() {
         /// Retrieve ATM receipt from server
         ReceivedMessage recvMsg = this.receiveMessage();
         return recvMsg.msg;
     }
 
-    // Closes the connection between the Client and Server
+    /// Closes the connection between the Client and Server
     public void close() {
         try {
             inputReader.close();
@@ -219,7 +219,7 @@ public class Client {
             parser.handleError(e);
             System.exit(0);
         }
-        
+
         Scanner scanner = new Scanner(System.in);
         Client client = new Client(ns.getString("host"), ns.getInt("port"));
         if (!client.startConnection())

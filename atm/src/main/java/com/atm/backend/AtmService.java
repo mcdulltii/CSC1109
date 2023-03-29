@@ -49,7 +49,7 @@ public class AtmService {
         SQLQueries q = new SQLQueries();
         Account a = q.getAccountfromAccountNumber(Long.parseLong(acc.getAccountNumber()));
         acc.setAvailableBalance(a.getAvailableBalance());
-        acc.setTotalBalance(a.getTotalBalance());   
+        acc.setTotalBalance(a.getTotalBalance());
         double[] balance = { acc.getAvailableBalance(), acc.getTotalBalance() };
         return balance;
     }
@@ -189,11 +189,11 @@ public class AtmService {
     }
 
     /// Returns amount based on user's selection or input
-    /// 
+    ///
     /// # Argument
     ///
     /// \param action Deposit/Withdraw/Transfer action
-    /// 
+    ///
     /// # Return value
     ///
     /// \return Amount
@@ -203,7 +203,7 @@ public class AtmService {
         while (true) {
             outputStream.printf("%n- %s -%n",
                     "Choose Amount to " + action + " ($)");
-                    
+
             outputStream.printf("| %-40s |%n", "(0) Cancel Operation");
             outputStream.printf("| %-40s |%n", "(1) 10");
             outputStream.printf("| %-40s |%n", "(2) 20");
@@ -255,11 +255,11 @@ public class AtmService {
         outputStream.print("Please enter an option: ");
     }
 
-    // Triggers different functions based on what the user wishes to do
-    // 
-    // # Arguments
-    // 
-    // \param option - user's choice of function
+    /// Triggers different functions based on what the user wishes to do
+    ///
+    /// # Arguments
+    ///
+    /// \param option - user's choice of function
     public void selection(int option) {
         switch (option) {
             case 0:
