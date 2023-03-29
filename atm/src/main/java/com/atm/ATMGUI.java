@@ -474,7 +474,7 @@ public class ATMGUI extends JFrame {
             e.printStackTrace();
         }
         // Instantiate ATM GUI
-        new ATMGUIWrapper(new ATMGUI(ns.getString("host"), Integer.parseInt(ns.getString("port"))));
+        new ATMGUIWrapper(new ATMGUI(ns.getString("host"), ns.getInt("port")));
     }
 }
 
