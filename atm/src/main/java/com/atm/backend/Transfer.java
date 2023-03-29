@@ -12,7 +12,7 @@ public class Transfer {
     public Transfer(Connection conn) {
         this.conn = conn;
     }
-
+    
     // Updates accounts and transaction tables in database after transfer using Withdraw and Deposit objects
     //
     // # Arguments
@@ -39,6 +39,6 @@ public class Transfer {
         this.withdrawal.execute(a1, amount);
         this.deposit.execute(a2, amount);
 
-        return "Tranfer is Successful";
+        return "Transfer is Successful";
     }
 }

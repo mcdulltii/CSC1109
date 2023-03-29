@@ -62,7 +62,12 @@ public class SQLQueries {
         }
     }
 
-    // Update accounts table based on selected action (Deposit/Withdraw)
+    // Update accounts table based on selected action (Deposit/Withdraw/Transfer)
+    // 
+    // # Arguments
+    //
+    // * 'a1' - Current Account Object
+    // * 'a2' - Account to transfer to
     protected void executeQueryAccounts(Account a1, Account a2) {
         String updateQuery = "UPDATE accounts SET TotalBalance = ?, AvailableBalance = ?, TransferLimit = ? WHERE AccountNumber = ?";
         try {
@@ -132,7 +137,15 @@ public class SQLQueries {
         }
     }
 
-    // Create and return Account object from accounts table based on username input
+    // Return account object from accounts table based on username input
+    // 
+    // # Arguments
+    //
+    // * 'username' - Username
+    // 
+    // # Return value
+    //
+    // AccUserObj Object
     public AccUserObj getAccountfromUsername(String username) {
         String accountNumber = "", firstname = "", lastname = "";
         int isAdmin = 0;
@@ -162,7 +175,11 @@ public class SQLQueries {
 
         return obj;
     }
-
+    // Return HashSet of all Account Numbers in Database
+    // 
+    // # Return value
+    //
+    // Hashset of account numbers
     public HashSet<String> getAccountNumbers(){
         HashSet<String> accountNumbers = new HashSet<>();
         String selectQuery = "SELECT * FROM accounts";
@@ -177,7 +194,15 @@ public class SQLQueries {
         return accountNumbers;
     }
 
-    // Create and return Account object from accounts table based on Card Number input
+    // Return account object from accounts table based on Card Number input
+    // 
+    // # Arguments
+    //
+    // * 'cardNumber' - Credit Card Number
+    // 
+    // # Return value
+    //
+    // AccUserObj Object
     public AccUserObj getAccountfromCardNumber(String cardNumber) {
         String accountNumber = "", firstname = "", lastname = "";
         int isAdmin = 0;
@@ -189,9 +214,9 @@ public class SQLQueries {
         try {
             while (rs.next()) {
                 accountNumber = String.valueOf(rs.getLong("AccountNumber"));
-                firstname = rs.getString("FirstName");
-                lastname = rs.getString("LastName");
-                availableBalance = rs.getDouble("AvailableBalance");
+                firstname = rs.getString("FirstName"); 
+                lastname = rs.getString("LastName"); 
+                availableBalance = rs.getDouble("AvailableBalance"); 
                 totalBalance = rs.getDouble("TotalBalance");
                 transferLimit = rs.getDouble("TransferLimit");
                 isAdmin = rs.getInt("IsAdmin");
@@ -208,6 +233,15 @@ public class SQLQueries {
         return obj;
     }
 
+    // Return account object from accounts table based on Account Number input
+    // 
+    // # Arguments
+    //
+    // * 'accountNumber' - Account Number
+    // 
+    // # Return value
+    //
+    // Account Object
     protected Account getAccountfromAccountNumber(Long accountNumber) {
         double availableBalance = 0, totalBalance = 0, transferLimit = 0;
 
@@ -217,8 +251,8 @@ public class SQLQueries {
         try {
             while (rs.next()) {
                 availableBalance = rs.getDouble("AvailableBalance");
-                totalBalance = rs.getDouble("TotalBalance");
-                transferLimit = rs.getDouble("TransferLimit");
+                totalBalance = rs.getDouble("TotalBalance"); 
+                transferLimit = rs.getDouble("TransferLimit"); 
             }
         } catch (SQLException e) {
             System.out.println("Please check column label and database connection.");
@@ -305,17 +339,17 @@ public class SQLQueries {
         try {
             while (rs.next()) {
                 String[] data = new String[11];
-                data[0] = rs.getLong(1) + ""; //get CardNumber
-                data[1] = rs.getLong(2) + ""; //get AccountNumber
-                data[2] = rs.getString(3) + ""; //get Username
-                data[3] = rs.getString(4) + ""; //get Password
-                data[4] = rs.getString(5) + ""; //get FirstName
-                data[5] = rs.getString(6) + ""; //get LastName
-                data[6] = rs.getBytes(7) + ""; //get PasswordSalt
-                data[7] = rs.getFloat(8) + ""; //get AvailableBalance
-                data[8] = rs.getFloat(9) + ""; //get TotalBalance
-                data[9] = rs.getFloat(10) + "";//get TransferLimit
-                data[10] = rs.getBoolean(11) + ""; //get IsAdmin
+                data[0] = Long.toString(rs.getLong(1)); //get CardNumber
+                data[1] = Long.toString(rs.getLong(2)); //get AccountNumber
+                data[2] = rs.getString(3); //get Username
+                data[3] = rs.getString(4); //get Password
+                data[4] = rs.getString(5); //get FirstName
+                data[5] = rs.getString(6); //get LastName
+                data[6] = new String(rs.getBytes(7)); //get PasswordSalt
+                data[7] = Float.toString(rs.getFloat(8)); //get AvailableBalance
+                data[8] = Float.toString(rs.getFloat(9)); //get TotalBalance
+                data[9] = Float.toString(rs.getFloat(10));//get TransferLimit
+                data[10] = Boolean.toString(rs.getBoolean(11)); //get IsAdmin
                 accountsList.add(data);
             }
         } catch (SQLException e) {
