@@ -93,7 +93,7 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:adf0535abb220f4ac3af52251e969a3df"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1atm_1_1backend_1_1Transfer.html#adf0535abb220f4ac3af52251e969a3df">transferToAccount</a> (<a class="el" href="classcom_1_1atm_1_1backend_1_1Account.html">Account</a> a1, <a class="el" href="classcom_1_1atm_1_1backend_1_1Account.html">Account</a> a2, double amount)  throws InsufficientFundsException </td></tr>
+<tr class="memitem:adf0535abb220f4ac3af52251e969a3df"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1atm_1_1backend_1_1Transfer.html#adf0535abb220f4ac3af52251e969a3df">transferToAccount</a> (<a class="el" href="classcom_1_1atm_1_1backend_1_1Account.html">Account</a> a1, <a class="el" href="classcom_1_1atm_1_1backend_1_1Account.html">Account</a> a2, double amount)  throws ExceedTransferLimitException, InsufficientFundsException </td></tr>
 <tr class="separator:adf0535abb220f4ac3af52251e969a3df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -156,7 +156,7 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> throws InsufficientFundsException</td>
+          <td></td><td> throws ExceedTransferLimitException, InsufficientFundsException</td>
         </tr>
       </table>
   </td>
