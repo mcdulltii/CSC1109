@@ -98,6 +98,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a32b47d44840ed43a11136bedeed60ece"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1atm_1_1Server.html#a32b47d44840ed43a11136bedeed60ece">start</a> (int port)</td></tr>
 <tr class="separator:a32b47d44840ed43a11136bedeed60ece"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7fb450c9a5ce64b0faaad1f16b05073"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1atm_1_1Server.html#ae7fb450c9a5ce64b0faaad1f16b05073">stopServer</a> ()</td></tr>
+<tr class="memdesc:ae7fb450c9a5ce64b0faaad1f16b05073"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops the server.  <a href="classcom_1_1atm_1_1Server.html#ae7fb450c9a5ce64b0faaad1f16b05073">More...</a><br /></td></tr>
 <tr class="separator:ae7fb450c9a5ce64b0faaad1f16b05073"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b318faa5291331d596b3a083da38792"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1atm_1_1Server.html#a1b318faa5291331d596b3a083da38792">run</a> ()</td></tr>
 <tr class="separator:a1b318faa5291331d596b3a083da38792"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,10 +133,22 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Retrieve commandline arguments</p>
+<p>Start the server</p>
 <p>Fill account database</p>
 <p>Import accounts table</p>
+<p>Optionally only partially retrieves transaction details</p>
 <p>Import transactions table</p>
 <p>Import admin account</p>
+<p>Login for admin</p>
+<p>Admin is successfully logged in</p>
+<p>Print options for admin to use</p>
+<p>Get admin's choice of function</p>
+<p>Print account details of all accounts</p>
+<p>Print transaction details of latest 100 transactions</p>
+<p>Print account details of a user</p>
+<p>Print transaction history of a user</p>
+<p>Logs out the admin, but keeps the server running</p>
+<p>Invalid Option</p>
 
 </div>
 </div>
@@ -188,6 +201,14 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Starts the server at the port</p>
+<p>Arguments</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">port</td><td>port number for the server to be hosted on </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -213,6 +234,8 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Stops the server. </p>
 
 </div>
 </div>

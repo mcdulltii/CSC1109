@@ -215,7 +215,7 @@ Protected Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Update accounts table based on selected action (Deposit/Withdraw/Transfer)</p>
-<h1><a class="anchor" id="autotoc_md27"></a>
+<h1><a class="anchor" id="autotoc_md28"></a>
 Arguments</h1>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -396,7 +396,7 @@ Arguments</h1>
 </table>
 </div><div class="memdoc">
 <p>Return account object from accounts table based on <a class="el" href="classcom_1_1atm_1_1backend_1_1Account.html">Account</a> Number input</p>
-<h1><a class="anchor" id="autotoc_md33"></a>
+<h1><a class="anchor" id="autotoc_md34"></a>
 Arguments</h1>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -404,7 +404,7 @@ Arguments</h1>
   </table>
   </dd>
 </dl>
-<h1><a class="anchor" id="autotoc_md34"></a>
+<h1><a class="anchor" id="autotoc_md35"></a>
 Return value</h1>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="classcom_1_1atm_1_1backend_1_1Account.html">Account</a> Object </dd></dl>
 
@@ -434,7 +434,7 @@ Return value</h1>
 </table>
 </div><div class="memdoc">
 <p>Return account object from accounts table based on Card Number input</p>
-<h1><a class="anchor" id="autotoc_md31"></a>
+<h1><a class="anchor" id="autotoc_md32"></a>
 Arguments</h1>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -442,7 +442,7 @@ Arguments</h1>
   </table>
   </dd>
 </dl>
-<h1><a class="anchor" id="autotoc_md32"></a>
+<h1><a class="anchor" id="autotoc_md33"></a>
 Return value</h1>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="classcom_1_1atm_1_1backend_1_1AccUserObj.html">AccUserObj</a> Object </dd></dl>
 
@@ -472,7 +472,7 @@ Return value</h1>
 </table>
 </div><div class="memdoc">
 <p>Return account object from accounts table based on username input</p>
-<h1><a class="anchor" id="autotoc_md28"></a>
+<h1><a class="anchor" id="autotoc_md29"></a>
 Arguments</h1>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -480,7 +480,7 @@ Arguments</h1>
   </table>
   </dd>
 </dl>
-<h1><a class="anchor" id="autotoc_md29"></a>
+<h1><a class="anchor" id="autotoc_md30"></a>
 Return value</h1>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="classcom_1_1atm_1_1backend_1_1AccUserObj.html">AccUserObj</a> Object </dd></dl>
 
@@ -509,7 +509,7 @@ Return value</h1>
 </table>
 </div><div class="memdoc">
 <p>Return HashSet of all <a class="el" href="classcom_1_1atm_1_1backend_1_1Account.html">Account</a> Numbers in Database</p>
-<h1><a class="anchor" id="autotoc_md30"></a>
+<h1><a class="anchor" id="autotoc_md31"></a>
 Return value</h1>
 <dl class="section return"><dt>Returns</dt><dd>Hashset of account numbers </dd></dl>
 
@@ -615,6 +615,20 @@ Return value</h1>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Retrieves account data for Admin If cardNumber is specified, only for the account with that Card Number Otherwise, retrieves for all accounts</p>
+<h1><a class="anchor" id="autotoc_md36"></a>
+Arguments</h1>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cardNumber</td><td>Card Number of <a class="el" href="classcom_1_1atm_1_1backend_1_1User.html">User</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<h1><a class="anchor" id="autotoc_md37"></a>
+Return Value</h1>
+<dl class="section return"><dt>Returns</dt><dd>ArrayList of account data </dd></dl>
+<p>Get account details for all accounts</p>
+<p>Get account details for one account</p>
 <p>get CardNumber</p>
 <p>get AccountNumber</p>
 <p>get Username</p>
@@ -652,6 +666,20 @@ Return value</h1>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Retrieves transaction data for Admin If cardNumber is specified, only for the account with that Card Number Otherwise, retrieves for all accounts</p>
+<h1><a class="anchor" id="autotoc_md38"></a>
+Arguments</h1>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cardNumber</td><td>Card Number of <a class="el" href="classcom_1_1atm_1_1backend_1_1User.html">User</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<h1><a class="anchor" id="autotoc_md39"></a>
+Return Value</h1>
+<dl class="section return"><dt>Returns</dt><dd>ArrayList of transaction data </dd></dl>
+<p>get <a class="el" href="classcom_1_1atm_1_1backend_1_1Transaction.html">Transaction</a> data for all users</p>
+<p>get <a class="el" href="classcom_1_1atm_1_1backend_1_1Transaction.html">Transaction</a> data for one user</p>
 <p>get transactionId</p>
 <p>get transactionDetails</p>
 <p>get chqNumber</p>
