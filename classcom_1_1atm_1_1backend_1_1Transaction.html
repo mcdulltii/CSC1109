@@ -80,9 +80,9 @@ Inheritance diagram for com.atm.backend.Transaction:</div>
 <div class="dyncontent">
 <div class="center"><img src="classcom_1_1atm_1_1backend_1_1Transaction__inherit__graph.png" border="0" usemap="#acom_8atm_8backend_8Transaction_inherit__map" alt="Inheritance graph"/></div>
 <map name="acom_8atm_8backend_8Transaction_inherit__map" id="acom_8atm_8backend_8Transaction_inherit__map">
-<area shape="rect" title=" " alt="" coords="104,5,320,229"/>
-<area shape="rect" href="classcom_1_1atm_1_1backend_1_1Deposit.html" title=" " alt="" coords="5,277,197,399"/>
-<area shape="rect" href="classcom_1_1atm_1_1backend_1_1Withdraw.html" title=" " alt="" coords="222,277,426,399"/>
+<area shape="rect" title=" " alt="" coords="104,5,320,200"/>
+<area shape="rect" href="classcom_1_1atm_1_1backend_1_1Deposit.html" title=" " alt="" coords="5,248,197,369"/>
+<area shape="rect" href="classcom_1_1atm_1_1backend_1_1Withdraw.html" title=" " alt="" coords="222,248,426,369"/>
 </map>
 </div>
 <div class="dynheader">
@@ -90,7 +90,7 @@ Collaboration diagram for com.atm.backend.Transaction:</div>
 <div class="dyncontent">
 <div class="center"><img src="classcom_1_1atm_1_1backend_1_1Transaction__coll__graph.png" border="0" usemap="#acom_8atm_8backend_8Transaction_coll__map" alt="Collaboration graph"/></div>
 <map name="acom_8atm_8backend_8Transaction_coll__map" id="acom_8atm_8backend_8Transaction_coll__map">
-<area shape="rect" title=" " alt="" coords="31,395,247,619"/>
+<area shape="rect" title=" " alt="" coords="31,395,247,589"/>
 <area shape="rect" href="classcom_1_1atm_1_1backend_1_1SQLQueries.html" title=" " alt="" coords="5,5,272,332"/>
 </map>
 </div>
@@ -116,10 +116,6 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a62be9aef6c9eefaf747ea578e1b807c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a551410874a8a9e0d8ccf15a7864150aa"><td class="memItemLeft" align="right" valign="top">Double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1atm_1_1backend_1_1Transaction.html#a551410874a8a9e0d8ccf15a7864150aa">getBalance</a> ()</td></tr>
 <tr class="separator:a551410874a8a9e0d8ccf15a7864150aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a709dc8a4d0ecd921da920d7a16a9f351"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1atm_1_1backend_1_1Transaction.html#a709dc8a4d0ecd921da920d7a16a9f351">hasAvailableBalance</a> (double amount)</td></tr>
-<tr class="separator:a709dc8a4d0ecd921da920d7a16a9f351"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ad6259654de9c5d2792f95d5131f5e0"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1atm_1_1backend_1_1Transaction.html#a8ad6259654de9c5d2792f95d5131f5e0">belowTransferLimit</a> (double amount)</td></tr>
-<tr class="separator:a8ad6259654de9c5d2792f95d5131f5e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6619e4a1d89bd093eb8c0f8606dac9b"><td class="memItemLeft" align="right" valign="top">abstract String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1atm_1_1backend_1_1Transaction.html#aa6619e4a1d89bd093eb8c0f8606dac9b">execute</a> (<a class="el" href="classcom_1_1atm_1_1backend_1_1Account.html">Account</a> a1, double amount)  throws InsufficientFundsException</td></tr>
 <tr class="separator:aa6619e4a1d89bd093eb8c0f8606dac9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -232,32 +228,6 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a8ad6259654de9c5d2792f95d5131f5e0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8ad6259654de9c5d2792f95d5131f5e0">&#9670;&nbsp;</a></span>belowTransferLimit()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">boolean com.atm.backend.Transaction.belowTransferLimit </td>
-          <td>(</td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>amount</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="aa6619e4a1d89bd093eb8c0f8606dac9b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa6619e4a1d89bd093eb8c0f8606dac9b">&#9670;&nbsp;</a></span>execute()</h2>
 
@@ -434,32 +404,6 @@ Protected Attributes</h2></td></tr>
           <td class="memname">java.sql.Date com.atm.backend.Transaction.getValueDate </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a709dc8a4d0ecd921da920d7a16a9f351"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a709dc8a4d0ecd921da920d7a16a9f351">&#9670;&nbsp;</a></span>hasAvailableBalance()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">boolean com.atm.backend.Transaction.hasAvailableBalance </td>
-          <td>(</td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>amount</em></td><td>)</td>
           <td></td>
         </tr>
       </table>

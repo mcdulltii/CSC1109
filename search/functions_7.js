@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['importaccounts_252',['importAccounts',['../classcom_1_1atm_1_1backend_1_1SQLQueries.html#a40d001080af62a3fc077352d80def0f9',1,'com::atm::backend::SQLQueries']]],
-  ['importadminaccount_253',['importAdminAccount',['../classcom_1_1atm_1_1backend_1_1SQLQueries.html#a70c59bf570ebeae3b2652fee95b7b080',1,'com::atm::backend::SQLQueries']]],
-  ['importtransactions_254',['importTransactions',['../classcom_1_1atm_1_1backend_1_1SQLQueries.html#a5a59c95a8530f2a509ac334ca1cd07fb',1,'com::atm::backend::SQLQueries']]]
+  ['main_251',['main',['../classcom_1_1atm_1_1ATMGUI.html#a857b8ec860770187ab5731c808b6da91',1,'com.atm.ATMGUI.main()'],['../classcom_1_1atm_1_1Client.html#af523be336b4200da096cb8dbf30a2f1b',1,'com.atm.Client.main()'],['../classcom_1_1atm_1_1Server.html#addd7759ad7dd08c266b5e1f0628df083',1,'com.atm.Server.main()']]]
 ];
