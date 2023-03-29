@@ -63,7 +63,7 @@ public class SQLQueries {
     }
 
     /// Update accounts table based on selected action (Deposit/Withdraw/Transfer)
-    /// 
+    ///
     /// # Arguments
     ///
     /// \param a1 Current Account Object
@@ -138,11 +138,11 @@ public class SQLQueries {
     }
 
     /// Return account object from accounts table based on username input
-    /// 
+    ///
     /// # Arguments
     ///
     /// \param username Username
-    /// 
+    ///
     /// # Return value
     ///
     /// \return AccUserObj Object
@@ -176,14 +176,14 @@ public class SQLQueries {
         return obj;
     }
     /// Return HashSet of all Account Numbers in Database
-    /// 
+    ///
     /// # Return value
     ///
     /// \return Hashset of account numbers
     public HashSet<String> getAccountNumbers(){
         HashSet<String> accountNumbers = new HashSet<>();
         String selectQuery = "SELECT * FROM accounts";
-        ResultSet rs = executeQuery(selectQuery); 
+        ResultSet rs = executeQuery(selectQuery);
         try {
             while(rs.next()){
                 accountNumbers.add(rs.getString("AccountNumber"));
@@ -195,11 +195,11 @@ public class SQLQueries {
     }
 
     /// Return account object from accounts table based on Card Number input
-    /// 
+    ///
     /// # Arguments
     ///
     /// \param cardNumber Credit Card Number
-    /// 
+    ///
     /// # Return value
     ///
     /// \return AccUserObj Object
@@ -214,9 +214,9 @@ public class SQLQueries {
         try {
             while (rs.next()) {
                 accountNumber = String.valueOf(rs.getLong("AccountNumber"));
-                firstname = rs.getString("FirstName"); 
-                lastname = rs.getString("LastName"); 
-                availableBalance = rs.getDouble("AvailableBalance"); 
+                firstname = rs.getString("FirstName");
+                lastname = rs.getString("LastName");
+                availableBalance = rs.getDouble("AvailableBalance");
                 totalBalance = rs.getDouble("TotalBalance");
                 transferLimit = rs.getDouble("TransferLimit");
                 isAdmin = rs.getInt("IsAdmin");
@@ -234,11 +234,11 @@ public class SQLQueries {
     }
 
     /// Return account object from accounts table based on Account Number input
-    /// 
+    ///
     /// # Arguments
     ///
     /// \param accountNumber Account Number
-    /// 
+    ///
     /// # Return value
     ///
     /// \return Account Object
@@ -251,8 +251,8 @@ public class SQLQueries {
         try {
             while (rs.next()) {
                 availableBalance = rs.getDouble("AvailableBalance");
-                totalBalance = rs.getDouble("TotalBalance"); 
-                transferLimit = rs.getDouble("TransferLimit"); 
+                totalBalance = rs.getDouble("TotalBalance");
+                transferLimit = rs.getDouble("TransferLimit");
             }
         } catch (SQLException e) {
             System.out.println("Please check column label and database connection.");
@@ -330,39 +330,39 @@ public class SQLQueries {
         return password;
     }
 
-    // Retrieves account data for Admin
-    // If cardNumber is specified, only for the account with that Card Number
-    // Otherwise, retrieves for all accounts
-    // 
-    // # Arguments
-    // 
-    // \param cardNumber Card Number of User
-    //
-    // # Return Value
-    //
-    // \return ArrayList of account data
+    /// Retrieves account data for Admin
+    /// If cardNumber is specified, only for the account with that Card Number
+    /// Otherwise, retrieves for all accounts
+    ///
+    /// # Arguments
+    ///
+    /// \param cardNumber Card Number of User
+    ///
+    /// # Return Value
+    ///
+    /// \return ArrayList of account data
     public ArrayList<String[]> getTopAccountsForAdmin(String cardNumber) {
         String sql;
-        // Get account details for all accounts
+        /// Get account details for all accounts
         if (cardNumber.isEmpty()) sql = "SELECT * FROM accounts LIMIT 100";
-        // Get account details for one account
+        /// Get account details for one account
         else sql = "SELECT * FROM accounts WHERE CardNumber = \"" + cardNumber + "\"";
         ResultSet rs = executeQuery(sql);
         ArrayList<String[]> accountsList = new ArrayList<String[]>();
         try {
             while (rs.next()) {
                 String[] data = new String[11];
-                data[0] = Long.toString(rs.getLong(1)); ///get CardNumber
-                data[1] = Long.toString(rs.getLong(2)); ///get AccountNumber
-                data[2] = rs.getString(3); ///get Username
-                data[3] = rs.getString(4); ///get Password
-                data[4] = rs.getString(5); ///get FirstName
-                data[5] = rs.getString(6); ///get LastName
-                data[6] = new String(rs.getBytes(7)); ///get PasswordSalt
-                data[7] = Float.toString(rs.getFloat(8)); ///get AvailableBalance
-                data[8] = Float.toString(rs.getFloat(9)); ///get TotalBalance
-                data[9] = Float.toString(rs.getFloat(10));///get TransferLimit
-                data[10] = Boolean.toString(rs.getBoolean(11)); ///get IsAdmin
+                data[0] = Long.toString(rs.getLong(1)); /// get CardNumber
+                data[1] = Long.toString(rs.getLong(2)); /// get AccountNumber
+                data[2] = rs.getString(3); /// get Username
+                data[3] = rs.getString(4); /// get Password
+                data[4] = rs.getString(5); /// get FirstName
+                data[5] = rs.getString(6); /// get LastName
+                data[6] = new String(rs.getBytes(7)); /// get PasswordSalt
+                data[7] = Float.toString(rs.getFloat(8)); /// get AvailableBalance
+                data[8] = Float.toString(rs.getFloat(9)); /// get TotalBalance
+                data[9] = Float.toString(rs.getFloat(10));/// get TransferLimit
+                data[10] = Boolean.toString(rs.getBoolean(11)); /// get IsAdmin
                 accountsList.add(data);
             }
         } catch (SQLException e) {
@@ -371,22 +371,22 @@ public class SQLQueries {
         return accountsList;
     }
 
-    // Retrieves transaction data for Admin
-    // If cardNumber is specified, only for the account with that Card Number
-    // Otherwise, retrieves for all accounts
-    // 
-    // # Arguments
-    // 
-    // \param cardNumber Card Number of User
-    //
-    // # Return Value
-    //
-    // \return ArrayList of transaction data
+    /// Retrieves transaction data for Admin
+    /// If cardNumber is specified, only for the account with that Card Number
+    /// Otherwise, retrieves for all accounts
+    ///
+    /// # Arguments
+    ///
+    /// \param cardNumber Card Number of User
+    ///
+    /// # Return Value
+    ///
+    /// \return ArrayList of transaction data
     public ArrayList<String[]> getTopTransactionsForAdmin(String cardNumber) {
         String sql;
-        //get Transaction data for all users
+        /// get Transaction data for all users
         if (cardNumber.isEmpty()) sql = "SELECT * FROM transactions ORDER BY transactionId desc LIMIT 100";
-        //get Transaction data for one user
+        /// get Transaction data for one user
         else sql = "SELECT * FROM transactions WHERE AccountNumber = (SELECT AccountNumber FROM accounts WHERE CardNumber = \"" + cardNumber + "\") ORDER BY transactionId desc LIMIT 100";
         ResultSet rs = executeQuery(sql);
         ArrayList<String[]> transactionsList = new ArrayList<String[]>();
@@ -419,7 +419,7 @@ public class SQLQueries {
         } catch (SQLException e) {
             System.out.println("Please check column label and database connection.");
         }
-        return transactionsList; 
+        return transactionsList;
     }
 
     public String importAdminAccount() {
@@ -488,7 +488,7 @@ public class SQLQueries {
 
                 while (true) {
                     pb.step();
-                    
+
                     String row = null;
                     try {
                         row = br.readLine();
@@ -553,7 +553,7 @@ public class SQLQueries {
                 /// Import CSV
                 String filename = "atm/res/transactions_new.csv";
                 BufferedReader br = new BufferedReader(new FileReader(filename));
-                
+
                 int lineNumbers = countLines(filename);
                 ProgressBar pb = new ProgressBar("Importing Transactions", lineNumbers);
                 pb.start();
@@ -574,7 +574,7 @@ public class SQLQueries {
                 int count = 0;
                 while (true) {
                     pb.step();
-                    
+
                     String row = null;
                     try {
                         row = br.readLine();
@@ -598,14 +598,14 @@ public class SQLQueries {
                                 preparedStmt.setLong(i + 1, Long.parseLong(data[i]));
                                 break;
                             case 2: /// Set transactionDate
-                                preparedStmt.setDate(i + 1, Date.valueOf(data[i])); ///date in string format yyyy-mm-dd
+                                preparedStmt.setDate(i + 1, Date.valueOf(data[i])); /// date in string format yyyy-mm-dd
                                 break;
                             case 3: /// Set transactionDetails
                             case 4: /// Set chqNumber
                                 preparedStmt.setString(i + 1, data[i]);
                                 break;
                             case 5: /// Set valueDate
-                                preparedStmt.setDate(i + 1, Date.valueOf(data[i])); ///date in string format yyyy-mm-dd
+                                preparedStmt.setDate(i + 1, Date.valueOf(data[i])); /// date in string format yyyy-mm-dd
                                 break;
                             case 6: /// Set withdrawal
                             case 7: /// Set deposit
@@ -617,7 +617,7 @@ public class SQLQueries {
                     preparedStmt.execute();
                     count++;
                 }
-                
+
                 pb.stop();
 
                 try {
