@@ -17,3 +17,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           folder: utils/html
           config_file: Doxyfile
+      - name: Symlink
+        run: |
+          pushd ./utils/html/
+          ln -s ../../utils utils
+          popd
