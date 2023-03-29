@@ -474,7 +474,7 @@ public class ATMGUI extends JFrame {
             e.printStackTrace();
         }
         // Instantiate ATM GUI
-        new ATMGUIWrapper(new ATMGUI(ns.getString("host"), ns.getInt("port")));
+        new ATMGUIWrapper(new ATMGUI(ns.getString("host"), Integer.parseInt(ns.getString("port"))));
     }
 }
 
@@ -483,7 +483,7 @@ class ATMGUIWrapper implements Runnable {
     private Thread thread = null;
     private int seconds = 0;
     // Max number of seconds before timeout
-    private final int max = 30;
+    private final int max = 60;
 
     public ATMGUIWrapper(ATMGUI frame) {
         this.frame = frame;

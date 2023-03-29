@@ -69,11 +69,24 @@ public abstract class Transaction {
     protected abstract String execute(Account a1, double amount) throws InsufficientFundsException;
 }
 
-// User-defined Exception class to check that user have sufficient funds in account for withdrawal / transfer
+// User-defined Exception class to check that user have sufficient funds in account for withdrawal
 class InsufficientFundsException extends Exception {
     private double amount;
 
     protected InsufficientFundsException(double amount) {
+        this.amount = amount;
+    }
+
+    protected double getAmount() {
+        return amount;
+    }
+}
+
+// User-defined Exception class to check that user have sufficient funds in account for transfer
+class ExceedTransferLimitException extends Exception {
+    private double amount;
+
+    protected ExceedTransferLimitException(double amount) {
         this.amount = amount;
     }
 
