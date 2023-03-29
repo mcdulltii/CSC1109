@@ -66,7 +66,7 @@ public class Client {
     //
     // # Return Value
     // 
-    // True if connection is valid and started, otherwise false
+    // \return True if connection is valid and started, otherwise false
     public Boolean startConnection() {
         // Initialize socket input and output streams
         try {
@@ -86,7 +86,7 @@ public class Client {
     //
     // # Return Value
     //
-    // ReceivedMessage Object containing if the connection is closed and the Server's message
+    // \return ReceivedMessage Object containing if the connection is closed and the Server's message
     public ReceivedMessage receiveMessage() {
         String responseLine = "";
         ReceivedMessage recvMsg = new ReceivedMessage();
@@ -137,11 +137,11 @@ public class Client {
     // 
     // # Arguments
     // 
-    // * `msg` - Message to be sent to the server
+    // \param msg Message to be sent to the server
     //
     // # Return Value
     //
-    // ReceivedMessage Object containing if the connection is closed and the Server's message 
+    // \return ReceivedMessage Object containing if the connection is closed and the Server's message 
     public ReceivedMessage sendMessage(String msg) {
         // Send client message to server, and retrieve server response
         outputStream.println(msg);
@@ -154,12 +154,12 @@ public class Client {
     // 
     // # Arguments
     // 
-    // * `username` - User's username for login verification
-    // * `password` - User's password for login verification
+    // \param username User's username for login verification
+    // \param password User's password for login verification
     //
     // # Return Value
     //
-    // String containing the Server's message, notifying if login was successful
+    // \return String containing the Server's message, notifying if login was successful
     public String sendUsernamePassword(String username, String password) {
         // Send username and password to server for client authentication
         this.sendMessage(username);
@@ -169,17 +169,19 @@ public class Client {
     }
 
     // Gets number of login tries
+    //
     // # Return Value
     //
-    // int of the number of tries the user has made to login
+    // \return int of the number of tries the user has made to login
     public int getNumTries() {
         return this.numTries;
     }
 
     // Gets receipt text from Server
+    //
     // # Return Value
     //
-    // String of receipt text from Server
+    // \return String of receipt text from Server
     public String getInteractions() {
         // Retrieve ATM receipt from server
         ReceivedMessage recvMsg = this.receiveMessage();

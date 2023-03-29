@@ -30,9 +30,9 @@ public class Server extends Thread {
     private ServerSocket serverSocket;
     // Starts the server at the port
     // 
-    // # Arguments
+    // Arguments
     // 
-    // * `port` - port number for the server to be hosted on
+    // \param port port number for the server to be hosted on
     public void start(int port) {
         try {
             serverSocket = new ServerSocket(port);
@@ -193,7 +193,7 @@ public class Server extends Thread {
     // 
     // # Arguments
     // 
-    // * `lng` - Card Number
+    // \param lng Card Number
     private static void printAccountFromCardNo(Long lng) {
         SQLQueries q = new SQLQueries();
         ArrayList<String[]> data = q.getTopAccountsForAdmin(Long.toString(lng));
@@ -206,7 +206,7 @@ public class Server extends Thread {
     // 
     // # Arguments
     // 
-    // * `lng` - Card Number
+    // \param lng Card Number
     private static void printTransactionFromCardNo(Long lng) {
         SQLQueries q = new SQLQueries();
         ArrayList<String[]> data = q.getTopTransactionsForAdmin(Long.toString(lng));
@@ -347,11 +347,11 @@ class ThreadClientHandler extends Thread {
     //
     // # Arguments
     // 
-    // * `cardNumber` - Card Number of User
+    // \param cardNumber Card Number of User
     //
     // # Return Value
     //
-    // Account object of user 
+    // \return Account object of user 
     private AccUserObj getCurrentUserAcc(String cardNumber) {
         SQLQueries q = new SQLQueries();
         AccUserObj currentUserAcc = q.getAccountfromCardNumber(cardNumber);
@@ -362,7 +362,7 @@ class ThreadClientHandler extends Thread {
     //
     // # Arguments
     // 
-    // * `outputStream` - //Stream of text that the Server sends to the Client
+    // \param outputStream Stream of text that the Server sends to the Client
     private void endSession(PrintWriter outputStream) {
         outputStream.println("FIN");
     }

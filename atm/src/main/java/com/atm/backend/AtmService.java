@@ -246,7 +246,7 @@ public class AtmService {
     // 
     // # Arguments
     // 
-    // * `option` - user's choice of function
+    // \param option - user's choice of function
     public void selection(int option) {
         switch (option) {
             case 0:

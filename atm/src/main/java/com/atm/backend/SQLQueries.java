@@ -302,11 +302,11 @@ public class SQLQueries {
     // 
     // # Arguments
     // 
-    // * `cardNumber` - Card Number of User
+    // \param cardNumber Card Number of User
     //
     // # Return Value
     //
-    // ArrayList of account data
+    // \return ArrayList of account data
     public ArrayList<String[]> getTopAccountsForAdmin(String cardNumber) {
         String sql;
         // Get account details for all accounts
@@ -343,11 +343,11 @@ public class SQLQueries {
     // 
     // # Arguments
     // 
-    // * `cardNumber` - Card Number of User
+    // \param cardNumber Card Number of User
     //
     // # Return Value
     //
-    // ArrayList of transaction data
+    // \return ArrayList of transaction data
     public ArrayList<String[]> getTopTransactionsForAdmin(String cardNumber) {
         String sql;
         //get Transaction data for all users
