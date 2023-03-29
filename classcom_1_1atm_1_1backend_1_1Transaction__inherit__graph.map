@@ -1,5 +1,5 @@
 <map id="com.atm.backend.Transaction" name="com.atm.backend.Transaction">
 <area shape="rect" id="node1" title=" " alt="" coords="104,5,320,200"/>
-<area shape="rect" id="node2" href="$classcom_1_1atm_1_1backend_1_1Deposit.html" title=" " alt="" coords="5,248,197,369"/>
-<area shape="rect" id="node3" href="$classcom_1_1atm_1_1backend_1_1Withdraw.html" title=" " alt="" coords="222,248,426,369"/>
+<area shape="rect" id="node2" href="$classcom_1_1atm_1_1backend_1_1Deposit.html" title="subclass" alt="" coords="5,248,197,369"/>
+<area shape="rect" id="node3" href="$classcom_1_1atm_1_1backend_1_1Withdraw.html" title="subclass" alt="" coords="222,248,426,369"/>
 </map>

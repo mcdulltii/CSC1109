@@ -86,6 +86,7 @@ Collaboration diagram for com.atm.backend.SQLQueries:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a3aa3fe2d160a985843ef7c02c1ab5238"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1atm_1_1backend_1_1SQLQueries.html#a3aa3fe2d160a985843ef7c02c1ab5238">SQLQueries</a> ()</td></tr>
+<tr class="memdesc:a3aa3fe2d160a985843ef7c02c1ab5238"><td class="mdescLeft">&#160;</td><td class="mdescRight">default connection  <a href="classcom_1_1atm_1_1backend_1_1SQLQueries.html#a3aa3fe2d160a985843ef7c02c1ab5238">More...</a><br /></td></tr>
 <tr class="separator:a3aa3fe2d160a985843ef7c02c1ab5238"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae4d138b5ef738059a6b60e6f563a679"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1atm_1_1backend_1_1SQLQueries.html#aae4d138b5ef738059a6b60e6f563a679">SQLQueries</a> (Connection conn)</td></tr>
 <tr class="separator:aae4d138b5ef738059a6b60e6f563a679"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,6 +150,8 @@ Protected Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>default connection </p>
+
 </div>
 </div>
 <a id="aae4d138b5ef738059a6b60e6f563a679"></a>
@@ -211,6 +214,16 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Update accounts table based on selected action (Deposit/Withdraw/Transfer)</p>
+<h1><a class="anchor" id="autotoc_md28"></a>
+Arguments</h1>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a1</td><td>Current <a class="el" href="classcom_1_1atm_1_1backend_1_1Account.html">Account</a> Object </td></tr>
+    <tr><td class="paramname">a2</td><td><a class="el" href="classcom_1_1atm_1_1backend_1_1Account.html">Account</a> to transfer to </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -355,6 +368,7 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p><a class="el" href="classcom_1_1atm_1_1backend_1_1Transaction.html">Transaction</a> table is empty</p>
 
 </div>
 </div>
@@ -381,6 +395,18 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Return account object from accounts table based on <a class="el" href="classcom_1_1atm_1_1backend_1_1Account.html">Account</a> Number input</p>
+<h1><a class="anchor" id="autotoc_md34"></a>
+Arguments</h1>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">accountNumber</td><td><a class="el" href="classcom_1_1atm_1_1backend_1_1Account.html">Account</a> Number</td></tr>
+  </table>
+  </dd>
+</dl>
+<h1><a class="anchor" id="autotoc_md35"></a>
+Return value</h1>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classcom_1_1atm_1_1backend_1_1Account.html">Account</a> Object </dd></dl>
 
 </div>
 </div>
@@ -407,6 +433,18 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Return account object from accounts table based on Card Number input</p>
+<h1><a class="anchor" id="autotoc_md32"></a>
+Arguments</h1>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cardNumber</td><td>Credit Card Number</td></tr>
+  </table>
+  </dd>
+</dl>
+<h1><a class="anchor" id="autotoc_md33"></a>
+Return value</h1>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classcom_1_1atm_1_1backend_1_1AccUserObj.html">AccUserObj</a> Object </dd></dl>
 
 </div>
 </div>
@@ -433,6 +471,18 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Return account object from accounts table based on username input</p>
+<h1><a class="anchor" id="autotoc_md29"></a>
+Arguments</h1>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">username</td><td>Username</td></tr>
+  </table>
+  </dd>
+</dl>
+<h1><a class="anchor" id="autotoc_md30"></a>
+Return value</h1>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classcom_1_1atm_1_1backend_1_1AccUserObj.html">AccUserObj</a> Object </dd></dl>
 
 </div>
 </div>
@@ -458,6 +508,10 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Return HashSet of all <a class="el" href="classcom_1_1atm_1_1backend_1_1Account.html">Account</a> Numbers in Database</p>
+<h1><a class="anchor" id="autotoc_md31"></a>
+Return value</h1>
+<dl class="section return"><dt>Returns</dt><dd>Hashset of account numbers </dd></dl>
 
 </div>
 </div>
@@ -561,6 +615,17 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>get CardNumber</p>
+<p>get AccountNumber</p>
+<p>get Username</p>
+<p>get Password</p>
+<p>get FirstName</p>
+<p>get LastName</p>
+<p>get PasswordSalt</p>
+<p>get AvailableBalance</p>
+<p>get TotalBalance</p>
+<p>get TransferLimit</p>
+<p>get IsAdmin</p>
 
 </div>
 </div>
@@ -587,6 +652,15 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>get transactionId</p>
+<p>get transactionDetails</p>
+<p>get chqNumber</p>
+<p>get AccountNumber</p>
+<p>get transactionDate</p>
+<p>get valueDate</p>
+<p>get withdrawal</p>
+<p>get deposit</p>
+<p>get balance</p>
 
 </div>
 </div>
@@ -612,6 +686,17 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Import CSV</p>
+<p>Set CardNumber</p>
+<p>Set AccountNumber</p>
+<p>Set Username</p>
+<p>Set FirstName</p>
+<p>Set LastName</p>
+<p>Set PasswordSalt and Password</p>
+<p>Set AvailableBalance</p>
+<p>Set TotalBalance</p>
+<p>Set TransferLimit</p>
+<p>Set IsAdmin</p>
 
 </div>
 </div>
@@ -637,6 +722,17 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Set CardNumber</p>
+<p>Set AccountNumber</p>
+<p>Set Username</p>
+<p>Set Password</p>
+<p>Set FirstName</p>
+<p>Set LastName</p>
+<p>Set PasswordSalt</p>
+<p>Set AvailableBalance</p>
+<p>Set TotalBalance</p>
+<p>Set TransferLimit</p>
+<p>Set IsAdmin</p>
 
 </div>
 </div>
@@ -663,6 +759,18 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Import CSV</p>
+<p>Set transactionId</p>
+<p>Set AccountNumber</p>
+<p>Set transactionDate</p>
+<p>date in string format yyyy-mm-dd</p>
+<p>Set transactionDetails</p>
+<p>Set chqNumber</p>
+<p>Set valueDate</p>
+<p>date in string format yyyy-mm-dd</p>
+<p>Set withdrawal</p>
+<p>Set deposit</p>
+<p>Set balance</p>
 
 </div>
 </div>

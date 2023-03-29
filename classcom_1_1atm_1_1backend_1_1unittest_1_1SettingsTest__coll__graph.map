@@ -15,7 +15,7 @@
 <area shape="rect" id="node13" title=" " alt="" coords="1321,5,1371,83"/>
 <area shape="rect" id="node15" title=" " alt="" coords="323,5,390,83"/>
 <area shape="rect" id="node16" href="$classcom_1_1atm_1_1backend_1_1Settings.html" title=" " alt="" coords="1473,549,1667,671"/>
-<area shape="rect" id="node17" href="$interfacecom_1_1atm_1_1backend_1_1UserSettings.html" title=" " alt="" coords="1457,270,1683,347"/>
-<area shape="rect" id="node18" href="$interfacecom_1_1atm_1_1backend_1_1AccountSettings.html" title=" " alt="" coords="1707,270,1953,347"/>
+<area shape="rect" id="node17" href="$interfacecom_1_1atm_1_1backend_1_1UserSettings.html" title="User setting interface for multiple inheritance." alt="" coords="1457,270,1683,347"/>
+<area shape="rect" id="node18" href="$interfacecom_1_1atm_1_1backend_1_1AccountSettings.html" title="Account setting interface for multiple inheritance." alt="" coords="1707,270,1953,347"/>
 <area shape="rect" id="node19" title=" " alt="" coords="1692,571,1763,649"/>
 </map>

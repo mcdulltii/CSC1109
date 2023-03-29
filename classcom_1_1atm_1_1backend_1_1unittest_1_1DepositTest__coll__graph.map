@@ -1,6 +1,6 @@
 <map id="com.atm.backend.unittest.DepositTest" name="com.atm.backend.unittest.DepositTest">
 <area shape="rect" id="node1" title=" " alt="" coords="514,909,710,1031"/>
-<area shape="rect" id="node2" href="$classcom_1_1atm_1_1backend_1_1Deposit.html" title=" " alt="" coords="188,667,380,788"/>
+<area shape="rect" id="node2" href="$classcom_1_1atm_1_1backend_1_1Deposit.html" title="subclass" alt="" coords="188,667,380,788"/>
 <area shape="rect" id="node3" href="$classcom_1_1atm_1_1backend_1_1Transaction.html" title=" " alt="" coords="5,395,221,589"/>
 <area shape="rect" id="node4" href="$classcom_1_1atm_1_1backend_1_1SQLQueries.html" title=" " alt="" coords="103,5,369,332"/>
 <area shape="rect" id="node5" href="$classcom_1_1atm_1_1backend_1_1unittest_1_1UnitTestSuite.html" title=" " alt="" coords="514,681,710,773"/>
