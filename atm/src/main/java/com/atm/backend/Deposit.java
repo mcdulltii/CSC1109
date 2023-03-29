@@ -21,8 +21,8 @@ public class Deposit extends Transaction {
     public double getDeposit(){
         return deposit;
     }
-    
-// Updates accounts and transaction tables in database after deposit
+
+    // Updates accounts and transaction tables in database after deposit
     //
     // # Arguments
     //

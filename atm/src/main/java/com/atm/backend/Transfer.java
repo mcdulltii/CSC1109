@@ -13,7 +13,7 @@ public class Transfer {
         this.conn = conn;
     }
     
-// Updates accounts and transaction tables in database after transfer using Withdraw and Deposit objects
+    // Updates accounts and transaction tables in database after transfer using Withdraw and Deposit objects
     //
     // # Arguments
     //

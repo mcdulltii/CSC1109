@@ -21,7 +21,8 @@ public class Withdraw extends Transaction {
     public double getWithdrawal(){
         return withdrawal;
     }
-// Updates accounts and transaction tables in database after withdrawal
+
+    // Updates accounts and transaction tables in database after withdrawal
     //
     // # Arguments
     //
