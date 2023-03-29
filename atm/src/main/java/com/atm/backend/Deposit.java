@@ -3,6 +3,7 @@ package com.atm.backend;
 import java.sql.Connection;
 import java.util.UUID;
 
+// subclass
 public class Deposit extends Transaction {
     private Double withdrawal = 0.0;
     private Double deposit;
@@ -20,15 +21,17 @@ public class Deposit extends Transaction {
     public double getDeposit(){
         return deposit;
     }
-    // Deposit amount into current account
-    // 
+    
+// Updates accounts and transaction tables in database after deposit
+    //
     // # Arguments
     //
-    // * 'a1' - Account to deposit to
-    // * 'amount' 
+    // * `a1` - Account 
+    // * `amount` - Deposit amount
+    //
     // # Return value
     //
-    // "Deposit Successful"
+    // Successful message 
     protected String execute(Account a1, double amount) {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount has to be positive.");

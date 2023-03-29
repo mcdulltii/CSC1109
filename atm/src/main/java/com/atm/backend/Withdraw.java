@@ -3,6 +3,7 @@ package com.atm.backend;
 import java.sql.Connection;
 import java.util.UUID;
 
+// subclass 
 public class Withdraw extends Transaction {
     private Double withdrawal;
     private Double deposit = 0.0;
@@ -20,15 +21,16 @@ public class Withdraw extends Transaction {
     public double getWithdrawal(){
         return withdrawal;
     }
-    // Withdraw amount from current account
-    // 
+// Updates accounts and transaction tables in database after withdrawal
+    //
     // # Arguments
     //
-    // * 'a1' - Account to withdraw from
-    // * 'amount' 
+    // * `a1` - Account 
+    // * `amount` - Withdrawal amount
+    //
     // # Return value
     //
-    // "Withdraw Successful"
+    // Successful message 
     protected String execute(Account a1, double amount) throws InsufficientFundsException  {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount has to be positive.");

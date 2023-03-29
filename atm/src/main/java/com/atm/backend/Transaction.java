@@ -3,6 +3,8 @@ package com.atm.backend;
 import java.sql.Connection;
 import java.util.Date;
 
+// Inheritance - Superclass
+// Subclass - Withdraw.java and Deposit.java
 public abstract class Transaction {
     private Account a1;
     private String accountNumber;
@@ -58,23 +60,16 @@ public abstract class Transaction {
         return balance;
     }
 
-    protected boolean hasAvailableBalance(double amount) {
-        if (amount < a1.getAvailableBalance()) {
-            return true;
-        }
-        return false;
-    }
-
-    protected boolean belowTransferLimit(double amount) {
-        if (amount < a1.getTransferLimit()) {
-            return true;
-        }
-        return false;
-    }
-    
+    // Abstract Method to be implemented in Withdraw and Deposit classes to execute action
+    //
+    // # Arguments
+    //
+    // * `a1` - Account
+    // * `amount` - Withdrawal or Deposit amount 
     protected abstract String execute(Account a1, double amount) throws InsufficientFundsException;
 }
 
+// User-defined Exception class to check that user have sufficient funds in account for withdrawal / transfer
 class InsufficientFundsException extends Exception {
     private double amount;
 
