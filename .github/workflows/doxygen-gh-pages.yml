@@ -15,10 +15,10 @@ jobs:
       - uses: DenverCoder1/doxygen-github-pages-action@v1.2.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          folder: utils/html
+          folder: docs/html
           config_file: Doxyfile
       - name: Symlink
         run: |
-          pushd ./utils/html/
+          pushd ./docs/html/
           ln -s ../../utils utils
           popd
