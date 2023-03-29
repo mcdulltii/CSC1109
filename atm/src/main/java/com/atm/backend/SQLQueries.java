@@ -66,8 +66,8 @@ public class SQLQueries {
     /// 
     /// # Arguments
     ///
-    /// \param Account a1 Current Account Object
-    /// \param Account a2 Account to transfer to
+    /// \param a1 Current Account Object
+    /// \param a2 Account to transfer to
     protected void executeQueryAccounts(Account a1, Account a2) {
         String updateQuery = "UPDATE accounts SET TotalBalance = ?, AvailableBalance = ?, TransferLimit = ? WHERE AccountNumber = ?";
         try {
@@ -141,7 +141,7 @@ public class SQLQueries {
     /// 
     /// # Arguments
     ///
-    /// \param String username Username
+    /// \param username Username
     /// 
     /// # Return value
     ///
@@ -198,7 +198,7 @@ public class SQLQueries {
     /// 
     /// # Arguments
     ///
-    /// \param String cardNumber Credit Card Number
+    /// \param cardNumber Credit Card Number
     /// 
     /// # Return value
     ///
@@ -237,7 +237,7 @@ public class SQLQueries {
     /// 
     /// # Arguments
     ///
-    /// \param Long accountNumber Account Number
+    /// \param accountNumber Account Number
     /// 
     /// # Return value
     ///

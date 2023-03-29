@@ -29,7 +29,7 @@ public class Settings implements UserSettings, AccountSettings {
     ///
     /// # Arguments
     ///
-    /// \param String pinNumber User pin number
+    /// \param pinNumber User pin number
     public void setPinNumber(String pinNumber) {
         byte[] passwordSalt = auth.getRandomNonce();
         /// Store the password in hash
@@ -42,7 +42,7 @@ public class Settings implements UserSettings, AccountSettings {
     ///
     /// # Arguments
     ///
-    /// \param double limit Account transfer limit
+    /// \param limit Account transfer limit
     public void setTransferLimit(double limit) {
         account.setTransferLimit(limit);
         q.executeQuerySettings(account, "transferlimit");

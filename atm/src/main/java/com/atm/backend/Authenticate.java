@@ -22,8 +22,8 @@ public class Authenticate {
     ///
     /// # Arguments
     ///
-    /// \param String str User password
-    /// \param byte[] salt Password salt
+    /// \param str User password
+    /// \param salt Password salt
     ///
     /// # Return value
     ///
@@ -37,8 +37,8 @@ public class Authenticate {
     ///
     /// # Arguments
     ///
-    /// \param String cardNumber User card number
-    /// \param String password User password
+    /// \param cardNumber User card number
+    /// \param password User password
     ///
     /// # Return value
     ///
@@ -64,8 +64,8 @@ public class Authenticate {
     ///
     /// # Arguments
     ///
-    /// \param String password User password
-    /// \param byte[] salt Password salt
+    /// \param password User password
+    /// \param salt Password salt
     ///
     /// # Return value
     ///
@@ -112,7 +112,7 @@ public class Authenticate {
     ///
     /// # Arguments
     ///
-    /// \param int numBytes Length of password salt
+    /// \param numBytes Length of password salt
     ///
     /// # Return value
     ///
@@ -128,7 +128,7 @@ public class Authenticate {
     ///
     /// # Arguments
     ///
-    /// \param byte[] hash Encrypted password hash byte array
+    /// \param hash Encrypted password hash byte array
     ///
     /// # Return value
     ///

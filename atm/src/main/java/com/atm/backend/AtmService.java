@@ -192,7 +192,7 @@ public class AtmService {
     /// 
     /// # Argument
     ///
-    /// \param String action Deposit/Withdraw/Transfer action
+    /// \param action Deposit/Withdraw/Transfer action
     /// 
     /// # Return value
     ///

@@ -26,8 +26,8 @@ public class Deposit extends Transaction {
     ///
     /// # Arguments
     ///
-    /// \param Account a1 Account 
-    /// \param double amount Deposit amount
+    /// \param a1 Account 
+    /// \param amount Deposit amount
     ///
     /// # Return value
     ///
