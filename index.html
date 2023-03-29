@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>CSC1109 ATM Project: Main Page</title>
+<title>CSC1109 ATM Project: CSC1109 Project</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -61,11 +61,221 @@ $(function() {
 </iframe>
 </div>
 
-<div class="header">
+<div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">CSC1109 ATM Project Documentation</div>  </div>
+<div class="title">CSC1109 Project </div>  </div>
 </div><!--header-->
 <div class="contents">
+<div class="textblock"><p><a class="anchor" id="md_README"></a></p><ol type="1">
+<li>Account Information (e.g. how many accounts, account numbers, etc)</li>
+<li>Balance Check (e.g. remain balance, available balance, etc)</li>
+<li>Authentication (e.g. password check / reset, etc)</li>
+<li>Money Transfer(e.g. inter-account transfer, third-party transfer, etc)</li>
+<li>Settings (e.g. transfer limit, overseas withdraw limit, etc)</li>
+</ol>
+<h1><a class="anchor" id="autotoc_md1"></a>
+Dependencies</h1>
+<ul>
+<li>Maven</li>
+<li>MySQL</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md2"></a>
+Setup</h1>
+<ol type="1">
+<li>Install dependencies</li>
+<li>Connect to MySQL server</li>
+</ol>
+<ul>
+<li>Create database by <code>CREATE DATABASE oopasgdb;</code></li>
+<li>Grant user:password to access MySQL database by</li>
+</ul>
+<div class="fragment"><div class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> testAdmin<span class="preprocessor">@localhost</span> IDENTIFIED <span class="keyword">BY</span> <span class="stringliteral">&#39;password1&#39;</span>;</div>
+<div class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> PRIVILEGES <span class="keyword">ON</span> oopasgdb.* <span class="keyword">TO</span> testAdmin<span class="preprocessor">@localhost</span>;</div>
+</div><!-- fragment --><ul>
+<li>Create transactions table by <code>use oopasgdb;</code> and</li>
+</ul>
+<div class="fragment"><div class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `transactions` (</div>
+<div class="line">  `transactionId` <span class="keywordtype">varchar</span>(<span class="stringliteral">8</span>) <span class="keyword">NOT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  `accountNumber` <span class="keywordtype">varchar</span>(<span class="stringliteral">50</span>) <span class="keyword">NOT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  `transactionDate` <span class="keywordtype">date</span> <span class="keyword">NOT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  `transactionDetails` <span class="keywordtype">varchar</span>(<span class="stringliteral">100</span>) <span class="keyword">DEFAULT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  `chqNumber` <span class="keywordtype">varchar</span>(<span class="stringliteral">50</span>) <span class="keyword">DEFAULT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  `valueDate` <span class="keywordtype">date</span> <span class="keyword">NOT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  `withdrawal` <span class="keywordtype">decimal</span>(<span class="stringliteral">15</span>,<span class="stringliteral">2</span>) <span class="keyword">DEFAULT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  `deposit` <span class="keywordtype">decimal</span>(<span class="stringliteral">15</span>,<span class="stringliteral">2</span>) <span class="keyword">DEFAULT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  `balance` <span class="keywordtype">decimal</span>(<span class="stringliteral">15</span>,<span class="stringliteral">2</span>) <span class="keyword">NOT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  <span class="keyword">PRIMARY</span> KEY (`transactionId`)</div>
+<div class="line">) ENGINE=InnoDB <span class="keyword">DEFAULT</span> CHARSET=utf8mb4;</div>
+</div><!-- fragment --><ul>
+<li>Create accounts table</li>
+</ul>
+<div class="fragment"><div class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `accounts` (</div>
+<div class="line">  `CardNumber` <span class="keywordtype">BIGINT</span>(<span class="stringliteral">20</span>) <span class="keyword">NOT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  `AccountNumber` <span class="keywordtype">BIGINT</span>(<span class="stringliteral">20</span>) <span class="keyword">NOT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  `UserName` <span class="keywordtype">VARCHAR</span>(<span class="stringliteral">45</span>) <span class="keyword">NOT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  `Password` <span class="keywordtype">VARCHAR</span>(<span class="stringliteral">128</span>) <span class="keyword">NOT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  `FirstName` <span class="keywordtype">VARCHAR</span>(<span class="stringliteral">45</span>) <span class="keyword">NOT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  `LastName` <span class="keywordtype">VARCHAR</span>(<span class="stringliteral">45</span>) <span class="keyword">NOT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  `PasswordSalt` VARBINARY(<span class="stringliteral">128</span>) <span class="keyword">NOT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  `AvailableBalance` <span class="keywordtype">FLOAT</span>(<span class="stringliteral">45</span>) <span class="keyword">NOT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  `TotalBalance` <span class="keywordtype">FLOAT</span>(<span class="stringliteral">45</span>) <span class="keyword">NOT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  `TransferLimit` <span class="keywordtype">FLOAT</span>(<span class="stringliteral">45</span>) <span class="keyword">NOT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  `IsAdmin` <span class="keywordtype">SMALLINT</span>(<span class="stringliteral">1</span>) <span class="keyword">NOT</span> <span class="stringliteral">NULL</span>,</div>
+<div class="line">  <span class="keyword">PRIMARY</span> KEY (`AccountNumber`)</div>
+<div class="line">) ENGINE=InnoDB <span class="keyword">DEFAULT</span> CHARSET=utf8mb4;</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md3"></a>
+Setup (Docker)</h1>
+<ol type="1">
+<li>Start sql and server docker containers</li>
+</ol>
+<div class="fragment"><div class="line">&gt; ./start.sh</div>
+</div><!-- fragment --><ol type="1">
+<li>Run client script</li>
+</ol>
+<div class="fragment"><div class="line">&gt; make build</div>
+<div class="line">&gt; make run</div>
+</div><!-- fragment --><ol type="1">
+<li>Stop docker containers once done</li>
+</ol>
+<div class="fragment"><div class="line">&gt; ./stop.sh</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md4"></a>
+Setup (Docker SQL only)</h1>
+<ol type="1">
+<li>Start sql docker container</li>
+</ol>
+<div class="fragment"><div class="line">&gt; docker-compose --profile=sql up -d</div>
+</div><!-- fragment --><ol type="1">
+<li>Run server.java</li>
+<li>Stop docker container once done</li>
+</ol>
+<div class="fragment"><div class="line">&gt; docker-compose --profile=sql down</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md5"></a>
+Test</h1>
+<ol type="1">
+<li>Run standalone test</li>
+</ol>
+<div class="fragment"><div class="line">&gt; cd atm</div>
+<div class="line">&gt; mvn test</div>
+</div><!-- fragment --><ol type="1">
+<li>During build time</li>
+</ol>
+<p>Tests will automatically run during build time</p>
+<h1><a class="anchor" id="autotoc_md6"></a>
+Class Diagram</h1>
+<p><img src="utils/uml.png" alt="" width="95%" class="inline"/></p>
+<h1><a class="anchor" id="autotoc_md7"></a>
+Class Diagram UPDATE (Incomplete)</h1>
+<div class="fragment"><div class="line">classDiagram</div>
+<div class="line">    class Account {</div>
+<div class="line">        -accountNumber</div>
+<div class="line">        -availableBalance</div>
+<div class="line">        -totalBalance</div>
+<div class="line">        -transferLimit</div>
+<div class="line">        +getAccountNumber()</div>
+<div class="line">        +getTransferLimit()</div>
+<div class="line">        +setTransferLimit(transferLimit: double)</div>
+<div class="line">        +getAvailableBalance()</div>
+<div class="line">        +setAvailableBalance(availableBalance: double)</div>
+<div class="line">        +getTotalBalance()</div>
+<div class="line">        +setTotalBalance(totalBalance: double)</div>
+<div class="line">        +getNewAccountNumber()</div>
+<div class="line">    }</div>
+<div class="line">    Authenticate &lt;|-- Account</div>
+<div class="line">    class Authenticate {</div>
+<div class="line">        -numTries</div>
+<div class="line">        +hashString()</div>
+<div class="line">        +checkPassword()</div>
+<div class="line">        +getNumTries() </div>
+<div class="line">    }</div>
+<div class="line">    Transaction &lt;|-- Account</div>
+<div class="line">    class Transaction {</div>
+<div class="line">        -accountNumber</div>
+<div class="line">        -transactionDate</div>
+<div class="line">        -transactionDetails</div>
+<div class="line">        -chqNumber</div>
+<div class="line">        -valueDate</div>
+<div class="line">        -withdrawal</div>
+<div class="line">        -deposit</div>
+<div class="line">        -balance</div>
+<div class="line">        +getAccountNumber()</div>
+<div class="line">        +getTransactionDate()</div>
+<div class="line">        +getTransactionDetails()</div>
+<div class="line">        +getChqNumber()</div>
+<div class="line">        +getValueDate()</div>
+<div class="line">        +getWithdrawal()</div>
+<div class="line">        +getDeposit()</div>
+<div class="line">        +getBalance()</div>
+<div class="line">        +hasAvailableBalance()</div>
+<div class="line">        +belowTransferLimit()</div>
+<div class="line">        +transferToAccount(a1: Account, a2: Account, amount: double)</div>
+<div class="line">        +deposit(a1: Account, amount: double)</div>
+<div class="line">        +withdraw(a1: Account, amount: double)</div>
+<div class="line">    }</div>
+<div class="line">    Settings &lt;|-- Account</div>
+<div class="line">    class Settings {</div>
+<div class="line">      +setTransferLimit(limit: double)</div>
+<div class="line">      +setPinNumber(pinNumber: String)</div>
+<div class="line">    }</div>
+<div class="line">    AccountSettings &lt;|.. Settings: uses</div>
+<div class="line">    class AccountSettings{</div>
+<div class="line">        &lt;&lt;interface&gt;&gt; </div>
+<div class="line">        +setTransferLimit(limit: double)</div>
+<div class="line">    }</div>
+<div class="line">    UserSettings &lt;|.. Settings: uses</div>
+<div class="line">    class UserSettings{</div>
+<div class="line">        &lt;&lt;interface&gt;&gt; </div>
+<div class="line">        +setPinNumber(pinNumber: String)</div>
+<div class="line">    }</div>
+<div class="line">    Account &lt;|--AccUserObj</div>
+<div class="line">    User &lt;|-- AccUserObj</div>
+<div class="line">    class AccUserObj{</div>
+<div class="line">        +getAccount()</div>
+<div class="line">        +getUser()</div>
+<div class="line">    }</div>
+<div class="line">    AtmService &lt;|-- Account</div>
+<div class="line">    AtmService &lt;|-- User</div>
+<div class="line">    AtmService &lt;|-- Transaction</div>
+<div class="line">    class AtmService{</div>
+<div class="line">        +getUserInput()</div>
+<div class="line">        +systemMenu()</div>
+<div class="line">        +userSystemMenu()</div>
+<div class="line">        +userSystemMenuOutput()</div>
+<div class="line">        +accountSystemMenu()</div>
+<div class="line">        +accountSystemMenuOutput()</div>
+<div class="line">        +selectionMenu()</div>
+<div class="line">        +selection()</div>
+<div class="line">    }</div>
+<div class="line">    SQLQueries &lt;|-- Account</div>
+<div class="line">    SQLQueries &lt;|-- Settings</div>
+<div class="line">    SQLQueries &lt;|-- Transaction</div>
+<div class="line">    class SQLQueries{</div>
+<div class="line">        +executeQueryTransactions(tr: Transaction)</div>
+<div class="line">        +executeQueryAccounts(a1: Account, a2: Account)</div>
+<div class="line">        +executeQuerySettings(ac: Account, field: String)</div>
+<div class="line">        +executeQuerySettings(user: User, field: String)</div>
+<div class="line">        +getAccountfromUsername(username: String)</div>
+<div class="line">        +getAccountfromAccountNumber(accountNumber: Long)</div>
+<div class="line">        +getPasswordfromUsername(username: String)</div>
+<div class="line">        +importAccounts()</div>
+<div class="line">        +executeQuery(query: String)</div>
+<div class="line">        +getConnection()</div>
+<div class="line">    }</div>
+<div class="line">    class User{</div>
+<div class="line">        -userId</div>
+<div class="line">        -AccNo</div>
+<div class="line">        -firstName</div>
+<div class="line">        -lastName</div>
+<div class="line">        -pinNumber</div>
+<div class="line">        -isAdmin</div>
+<div class="line">        +getUserId()</div>
+<div class="line">        +getAccNo()</div>
+<div class="line">        +getFirstName()</div>
+<div class="line">        +getLastName()</div>
+<div class="line">        +getPin()</div>
+<div class="line">        +setPin(pin: String)</div>
+<div class="line">        +getNewUserId()</div>
+<div class="line">    }</div>
+</div><!-- fragment --> </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
