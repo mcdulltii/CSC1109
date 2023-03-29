@@ -3,7 +3,7 @@ package com.atm.backend;
 import java.sql.Connection;
 import java.util.UUID;
 
-// subclass 
+/// subclass 
 public class Withdraw extends Transaction {
     private Double withdrawal;
     private Double deposit = 0.0;
@@ -22,16 +22,16 @@ public class Withdraw extends Transaction {
         return withdrawal;
     }
 
-    // Updates accounts and transaction tables in database after withdrawal
-    //
-    // # Arguments
-    //
-    // * `a1` - Account 
-    // * `amount` - Withdrawal amount
-    //
-    // # Return value
-    //
-    // Successful message 
+    /// Updates accounts and transaction tables in database after withdrawal
+    ///
+    /// # Arguments
+    ///
+    /// \param a1 Account 
+    /// \param amount Withdrawal amount
+    ///
+    /// # Return value
+    ///
+    /// \return Successful message 
     protected String execute(Account a1, double amount) throws InsufficientFundsException  {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount has to be positive.");
@@ -39,16 +39,16 @@ public class Withdraw extends Transaction {
             throw new InsufficientFundsException(-(a1.getAvailableBalance() - amount));
         }
 
-        // Update balances
+        /// Update balances
         double newTotalBalance = a1.getTotalBalance() - amount;
         double newAvailableBalance = a1.getAvailableBalance() - amount;
         a1.setTotalBalance(newTotalBalance);
         a1.setAvailableBalance(newAvailableBalance);
 
-        // Update transactions
+        /// Update transactions
         q.executeQueryTransactions(a1.getAccountNumber(), new java.sql.Date(super.getTransactionDate().getTime()), "ATM WITHDRAWAL/TRF", UUID.randomUUID().toString(), amount, deposit, newTotalBalance);
 
-        // Update account balance
+        /// Update account balance
         q.executeQueryAccounts(a1, null);
 
         return "Withdraw Successful";

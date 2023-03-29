@@ -67,13 +67,6 @@ public class Account {
                 uuid += ((Integer) rng.nextInt(10)).toString();
             }
             nonUnique = false;
-            // Check accounts for accountNumber collisions
-            // for (Account a : this.accounts) {
-            // if (uuid.compareTo(a.getAccountNumber()) == 0) {
-            // nonUnique = true;
-            // break;
-            // }
-            // }
         } while (nonUnique);
         return uuid;
     }

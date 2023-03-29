@@ -3,8 +3,8 @@ package com.atm.backend;
 import java.sql.Connection;
 import java.util.Date;
 
-// Inheritance - Superclass
-// Subclass - Withdraw.java and Deposit.java
+/// Inheritance - Superclass
+/// Subclass - Withdraw.java and Deposit.java
 public abstract class Transaction {
     private Account a1;
     private String accountNumber;
@@ -60,12 +60,12 @@ public abstract class Transaction {
         return balance;
     }
 
-    // Abstract Method to be implemented in Withdraw and Deposit classes to execute action
-    //
-    // # Arguments
-    //
-    // * `a1` - Account
-    // * `amount` - Withdrawal or Deposit amount 
+    /// Abstract Method to be implemented in Withdraw and Deposit classes to execute action
+    ///
+    /// # Arguments
+    ///
+    /// \param a1 Account
+    /// \param amount Withdrawal or Deposit amount 
     protected abstract String execute(Account a1, double amount) throws InsufficientFundsException;
 }
 
