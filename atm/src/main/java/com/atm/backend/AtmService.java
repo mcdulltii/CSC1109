@@ -39,7 +39,7 @@ public class AtmService {
         return withdrawal.execute(acc, amount);
     }
 
-    private String transfer(long transferAccNo, double amount) throws InsufficientFundsException {
+    private String transfer(long transferAccNo, double amount) throws ExceedTransferLimitException, InsufficientFundsException {
         Account a2 = getTransferAccount(transferAccNo);
         return transfer.transferToAccount(acc, a2, amount);
     }
@@ -316,6 +316,8 @@ public class AtmService {
                         this.interactions.add("Transferred $" + transferAmount + " to " + transferAccountNumber);
                     } catch (IllegalArgumentException e) {
                         outputStream.println(e.getMessage());
+                    } catch (ExceedTransferLimitException e) {
+                        outputStream.println("\nSorry, but you exceeded your transfer limit by: $" + e.getAmount());
                     } catch (InsufficientFundsException e) {
                         outputStream.println("\nSorry, but your account is short by: $" + e.getAmount());
                     }

@@ -24,10 +24,11 @@ public class Transfer {
     /// # Return value
     ///
     /// \return Successful message 
-    protected String transferToAccount(Account a1, Account a2, double amount) throws InsufficientFundsException {
-        if (amount > a1.getAvailableBalance()) {
-            throw new InsufficientFundsException(-(a1.getAvailableBalance() - amount));
+    protected String transferToAccount(Account a1, Account a2, double amount) throws ExceedTransferLimitException, InsufficientFundsException {
+        if (amount > a1.getTransferLimit()) {
+            throw new ExceedTransferLimitException(-(a1.getTransferLimit() - amount));
         }
+        
         if (amount < 0) {
             throw new IllegalArgumentException("Amount has to be positive.");
         }

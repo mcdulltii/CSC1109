@@ -484,8 +484,8 @@ class ATMGUIWrapper implements Runnable {
     private ATMGUI frame;
     private Thread thread = null;
     private int seconds = 0;
-    /// Max number of seconds before timeout
-    private final int max = 30;
+    // Max number of seconds before timeout
+    private final int max = 60;
 
     public ATMGUIWrapper(ATMGUI frame) {
         this.frame = frame;
