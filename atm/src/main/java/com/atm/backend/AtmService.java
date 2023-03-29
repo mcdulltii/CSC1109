@@ -318,7 +318,7 @@ public class AtmService {
                         outputStream.println(e.getMessage());
                     } catch (ExceedTransferLimitException e) {
                         outputStream.println("\nSorry, but you exceeded your transfer limit by: $" + e.getAmount());
-                    }catch (InsufficientFundsException e) {
+                    } catch (InsufficientFundsException e) {
                         outputStream.println("\nSorry, but your account is short by: $" + e.getAmount());
                     }
                 }
