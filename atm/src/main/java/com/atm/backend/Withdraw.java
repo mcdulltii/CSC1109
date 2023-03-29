@@ -20,7 +20,15 @@ public class Withdraw extends Transaction {
     public double getWithdrawal(){
         return withdrawal;
     }
-
+    // Withdraw amount from current account
+    // 
+    // # Arguments
+    //
+    // * 'a1' - Account to withdraw from
+    // * 'amount' 
+    // # Return value
+    //
+    // "Withdraw Successful"
     protected String execute(Account a1, double amount) throws InsufficientFundsException  {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount has to be positive.");

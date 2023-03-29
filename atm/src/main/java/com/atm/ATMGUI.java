@@ -272,7 +272,7 @@ public class ATMGUI extends JFrame {
         displayArea.setBackground(bgColor);
         displayArea.setForeground(Color.WHITE);
 
-        inputArea.setFont(new Font("Arial", Font.PLAIN, 34));
+        inputArea.setFont(new Font("Arial", Font.PLAIN, 30));
         inputArea.setOpaque(true);
         inputArea.setBackground(bgColor);
         inputArea.setForeground(Color.WHITE);

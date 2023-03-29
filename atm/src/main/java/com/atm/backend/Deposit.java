@@ -20,7 +20,15 @@ public class Deposit extends Transaction {
     public double getDeposit(){
         return deposit;
     }
-
+    // Deposit amount into current account
+    // 
+    // # Arguments
+    //
+    // * 'a1' - Account to deposit to
+    // * 'amount' 
+    // # Return value
+    //
+    // "Deposit Successful"
     protected String execute(Account a1, double amount) {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount has to be positive.");

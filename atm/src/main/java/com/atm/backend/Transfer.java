@@ -13,6 +13,17 @@ public class Transfer {
         this.conn = conn;
     }
 
+    // Transfer amount from current account to inputted account
+    // 
+    // # Arguments
+    //
+    // * 'a1' - Account to transfer from
+    // * 'a2' - Account to transfer to
+    // * 'amount' - Amount
+    // 
+    // # Return value
+    //
+    // "Transfer is successful"
     protected String transferToAccount(Account a1, Account a2, double amount) throws InsufficientFundsException {
         if (amount > a1.getAvailableBalance()) {
             throw new InsufficientFundsException(-(a1.getAvailableBalance() - amount));
@@ -28,6 +39,6 @@ public class Transfer {
         this.withdrawal.execute(a1, amount);
         this.deposit.execute(a2, amount);
 
-        return "Tranfer is Successful";
+        return "Transfer is Successful";
     }
 }

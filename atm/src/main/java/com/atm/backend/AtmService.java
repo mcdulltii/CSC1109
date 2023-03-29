@@ -44,7 +44,12 @@ public class AtmService {
         return transfer.transferToAccount(acc, a2, amount);
     }
 
+    // Get Available Balance and Total Balance from current account
     private double[] getBalance() {
+        SQLQueries q = new SQLQueries();
+        Account a = q.getAccountfromAccountNumber(Long.parseLong(acc.getAccountNumber()));
+        acc.setAvailableBalance(a.getAvailableBalance());
+        acc.setTotalBalance(a.getTotalBalance());   
         double[] balance = { acc.getAvailableBalance(), acc.getTotalBalance() };
         return balance;
     }
@@ -140,49 +145,6 @@ public class AtmService {
         outputStream.print("Please enter an option: ");
     }
 
-    private double getInputAmount(String action) {
-        double amount = 0.0;
-        double[] amountOptions = { 10.0, 20.0, 50.0, 100.0, 500.0, 1000.0 };
-        while (true) {
-            outputStream.printf("%n-------- %s ---------%n",
-                    "Choose Amount to " + action + " ($)");
-                    
-            outputStream.printf("| %-40s |%n", "(0) Cancel Operation");
-            outputStream.printf("| %-40s |%n", "(1) 10");
-            outputStream.printf("| %-40s |%n", "(2) 20");
-            outputStream.printf("| %-40s |%n", "(3) 50");
-            outputStream.printf("| %-40s |%n", "(4) 100");
-            outputStream.printf("| %-40s |%n", "(5) 500");
-            outputStream.printf("| %-40s |%n", "(6) 1000");
-            outputStream.printf("| %-40s |%n", "(7) Custom Amount");
-            outputStream.printf("%s%n%n", "-".repeat(40));
-            outputStream.print("Please enter an option: ");
-            try {
-                int userinput = Integer.parseInt(getUserInput());
-                if (userinput == 0 || userinput == -1)
-                    break;
-                if (userinput == 7) {
-                    outputStream.println("Enter amount to " + action + ": $");
-                    amount = Double.parseDouble(getUserInput());
-                    if (amount == -1){
-                        amount = 0;
-                        return amount;
-                    }
-                    return amount;
-                }else if (userinput < -1 || userinput > 7) {
-                    outputStream.println("Please enter a valid option");
-                    continue;
-                }
-                amount = amountOptions[userinput - 1];
-                return amount;
-            } catch (NumberFormatException e) {
-                outputStream.println("Please enter a valid option");
-                continue;
-            }
-        }
-        return amount;
-    }
-
     private void accountSystemMenuOpt(int opt) {
         switch (opt) {
             case 1:
@@ -226,6 +188,58 @@ public class AtmService {
         }
     }
 
+    // Returns amount based on user's selection or input
+    // 
+    // # Argument
+    //
+    // * 'action' - Deposit/Withdraw/Transfer action
+    // 
+    // # Return value
+    //
+    // Amount
+    private double getInputAmount(String action) {
+        double amount = 0.0;
+        double[] amountOptions = { 10.0, 20.0, 50.0, 100.0, 500.0, 1000.0 };
+        while (true) {
+            outputStream.printf("%n- %s -%n",
+                    "Choose Amount to " + action + " ($)");
+                    
+            outputStream.printf("| %-40s |%n", "(0) Cancel Operation");
+            outputStream.printf("| %-40s |%n", "(1) 10");
+            outputStream.printf("| %-40s |%n", "(2) 20");
+            outputStream.printf("| %-40s |%n", "(3) 50");
+            outputStream.printf("| %-40s |%n", "(4) 100");
+            outputStream.printf("| %-40s |%n", "(5) 500");
+            outputStream.printf("| %-40s |%n", "(6) 1000");
+            outputStream.printf("| %-40s |%n", "(7) Custom Amount");
+            outputStream.printf("%s%n%n", "-".repeat(40));
+            outputStream.print("Please enter an option: ");
+            try {
+                int userinput = Integer.parseInt(getUserInput());
+                if (userinput == 0 || userinput == -1)
+                    break;
+                if (userinput == 7) {
+                    outputStream.println("Enter amount to " + action + ": $");
+                    amount = Double.parseDouble(getUserInput());
+                    if (amount == -1){
+                        amount = 0;
+                        return amount;
+                    }
+                    return amount;
+                }else if (userinput < -1 || userinput > 7) {
+                    outputStream.println("Please enter a valid option");
+                    continue;
+                }
+                amount = amountOptions[userinput - 1];
+                return amount;
+            } catch (NumberFormatException e) {
+                outputStream.println("Please enter a valid option");
+                continue;
+            }
+        }
+        return amount;
+    }
+
     public void selectionMenu() {
         outputStream.printf("%n---------- %s ----------%n", "Available Services");
         outputStream.printf("| %-36s |%n", "(0) Exit");
@@ -246,7 +260,7 @@ public class AtmService {
             case 0:
                 break;
             case 1:
-                // Deposit
+                // Deposit amount to current account
                 double depositAmount = getInputAmount("Deposit");
                 if (depositAmount != 0) {
                     try {
@@ -259,7 +273,7 @@ public class AtmService {
                 }
                 break;
             case 2:
-                // Withdraw
+                // Withdraw amount from current account
                 double withdrawalAmount = getInputAmount("Withdraw");
                 if (withdrawalAmount != 0) {
                     try {
@@ -274,11 +288,12 @@ public class AtmService {
                 }
                 break;
             case 3:
-                // Transfer
+                // Transfer amount from current account to another account
                 String userInput = "";
                 SQLQueries q = new SQLQueries();
                 outputStream.println("Please enter account number to transfer to: ");
                 HashSet<String> accountNumbers = q.getAccountNumbers();
+                // Check if account number exists in the database
                 while (true){
                     userInput = getUserInput();
                     if (Long.parseLong(userInput) == -1)
@@ -307,7 +322,7 @@ public class AtmService {
                 }
                 break;
             case 4:
-                // Account balance
+                // Show Available Balance and Total Balance
                 double[] balance = getBalance();
                 outputStream.println("Your Available Balance is " + balance[0]);
                 outputStream.println("Your Total Balance is " + balance[1]);
