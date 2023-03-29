@@ -37,6 +37,7 @@ public class UnitTestSuite {
     public UnitTestSuite() throws SQLException {
         this.mock = new MockObjects();
 
+        // Specify to control the return values from database queries
         when(mock.resultSet.next()).thenReturn(true).thenReturn(false);
         when(mock.resultSet.getLong("AccountNumber")).thenReturn(409000438620L);
         when(mock.resultSet.getString("FirstName")).thenReturn("Tia");
@@ -50,11 +51,20 @@ public class UnitTestSuite {
         this.obj = q.getAccountfromUsername("tia");
         this.acc = obj.getAccount();
         this.user = obj.getUser();
-        this.protectedAccMethods = getProtectedAccMethods("account");
-        this.protectedUserMethods = getProtectedAccMethods("user");
+        this.protectedAccMethods = getProtectedMethods("account");
+        this.protectedUserMethods = getProtectedMethods("user");
     }
 
-    private Map<String, Method> getProtectedAccMethods(String typeClass) {
+    // Get access to protected methods for testing
+    //
+    // # Arguments
+    //
+    // * `typeClass` - Methods of specific class
+    //
+    // # Return value
+    //
+    // Dictionary of method name and the invokable methods
+    private Map<String, Method> getProtectedMethods(String typeClass) {
         Map<String, Method> protectedMethods = new HashMap<>();
         Method[] methods = null;
 
@@ -64,14 +74,15 @@ public class UnitTestSuite {
             methods = User.class.getDeclaredMethods();
         }
 
+        // Get all getters method
         methods = Arrays.stream(methods)
                 .filter(method -> method.getName().startsWith("get"))
                 .toArray(Method[]::new);
 
+        // Enable access to each protected method
         for (Method method : methods) {
             method.setAccessible(true);
             protectedMethods.put(method.getName(), method);
-            ;
         }
 
         return protectedMethods;

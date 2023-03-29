@@ -58,7 +58,7 @@ public class Server extends Thread {
 
     @Override
     public void run() {
-        // Listen to incoming client connections
+        /// Listen to incoming client connections
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
@@ -73,13 +73,14 @@ public class Server extends Thread {
     }
 
     public static void main(String[] args) {
-        // Retrieve commandline arguments
+        /// Retrieve commandline arguments
         ArgumentParser parser = ArgumentParsers.newFor("Server").build()
                 .defaultHelp(true)
                 .description("ATM Server backend");
         parser.addArgument("--partial").action(Arguments.storeTrue())
                 .help("Flag to import transactions table partially");
         parser.addArgument("-P", "--port")
+                .type(Integer.class)
                 .setDefault(7777)
                 .help("Specify which port to expose server on");
         Namespace ns = null;
@@ -94,11 +95,11 @@ public class Server extends Thread {
         Server s = new Server();
         s.start(ns.getInt("port"));
 
-        // Fill account database
+        /// Fill account database
         SQLQueries q = new SQLQueries();
         String adminPassword = null;
         try {
-            // Import accounts table
+            /// Import accounts table
             q.importAccounts();
         } catch (FileNotFoundException e) {
             System.out.println("Import Accounts File not found.");
@@ -107,7 +108,7 @@ public class Server extends Thread {
         // Optionally only partially retrieves transaction details
         Boolean isPartial = ns.getBoolean("partial");
         try {
-            // Import transactions table
+            /// Import transactions table
             if (args.length > 0 && isPartial)
                 q.importTransactions(true);
             else
@@ -116,7 +117,7 @@ public class Server extends Thread {
             System.out.println("Import Transactions File not found.");
         }
 
-        // Import admin account
+        /// Import admin account
         adminPassword = q.importAdminAccount();
         Scanner sc = new Scanner(System.in);
         Connection conn = new DBConnection().getConnection();
@@ -223,7 +224,7 @@ class ThreadClientHandler extends Thread {
     private PrintWriter outputStream;
     //Reader to read text that the Client sends to the Server
     private BufferedReader inputReader;
-    // Boolean to check if client is authenticated
+    /// Boolean to check if client is authenticated
     private Boolean authenticated = false;
 
     // Default constructor
@@ -231,7 +232,7 @@ class ThreadClientHandler extends Thread {
         this.clientSocket = socket;
     }
 
-    // Retrieve user input from client
+    /// Retrieve user input from client
     private String getUserInput() {
         endLine();
         String s = "";
@@ -243,7 +244,7 @@ class ThreadClientHandler extends Thread {
         return s.strip();
     }
 
-    // Send END indicator to client to indicate end of server message
+    /// Send END indicator to client to indicate end of server message
     private void endLine() {
         outputStream.println("END");
         outputStream.flush();
@@ -259,16 +260,16 @@ class ThreadClientHandler extends Thread {
             return;
         }
 
-        // Send server prompt
+        /// Send server prompt
         getUserInput();
 
-        // Welcome Message
+        /// Welcome Message
         outputStream.println("");
         outputStream.printf("%s%n", "-".repeat(32));
         outputStream.printf("|        Welcome to ATM!       |%n");
         outputStream.printf("%s%n%n", "-".repeat(32));
 
-        // Get client card number and password
+        /// Get client card number and password
         AccUserObj obj = null;
         Account acc = null;
         User user = null;
@@ -282,9 +283,9 @@ class ThreadClientHandler extends Thread {
             String password = getUserInput();
 
             if (cardNumber.length() != 0 && password.length() != 0) {
-                // Check if authentication succeeds
+                /// Check if authentication succeeds
                 if (au.checkPassword(cardNumber, password)) {
-                    // Set user based on card number input
+                    /// Set user based on card number input
                     obj = getCurrentUserAcc(cardNumber);
                     acc = obj.getAccount();
                     user = obj.getUser();
@@ -293,7 +294,7 @@ class ThreadClientHandler extends Thread {
                 }
             }
 
-            // 3 times timeout
+            /// 3 times timeout
             int numTries = au.getNumTries();
             outputStream.println("Password incorrect, try again.");
             outputStream.printf("You have %d tries left. ", 3 - numTries);
@@ -304,36 +305,36 @@ class ThreadClientHandler extends Thread {
                 outputStream.println("\n");
         }
 
-        // User has authenticated, goto main server prompt loop
+        /// User has authenticated, goto main server prompt loop
         if (authenticated) {
             outputStream.println("User authenticated");
             AtmService svc = new AtmService(acc, user, outputStream, inputReader);
             int userinput = 0;
 
             do {
-                // Server prompt a user selection menu
+                /// Server prompt a user selection menu
                 svc.selectionMenu();
                 try {
-                    // Retrieve user input from client response
+                    /// Retrieve user input from client response
                     userinput = Integer.parseInt(svc.getUserInput());
-                    // Handle user input selection
+                    /// Handle user input selection
                     svc.selection(userinput);
                 } catch (NumberFormatException e) {
                     outputStream.println("Invalid choice! Please choose again!");
                 }
             } while (userinput != 0);
 
-            // if here, user has prompted to terminate connection
-            // Thank You Message
+            /// if here, user has prompted to terminate connection
+            /// Thank You Message
             outputStream.println("Thank You and Have a Nice Day!");
             endSession(outputStream);
 
-            // Send receipt
+            /// Send receipt
             outputStream.println(svc.getInteractions());
             this.endLine();
         }
 
-        // Close connection
+        /// Close connection
         try {
             inputReader.close();
             outputStream.close();
@@ -351,7 +352,7 @@ class ThreadClientHandler extends Thread {
     //
     // # Return Value
     //
-    // \return Account object of user 
+    // \return Account object of user
     private AccUserObj getCurrentUserAcc(String cardNumber) {
         SQLQueries q = new SQLQueries();
         AccUserObj currentUserAcc = q.getAccountfromCardNumber(cardNumber);

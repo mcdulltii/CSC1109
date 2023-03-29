@@ -61,14 +61,6 @@ public class User {
 
             }
             nonUnique = false;
-            // Check database for userId collision
-            // for (User u : this.users) {
-            // if (uuid.compareTo(u.getUserId()) == 0) {
-            // nonUnique = true;
-            // break;
-            // }
-            // }
-
         } while (nonUnique);
         return Integer.parseInt(uuid);
     }

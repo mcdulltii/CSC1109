@@ -14,9 +14,9 @@ import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 
 class ReceivedMessage {
-    // Boolean to check if session is open
+    /// Boolean to check if session is open
     public Boolean isOpen = false;
-    // Server message prompt
+    /// Server message prompt
     public String msg = "";
 }
 
@@ -26,15 +26,15 @@ public class Client {
     private PrintStream outputStream;
     //Reader to read text that the Server sends to the client
     private BufferedReader inputReader;
-    // Boolean to check if client is in GUI or CLI mode
+    /// Boolean to check if client is in GUI or CLI mode
     private Boolean isCLI;
-    // Number of login tries
+    /// Number of login tries
     private int numTries;
 
     //Default Constructer for Client for CLI
     public Client(String ip, int port)  {
         this.numTries = 0;
-        // Initialize client as CLI mode
+        /// Initialize client as CLI mode
         this.isCLI = true;
         try {
             this.socket = new Socket(ip, port);
@@ -68,7 +68,7 @@ public class Client {
     // 
     // \return True if connection is valid and started, otherwise false
     public Boolean startConnection() {
-        // Initialize socket input and output streams
+        /// Initialize socket input and output streams
         try {
             outputStream = new PrintStream(socket.getOutputStream(), true);
             inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -91,21 +91,21 @@ public class Client {
         String responseLine = "";
         ReceivedMessage recvMsg = new ReceivedMessage();
         try {
-            // Retrieve server response
+            /// Retrieve server response
             if (inputReader.ready())
                 responseLine = inputReader.readLine().trim();
             while (true) {
-                // Retrieve server response till END or FIN indicators
+                /// Retrieve server response till END or FIN indicators
                 if (responseLine.equalsIgnoreCase("END")) {
-                    // END indicating end of server message
+                    /// END indicating end of server message
                     recvMsg.isOpen = true;
                     return recvMsg;
                 } else if (responseLine.equalsIgnoreCase("FIN")) {
-                    // FIN indicating server closing session
+                    /// FIN indicating server closing session
                     recvMsg.isOpen = false;
                     return recvMsg;
                 }
-                // Actively retrieve incoming server messages
+                /// Actively retrieve incoming server messages
                 if (responseLine != "") {
                     if (responseLine.length() > 3  &&
                         responseLine.substring(responseLine.length() - 3).equalsIgnoreCase("END")) {
@@ -121,7 +121,7 @@ public class Client {
                         recvMsg.msg += responseLine + "\n";
                     }
                 }
-                // Add delay to wait for new server messages
+                /// Add delay to wait for new server messages
                 Thread.sleep(50);
                 if (inputReader.ready())
                     responseLine = inputReader.readLine();
@@ -143,7 +143,7 @@ public class Client {
     //
     // \return ReceivedMessage Object containing if the connection is closed and the Server's message 
     public ReceivedMessage sendMessage(String msg) {
-        // Send client message to server, and retrieve server response
+        /// Send client message to server, and retrieve server response
         outputStream.println(msg);
         ReceivedMessage recvMsg = this.receiveMessage();
         outputStream.flush();
@@ -161,7 +161,7 @@ public class Client {
     //
     // \return String containing the Server's message, notifying if login was successful
     public String sendUsernamePassword(String username, String password) {
-        // Send username and password to server for client authentication
+        /// Send username and password to server for client authentication
         this.sendMessage(username);
         ReceivedMessage recvMsg = this.sendMessage(password);
         this.numTries++;
@@ -183,7 +183,7 @@ public class Client {
     //
     // \return String of receipt text from Server
     public String getInteractions() {
-        // Retrieve ATM receipt from server
+        /// Retrieve ATM receipt from server
         ReceivedMessage recvMsg = this.receiveMessage();
         return recvMsg.msg;
     }
@@ -200,14 +200,16 @@ public class Client {
     }
 
     public static void main(String args[]) {
-        // Retrieve commandline arguments
+        /// Retrieve commandline arguments
         ArgumentParser parser = ArgumentParsers.newFor("Client").build()
                 .defaultHelp(true)
                 .description("ATM Client frontend");
         parser.addArgument("-H", "--host")
+                .type(String.class)
                 .setDefault("127.0.0.1")
                 .help("Specify which host to expose server on");
         parser.addArgument("-P", "--port")
+                .type(Integer.class)
                 .setDefault(7777)
                 .help("Specify which port to expose server on");
         Namespace ns = null;
@@ -222,11 +224,11 @@ public class Client {
         Client client = new Client(ns.getString("host"), ns.getInt("port"));
         if (!client.startConnection())
             System.exit(0);
-        // Receive server prompt
+        /// Receive server prompt
         client.sendMessage(null);
         client.receiveMessage();
 
-        // Main server-client communication loop
+        /// Main server-client communication loop
         Boolean isOpen = true;
         while (isOpen) {
             String input = scanner.nextLine();

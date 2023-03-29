@@ -14,7 +14,7 @@ import javax.swing.table.TableModel;
 public class AdminTable extends JFrame {
 
     public void displayTable(String type, ArrayList<String[]> data) {
-        // headers for the table
+        /// headers for the table
         String[] headers = {};
         if (type.equalsIgnoreCase("Account Details")) {
             headers = new String[] {
@@ -29,13 +29,13 @@ public class AdminTable extends JFrame {
             };
         }
 
-        // format data
+        /// format data
         String[][] formattedData = new String[data.size()][];
         for (int i = 0; i<data.size(); i++) {
             formattedData[i] = data.get(i);
         }
 
-        // create table with data
+        /// create table with data
         TableModel model = new DefaultTableModel(formattedData, headers) {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -56,7 +56,7 @@ public class AdminTable extends JFrame {
         };
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
-        // set frame size
+        /// set frame size
         Dimension DimMax = Toolkit.getDefaultToolkit().getScreenSize();
         this.setMaximumSize(DimMax);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);

@@ -52,7 +52,7 @@ public class WithdrawTest {
         withdraw.setAccessible(true);
         withdraw.invoke(withdrawTrans, uts.acc, 50);
 
-        // Verify Account update
+        // Verify Account update made with right arguments
         verify(uts.mock.connection).prepareStatement(
                 "UPDATE accounts SET TotalBalance = ?, AvailableBalance = ?, TransferLimit = ? WHERE AccountNumber = ?");
         verify(uts.mock.preStatement).setDouble(1, (double) getTotalBalance.invoke(uts.acc));
@@ -60,7 +60,7 @@ public class WithdrawTest {
         verify(uts.mock.preStatement).setDouble(3, (double) getTransferLimit.invoke(uts.acc));
         verify(uts.mock.preStatement).setLong(4, Long.parseLong((String) getAccountNumber.invoke(uts.acc)));
 
-        // Verify Transaction update
+        // Verify Transaction update made with right arguments
         when(uts.mock.resultSet.next()).thenReturn(true, true, false);
 
         verify(uts.mock.statement)
