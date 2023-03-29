@@ -29,7 +29,7 @@ public class Withdraw extends Transaction {
     // * `a1` - Account 
     // * `amount` - Withdrawal amount
     //
-    // # Return String
+    // # Return value
     //
     // Successful message 
     protected String execute(Account a1, double amount) throws InsufficientFundsException  {

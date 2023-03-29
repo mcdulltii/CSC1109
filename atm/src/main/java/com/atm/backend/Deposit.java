@@ -29,7 +29,7 @@ public class Deposit extends Transaction {
     // * `a1` - Account 
     // * `amount` - Deposit amount
     //
-    // # Return String
+    // # Return value
     //
     // Successful message 
     protected String execute(Account a1, double amount) {

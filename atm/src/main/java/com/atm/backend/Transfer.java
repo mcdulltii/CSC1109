@@ -21,7 +21,7 @@ public class Transfer {
     // * `a2` - Receiver Account
     // * `amount` - Transfer amount
     //
-    // # Return String
+    // # Return value
     //
     // Successful message 
     protected String transferToAccount(Account a1, Account a2, double amount) throws InsufficientFundsException {
