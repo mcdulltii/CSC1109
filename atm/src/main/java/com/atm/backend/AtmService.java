@@ -44,7 +44,7 @@ public class AtmService {
         return transfer.transferToAccount(acc, a2, amount);
     }
 
-    // Get Available Balance and Total Balance from current account
+    /// Get Available Balance and Total Balance from current account
     private double[] getBalance() {
         SQLQueries q = new SQLQueries();
         Account a = q.getAccountfromAccountNumber(Long.parseLong(acc.getAccountNumber()));
@@ -54,7 +54,7 @@ public class AtmService {
         return balance;
     }
 
-    // Create Account object based on accountNumber (For transfer)
+    /// Create Account object based on accountNumber (For transfer)
     private static Account getTransferAccount(Long accountNumber) {
         SQLQueries q = new SQLQueries(conn);
         Account transferAccount = q.getAccountfromAccountNumber(accountNumber);
@@ -119,7 +119,7 @@ public class AtmService {
                         outputStream.printf("Please enter a valid 6-digit numeric pin%n");
                         continue;
                     } else {
-                        // check if user input is numeric
+                        /// check if user input is numeric
                         Integer.parseInt(userinput);
                     }
 
@@ -188,15 +188,15 @@ public class AtmService {
         }
     }
 
-    // Returns amount based on user's selection or input
-    // 
-    // # Argument
-    //
-    // * 'action' - Deposit/Withdraw/Transfer action
-    // 
-    // # Return value
-    //
-    // Amount
+    /// Returns amount based on user's selection or input
+    /// 
+    /// # Argument
+    ///
+    /// \param action Deposit/Withdraw/Transfer action
+    /// 
+    /// # Return value
+    ///
+    /// \return Amount
     private double getInputAmount(String action) {
         double amount = 0.0;
         double[] amountOptions = { 10.0, 20.0, 50.0, 100.0, 500.0, 1000.0 };
@@ -243,7 +243,7 @@ public class AtmService {
     public void selectionMenu() {
         outputStream.printf("%n---------- %s ----------%n", "Available Services");
         outputStream.printf("| %-36s |%n", "(0) Exit");
-        // User options
+        /// User options
         outputStream.printf("| %-36s |%n", "(1) Deposit");
         outputStream.printf("| %-36s |%n", "(2) Withdraw");
         outputStream.printf("| %-36s |%n", "(3) Transfer");
@@ -260,7 +260,7 @@ public class AtmService {
             case 0:
                 break;
             case 1:
-                // Deposit amount to current account
+                /// Deposit amount to current account
                 double depositAmount = getInputAmount("Deposit");
                 if (depositAmount != 0) {
                     try {
@@ -273,7 +273,7 @@ public class AtmService {
                 }
                 break;
             case 2:
-                // Withdraw amount from current account
+                /// Withdraw amount from current account
                 double withdrawalAmount = getInputAmount("Withdraw");
                 if (withdrawalAmount != 0) {
                     try {
@@ -288,12 +288,12 @@ public class AtmService {
                 }
                 break;
             case 3:
-                // Transfer amount from current account to another account
+                /// Transfer amount from current account to another account
                 String userInput = "";
                 SQLQueries q = new SQLQueries();
                 outputStream.println("Please enter account number to transfer to: ");
                 HashSet<String> accountNumbers = q.getAccountNumbers();
-                // Check if account number exists in the database
+                /// Check if account number exists in the database
                 while (true){
                     userInput = getUserInput();
                     if (Long.parseLong(userInput) == -1)
@@ -322,7 +322,7 @@ public class AtmService {
                 }
                 break;
             case 4:
-                // Show Available Balance and Total Balance
+                /// Show Available Balance and Total Balance
                 double[] balance = getBalance();
                 outputStream.println("Your Available Balance is " + balance[0]);
                 outputStream.println("Your Total Balance is " + balance[1]);
@@ -357,7 +357,7 @@ public class AtmService {
                 }
                 break;
             case 6:
-                // Help
+                /// Help
                 outputStream.println("Please contact the customer service hotline for any assistance.");
                 break;
             default:

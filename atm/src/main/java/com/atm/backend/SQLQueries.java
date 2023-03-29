@@ -18,7 +18,7 @@ public class SQLQueries {
     private String transactionId;
     private Connection conn;
 
-    // default connection
+    /// default connection
     public SQLQueries() {
         DBConnection dbConn = new DBConnection();
         this.conn = dbConn.getConnection();
@@ -41,7 +41,7 @@ public class SQLQueries {
             System.out.println(e);
         }
 
-        // Transaction table is empty
+        /// Transaction table is empty
         if (transactionId == null)
             transactionId = "0";
 
@@ -62,12 +62,12 @@ public class SQLQueries {
         }
     }
 
-    // Update accounts table based on selected action (Deposit/Withdraw/Transfer)
-    // 
-    // # Arguments
-    //
-    // * 'a1' - Current Account Object
-    // * 'a2' - Account to transfer to
+    /// Update accounts table based on selected action (Deposit/Withdraw/Transfer)
+    /// 
+    /// # Arguments
+    ///
+    /// \param a1 Current Account Object
+    /// \param a2 Account to transfer to
     protected void executeQueryAccounts(Account a1, Account a2) {
         String updateQuery = "UPDATE accounts SET TotalBalance = ?, AvailableBalance = ?, TransferLimit = ? WHERE AccountNumber = ?";
         try {
@@ -137,15 +137,15 @@ public class SQLQueries {
         }
     }
 
-    // Return account object from accounts table based on username input
-    // 
-    // # Arguments
-    //
-    // * 'username' - Username
-    // 
-    // # Return value
-    //
-    // AccUserObj Object
+    /// Return account object from accounts table based on username input
+    /// 
+    /// # Arguments
+    ///
+    /// \param username Username
+    /// 
+    /// # Return value
+    ///
+    /// \return AccUserObj Object
     public AccUserObj getAccountfromUsername(String username) {
         String accountNumber = "", firstname = "", lastname = "";
         int isAdmin = 0;
@@ -175,11 +175,11 @@ public class SQLQueries {
 
         return obj;
     }
-    // Return HashSet of all Account Numbers in Database
-    // 
-    // # Return value
-    //
-    // Hashset of account numbers
+    /// Return HashSet of all Account Numbers in Database
+    /// 
+    /// # Return value
+    ///
+    /// \return Hashset of account numbers
     public HashSet<String> getAccountNumbers(){
         HashSet<String> accountNumbers = new HashSet<>();
         String selectQuery = "SELECT * FROM accounts";
@@ -194,15 +194,15 @@ public class SQLQueries {
         return accountNumbers;
     }
 
-    // Return account object from accounts table based on Card Number input
-    // 
-    // # Arguments
-    //
-    // * 'cardNumber' - Credit Card Number
-    // 
-    // # Return value
-    //
-    // AccUserObj Object
+    /// Return account object from accounts table based on Card Number input
+    /// 
+    /// # Arguments
+    ///
+    /// \param cardNumber Credit Card Number
+    /// 
+    /// # Return value
+    ///
+    /// \return AccUserObj Object
     public AccUserObj getAccountfromCardNumber(String cardNumber) {
         String accountNumber = "", firstname = "", lastname = "";
         int isAdmin = 0;
@@ -233,15 +233,15 @@ public class SQLQueries {
         return obj;
     }
 
-    // Return account object from accounts table based on Account Number input
-    // 
-    // # Arguments
-    //
-    // * 'accountNumber' - Account Number
-    // 
-    // # Return value
-    //
-    // Account Object
+    /// Return account object from accounts table based on Account Number input
+    /// 
+    /// # Arguments
+    ///
+    /// \param accountNumber Account Number
+    /// 
+    /// # Return value
+    ///
+    /// \return Account Object
     protected Account getAccountfromAccountNumber(Long accountNumber) {
         double availableBalance = 0, totalBalance = 0, transferLimit = 0;
 
@@ -339,17 +339,17 @@ public class SQLQueries {
         try {
             while (rs.next()) {
                 String[] data = new String[11];
-                data[0] = Long.toString(rs.getLong(1)); //get CardNumber
-                data[1] = Long.toString(rs.getLong(2)); //get AccountNumber
-                data[2] = rs.getString(3); //get Username
-                data[3] = rs.getString(4); //get Password
-                data[4] = rs.getString(5); //get FirstName
-                data[5] = rs.getString(6); //get LastName
-                data[6] = new String(rs.getBytes(7)); //get PasswordSalt
-                data[7] = Float.toString(rs.getFloat(8)); //get AvailableBalance
-                data[8] = Float.toString(rs.getFloat(9)); //get TotalBalance
-                data[9] = Float.toString(rs.getFloat(10));//get TransferLimit
-                data[10] = Boolean.toString(rs.getBoolean(11)); //get IsAdmin
+                data[0] = Long.toString(rs.getLong(1)); ///get CardNumber
+                data[1] = Long.toString(rs.getLong(2)); ///get AccountNumber
+                data[2] = rs.getString(3); ///get Username
+                data[3] = rs.getString(4); ///get Password
+                data[4] = rs.getString(5); ///get FirstName
+                data[5] = rs.getString(6); ///get LastName
+                data[6] = new String(rs.getBytes(7)); ///get PasswordSalt
+                data[7] = Float.toString(rs.getFloat(8)); ///get AvailableBalance
+                data[8] = Float.toString(rs.getFloat(9)); ///get TotalBalance
+                data[9] = Float.toString(rs.getFloat(10));///get TransferLimit
+                data[10] = Boolean.toString(rs.getBoolean(11)); ///get IsAdmin
                 accountsList.add(data);
             }
         } catch (SQLException e) {
@@ -369,21 +369,21 @@ public class SQLQueries {
                 String[] data = new String[9];
                 for (int i = 0; i < data.length; i++) {
                     switch (i) {
-                        case 0: // get transactionId
-                        case 3: // get transactionDetails
-                        case 4: // get chqNumber
+                        case 0: /// get transactionId
+                        case 3: /// get transactionDetails
+                        case 4: /// get chqNumber
                             data[i] = rs.getString(i+1) + "";
                             break;
-                        case 1: // get AccountNumber
+                        case 1: /// get AccountNumber
                             data[i] = Long.toString(rs.getLong(i+1));
                             break;
-                        case 2: // get transactionDate
-                        case 5: // get valueDate
+                        case 2: /// get transactionDate
+                        case 5: /// get valueDate
                             data[i] = rs.getDate(i+1) + "";
                             break;
-                        case 6: // get withdrawal
-                        case 7: // get deposit
-                        case 8: // get balance
+                        case 6: /// get withdrawal
+                        case 7: /// get deposit
+                        case 8: /// get balance
                             data[i] = Float.toString(rs.getFloat(i+1));
                             break;
                     }
@@ -419,17 +419,17 @@ public class SQLQueries {
                 au = new Authenticate(conn);
                 byte[] passwordSalt = au.getRandomNonce();
                 passwordString = au.hashString(passwordString, passwordSalt);
-                preparedStmt.setLong(1, 0); // Set CardNumber
-                preparedStmt.setLong(2, 0); // Set AccountNumber
-                preparedStmt.setString(3, "ADMIN"); // Set Username
-                preparedStmt.setString(4, passwordString); // Set Password
-                preparedStmt.setString(5, "ADMIN"); // Set FirstName
-                preparedStmt.setString(6, "ADMIN"); // Set LastName
-                preparedStmt.setBytes(7, passwordSalt); // Set PasswordSalt
-                preparedStmt.setFloat(8, 0); // Set AvailableBalance
-                preparedStmt.setFloat(9, 0); // Set TotalBalance
-                preparedStmt.setFloat(10, 0); // Set TransferLimit
-                preparedStmt.setBoolean(11, true); // Set IsAdmin
+                preparedStmt.setLong(1, 0); /// Set CardNumber
+                preparedStmt.setLong(2, 0); /// Set AccountNumber
+                preparedStmt.setString(3, "ADMIN"); /// Set Username
+                preparedStmt.setString(4, passwordString); /// Set Password
+                preparedStmt.setString(5, "ADMIN"); /// Set FirstName
+                preparedStmt.setString(6, "ADMIN"); /// Set LastName
+                preparedStmt.setBytes(7, passwordSalt); /// Set PasswordSalt
+                preparedStmt.setFloat(8, 0); /// Set AvailableBalance
+                preparedStmt.setFloat(9, 0); /// Set TotalBalance
+                preparedStmt.setFloat(10, 0); /// Set TransferLimit
+                preparedStmt.setBoolean(11, true); /// Set IsAdmin
                 preparedStmt.execute();
             } else {
                 passwordString = this.getAdminPassword();
@@ -446,7 +446,7 @@ public class SQLQueries {
 
         try {
             if (!rs.next()) {
-                // Import CSV
+                /// Import CSV
                 String filename = "atm/res/accounts.csv";
                 BufferedReader br = new BufferedReader(new FileReader(filename));
                 au = new Authenticate(conn);
@@ -480,25 +480,25 @@ public class SQLQueries {
                     byte[] passwordSalt = au.getRandomNonce();
                     for (int i = 0; i < data.length; i++) {
                         switch (i) {
-                            case 0: // Set CardNumber
-                            case 1: // Set AccountNumber
+                            case 0: /// Set CardNumber
+                            case 1: /// Set AccountNumber
                                 preparedStmt.setLong(i + 1, Long.parseLong(data[i]));
                                 break;
-                            case 2: // Set Username
-                            case 4: // Set FirstName
-                            case 5: // Set LastName
+                            case 2: /// Set Username
+                            case 4: /// Set FirstName
+                            case 5: /// Set LastName
                                 preparedStmt.setString(i + 1, data[i]);
                                 break;
-                            case 6: // Set PasswordSalt and Password
+                            case 6: /// Set PasswordSalt and Password
                                 preparedStmt.setBytes(i + 1, passwordSalt);
                                 preparedStmt.setString(4, au.hashString(data[i], passwordSalt));
                                 break;
-                            case 7: // Set AvailableBalance
-                            case 8: // Set TotalBalance
-                            case 9: // Set TransferLimit
+                            case 7: /// Set AvailableBalance
+                            case 8: /// Set TotalBalance
+                            case 9: /// Set TransferLimit
                                 preparedStmt.setFloat(i + 1, Float.parseFloat(data[i]));
                                 break;
-                            case 10: // Set IsAdmin
+                            case 10: /// Set IsAdmin
                                 preparedStmt.setBoolean(i + 1, Boolean.parseBoolean(data[i]));
                         }
                     }
@@ -524,7 +524,7 @@ public class SQLQueries {
 
         try {
             if (!rs.next()) {
-                // Import CSV
+                /// Import CSV
                 String filename = "atm/res/transactions_new.csv";
                 BufferedReader br = new BufferedReader(new FileReader(filename));
                 
@@ -565,25 +565,25 @@ public class SQLQueries {
 
                     for (int i = 0; i < data.length; i++) {
                         switch (i) {
-                            case 0: // Set transactionId
+                            case 0: /// Set transactionId
                                 preparedStmt.setString(i + 1, data[i]);
                                 break;
-                            case 1: // Set AccountNumber
+                            case 1: /// Set AccountNumber
                                 preparedStmt.setLong(i + 1, Long.parseLong(data[i]));
                                 break;
-                            case 2: // Set transactionDate
-                                preparedStmt.setDate(i + 1, Date.valueOf(data[i])); //date in string format yyyy-mm-dd
+                            case 2: /// Set transactionDate
+                                preparedStmt.setDate(i + 1, Date.valueOf(data[i])); ///date in string format yyyy-mm-dd
                                 break;
-                            case 3: // Set transactionDetails
-                            case 4: // Set chqNumber
+                            case 3: /// Set transactionDetails
+                            case 4: /// Set chqNumber
                                 preparedStmt.setString(i + 1, data[i]);
                                 break;
-                            case 5: // Set valueDate
-                                preparedStmt.setDate(i + 1, Date.valueOf(data[i])); //date in string format yyyy-mm-dd
+                            case 5: /// Set valueDate
+                                preparedStmt.setDate(i + 1, Date.valueOf(data[i])); ///date in string format yyyy-mm-dd
                                 break;
-                            case 6: // Set withdrawal
-                            case 7: // Set deposit
-                            case 8: // Set balance
+                            case 6: /// Set withdrawal
+                            case 7: /// Set deposit
+                            case 8: /// Set balance
                                 preparedStmt.setFloat(i + 1, Float.parseFloat(data[i]));
                                 break;
                         }
@@ -632,7 +632,7 @@ public class SQLQueries {
         } catch (Exception e) {
             System.out.println(e);
         }
-        // closeConnection(conn);
+        /// closeConnection(conn);
         return statementResult;
     }
 
