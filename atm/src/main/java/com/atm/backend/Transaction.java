@@ -64,8 +64,8 @@ public abstract class Transaction {
     ///
     /// # Arguments
     ///
-    /// \param a1 Account
-    /// \param amount Withdrawal or Deposit amount 
+    /// \param Account a1 Account
+    /// \param double amount Withdrawal or Deposit amount 
     protected abstract String execute(Account a1, double amount) throws InsufficientFundsException;
 }
 

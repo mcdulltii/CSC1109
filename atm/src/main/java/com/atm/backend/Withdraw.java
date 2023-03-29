@@ -26,8 +26,8 @@ public class Withdraw extends Transaction {
     ///
     /// # Arguments
     ///
-    /// \param a1 Account 
-    /// \param amount Withdrawal amount
+    /// \param Account a1 Account 
+    /// \param double amount Withdrawal amount
     ///
     /// # Return value
     ///

@@ -17,9 +17,9 @@ public class Transfer {
     ///
     /// # Arguments
     ///
-    /// \param a1 Sender Account  
-    /// \param a2 Receiver Account
-    /// \param amount Transfer amount
+    /// \param Account a1 Sender Account  
+    /// \param Account a2 Receiver Account
+    /// \param double amount Transfer amount
     ///
     /// # Return value
     ///
