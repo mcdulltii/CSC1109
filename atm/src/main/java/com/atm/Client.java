@@ -161,9 +161,11 @@ public class Client {
                 .defaultHelp(true)
                 .description("ATM Client frontend");
         parser.addArgument("-H", "--host")
+                .type(String.class)
                 .setDefault("127.0.0.1")
                 .help("Specify which host to expose server on");
         parser.addArgument("-P", "--port")
+                .type(Integer.class)
                 .setDefault(7777)
                 .help("Specify which port to expose server on");
         Namespace ns = null;

@@ -434,9 +434,11 @@ public class ATMGUI extends JFrame {
                 .defaultHelp(true)
                 .description("ATM GUI Client frontend");
         parser.addArgument("-H", "--host")
+                .type(String.class)
                 .setDefault("127.0.0.1")
                 .help("Specify which host to expose server on");
         parser.addArgument("-P", "--port")
+                .type(Integer.class)
                 .setDefault(7777)
                 .help("Specify which port to expose server on");
         Namespace ns = null;

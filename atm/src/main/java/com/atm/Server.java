@@ -76,6 +76,7 @@ public class Server extends Thread {
         parser.addArgument("--partial").action(Arguments.storeTrue())
                 .help("Flag to import transactions table partially");
         parser.addArgument("-P", "--port")
+                .type(Integer.class)
                 .setDefault(7777)
                 .help("Specify which port to expose server on");
         Namespace ns = null;
