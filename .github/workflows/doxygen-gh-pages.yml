@@ -12,6 +12,9 @@ jobs:
       run:
         working-directory: "./"
     steps:
+      - name: Edit src path
+        run: |
+          sed -i "s/utils\///g" README.md
       - uses: DenverCoder1/doxygen-github-pages-action@v1.2.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -20,5 +23,5 @@ jobs:
       - name: Symlink
         run: |
           pushd ./utils/html/
-          ln -s ../../utils utils
+          cp ../../utils/uml.png ./
           popd
