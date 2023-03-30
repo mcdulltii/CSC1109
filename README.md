@@ -10,6 +10,7 @@
 
 - Maven
 - MySQL
+- Docker (For SQL and server setup without above dependencies)
 
 ## Setup
 
@@ -60,48 +61,52 @@
 
 ## Setup (Docker)
 
+> Ensure port 3306 is unused
+
 1. Start sql and server docker containers
 
-```shell
-  > ./start.sh
-```
+  ```shell
+    > ./start.sh
+  ```
 
 2. Run client script
 
-```shell
-  > make build
-  > make run
-```
+  ```shell
+    > make build
+    > make run
+  ```
 
 3. Stop docker containers once done
 
-```shell
-  > ./stop.sh
-```
+  ```shell
+    > ./stop.sh
+  ```
 
 ## Setup (Docker SQL only)
 
+> Ensure port 3306 is unused
+
 1. Start sql docker container
 
-```shell
-  > docker-compose --profile=sql up -d
-```
+  ```shell
+    > docker-compose --profile=sql up -d
+  ```
 
 2. Run server.java
 3. Stop docker container once done
 
-```shell
-  > docker-compose --profile=sql down
-```
+  ```shell
+    > docker-compose --profile=sql down
+  ```
 
 ## Test
 
 1. Run standalone test
 
-```shell
-> cd atm
-> mvn test
-```
+  ```shell
+  > cd atm
+  > mvn test
+  ```
 
 2. During build time
 

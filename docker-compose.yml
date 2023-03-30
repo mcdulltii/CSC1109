@@ -12,7 +12,7 @@ services:
       MYSQL_USER: testAdmin
       MYSQL_PASSWORD: password1
     ports:
-      - '${DOCKER_SQL_PORT:-4444}:3306'
+      - '${DOCKER_SQL_PORT:-3306}:3306'
     volumes:
       - ./docker:/docker-entrypoint-initdb.d
     networks:
