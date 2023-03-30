@@ -78,6 +78,7 @@ Dependencies</h1>
 <ul>
 <li>Maven</li>
 <li>MySQL</li>
+<li>Docker (For SQL and server setup without above dependencies)</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md2"></a>
 Setup</h1>
@@ -125,6 +126,9 @@ Setup</h1>
 <div class="line">) ENGINE=InnoDB <span class="keyword">DEFAULT</span> CHARSET=utf8mb4;</div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md3"></a>
 Setup (Docker)</h1>
+<blockquote class="doxtable">
+<p>Ensure port 3306 is unused </p>
+</blockquote>
 <ol type="1">
 <li>Start sql and server docker containers</li>
 </ol>
@@ -140,6 +144,9 @@ Setup (Docker)</h1>
 <div class="fragment"><div class="line">&gt; ./stop.sh</div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md4"></a>
 Setup (Docker SQL only)</h1>
+<blockquote class="doxtable">
+<p>Ensure port 3306 is unused </p>
+</blockquote>
 <ol type="1">
 <li>Start sql docker container</li>
 </ol>
